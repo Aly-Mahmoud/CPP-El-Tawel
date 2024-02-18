@@ -17,12 +17,29 @@
             -> if you made a Parameterized Constructor it prevents the compiler to create the defult constructor, so if you need it you must create it on your own
 
         -> Copy Constructor
+            ->  it's a (special function = special method)
+            ->  you can create it, if you did not compiler will and will give the constructor function the same name as the <<class>
+            ->  you do not call it, it calls itself automatically when copying an (instance = object)   player p2=p1;
+            -> you should pass by refrence when calling copy constructor as if you pass by value you will enter recursion 
+            -> if you created multiple copies for an object of a class the first copy to be destroyed 
+                will delete the ptr pointning to the data of the object copied making it's location accessable for other parts of the program
+                / making it unreserved memory
 
         -> Delegating Constructor
             -> iam lazy : if you call me, i will call another constructor to do my job
             -> it's a good practise, you make defult values for objects even if you just called in 
 
         -> Move Constructor -> move semantics(C++)
+            ->  it's a (special function = special method).
+            ->  you can create it, if you did not compiler will use copy Constructor
+            ->  you do not call it, it calls itself automatically when giving a temp (instance = object).
+            -> used in moving ownership of the data from one object to another 
+            -> benfits of using Moving Constructor over Copy Constructr is better memory use 
+                in case of copy constructor you need to make obj1 and then copy obj1 to obj2 and then destruct obj2
+                there is time in your program where do you have two objects having the same data 
+
+                in case of move Constructor
+
     /*--------------------------------------------------------------*/
 
     <<<<<<<<<<<<<<<<<<<<Constructor Initilization list>>>>>>>>>>>>>>>>>>>>
@@ -59,4 +76,27 @@
     -> can not be overload
 
 /*----------------------------------------------------------------------------------------------*/
+????????????????????????????????????????????????????????
+Lrefrence -> Lvalue (value addressable in mememory)    ?  
+                                                       ?
+int x;                                                 ?
+int &obj = x   // used to pass by refrence             ?        
+/* obj = x */                                          ?
+                                                       ?
+{                                                      ?
+int &ref = x;                                          ?
+ref = 50;                                              ?
+}                                                      ?
+                                                       ?
+int &x = 200; //not valid                              ?
+????????????????????????????????????????????????????????
 
+Rrefrence -> Rvalues (Temp objects)
+
+int &&x=200;  //valid        as we extend it's life time untill the scope of x ends & created a refrence out of it so i can access it
+cout<<x<<endl;
+
+    {
+    int &&Ref = 3;
+    Ref = 43;    
+    }
