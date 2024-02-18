@@ -43,6 +43,7 @@ class player{
         {
             std::cout <<"The health is :"<< health << std::endl;
             std::cout <<"The  name :" << name << std::endl;
+            std::cout <<"ptr value :" << *ptr<< std::endl;
         }        
 
         player(const player &source) 
