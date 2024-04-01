@@ -100,3 +100,108 @@ cout<<x<<endl;
     int &&Ref = 3;
     Ref = 43;    
     }
+
+
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Static vaiable >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+<<<<<<<<<<<<<<What>>>>>>>>>>>>>>
+
+    It's a vaiable that is shared among the whole class and all of it's objects
+
+<<<<<<<<<<<<<<<Why>>>>>>>>>>>>>>>
+
+    Global data across all the class
+
+<<<<<<<<<<<<<<How>>>>>>>>>>>>>>
+class Person
+{
+    public:
+
+        static int counts;         //declaration
+};
+
+int Person::counts =0;            //Initilization 
+
+int main()
+{
+    std::cout<<"the value of the static variable that is shared among the whole class and all of it's objects is: "<<Person::counts<<endl;
+    p1.counts = 5;
+    std::cout<<"the value of the static variable that is shared among the whole class and all of it's objects is: "<<Person::counts<<endl;
+    p2.counts++;
+    std::cout<<"the value of the static variable that is shared among the whole class and all of it's objects is: "<<Person::counts<<endl;
+
+                                    //Printing out the value of 
+}
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Static Function >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+<<<<<<<<<<<<<<What>>>>>>>>>>>>>>
+
+    It's a functions that is shared among the whole class and all of it's objects and can acess the static private data 
+
+<<<<<<<<<<<<<<<Why>>>>>>>>>>>>>>>
+
+normally you won't be able to access private data however to be able to access private data
+
+-> you can make it static variable.
+-> you can do that through Static function.
+
+<<<<<<<<<<<<<<How>>>>>>>>>>>>>>
+
+
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<This pointer >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+<<<<<<<<<<<<<What?>>>>>>>>>>>>>
+
+it's a pointer that points to the data of the class
+
+<<<<<<<<<<<<<<why?>>>>>>>>>>>>>>
+
+it's the normal way to acess your class data if you did not do it compiler will do it for you
+it helps diffrerntiate between local variables and class data
+
+<<<<<<<<<<<<<<How?>>>>>>>>>>>>>>
+
+Person(std::string name, std::string ID) 
+{ 
+    this->name = name;
+    this->ID = ID;
+    std::cout<<"Constructor2 has been called"<<std::endl;
+};
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<const function >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+<<<<<<<<<<<What?>>>>>>>>>>>
+    it's a type to be assigned to a function 
+<<<<<<<<<<<<Why?>>>>>>>>>>>>
+    in read function to ensure that no function to be called can change any data
+<<<<<<<<<<<<<How?>>>>>>>>>>>>>
+    void Person::display_info(void) const
+    {
+        std::cout <<"The name is :"<< name << std::endl;
+        std::cout <<"The ID is :" << ID << std::endl;
+        // the function is constant so i can not change any of the data of the class 
+        // name = "Ahmed";
+    }
+
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<const Object >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+<<<<<<<<<<<What?>>>>>>>>>>>
+    it's a type to be assigned to a Object
+<<<<<<<<<<<<Why?>>>>>>>>>>>>
+    i have important data that i do want it ti change accross time of the program
+<<<<<<<<<<<<<How?>>>>>>>>>>>>>
+
+    const Person p1 ( "Aly" , "1234" );
+
+    void Person::display_info(void) const
+    {
+        std::cout <<"The name is :"<< name << std::endl;
+        std::cout <<"The ID is :" << ID << std::endl;
+        // the function is constant so i can not change any of the data of the class 
+        // name = "Ahmed";
+    }
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<operator overloading>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
