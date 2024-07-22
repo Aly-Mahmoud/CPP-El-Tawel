@@ -62,9 +62,15 @@ class Mystring
                 //to avoid self copy
                 if (this != &src)
                 {
-                    delete[]str;                          // to free what this object had allocated before
-                    str = new char [strlen(src.str)+1];
-                    strcpy(str,src.str);
+                    delete[]str;                                               // to free what this object had allocated before
+                    
+                    if (src.str != nullptr  && this != nullptr)                // to check if the pointer we are copying from and the ptr we are copying to is not null,
+                                                                               // they can be null if we did not implement our constructor, 
+                                                                               //  or if we made a parameterized consructor that allocates new space in heap and we had the defult constructor still in this scinareo we will have 
+                    {
+                        str = new char [strlen(src.str)+1];
+                        strcpy(str,src.str);
+                    }
                 }
                     return *this;              
             }

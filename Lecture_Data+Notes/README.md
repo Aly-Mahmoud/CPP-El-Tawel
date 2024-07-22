@@ -1,36 +1,136 @@
 # **CPP El-Taweel**
 
-# Lecture 1
-
 
 
 ## 1.Class
 
 1. **Definition**: A class is a blueprint for creating objects. It defines the properties (data members) and behaviors (member functions) that objects of that class will have.
+
 2. **Memory Location**: The class definition itself is typically stored in the program's code segment (also known as the text segment). This segment contains the executable code of the program.
+
 3. **When It's Saved**: The class definition is compiled into the program during the compilation process. It exists in the program's code even before any objects of that class are created.
+
+4. **Declaration:**
+
+   ```cpp
+   using namespace std;
+   class Person
+   {
+   	//attributes (Data)
+       string Name;
+   	int Age;
+   	//Methods (functions)
+   	void sound();
+   	void jump();
+   };
+   ```
+
+   **Declaration of a class with initialized attributes**
+
+```cpp
+using namespace std;
+class Person
+{
+	//attributes (Data)
+    string Name{"Aly"};
+	int Age {24};
+	//Methods (functions)
+	void sound();
+	void jump();
+};
+```
+
+
+
+**MyClass.h** (Specification)
+
+```cpp
+#ifndef MYCLASS_H
+#define MYCLASS_H
+
+class MyClass {
+public:
+    MyClass();           // Default constructor
+    MyClass(int value);  // Parameterized constructor
+    void display();      // Member function
+
+private:
+    int m_value;         // Data member
+};
+
+#endif // MYCLASS_H
+
+```
+
+**MyClass.cpp** (Implementation)
+
+```cpp
+#include <iostream>
+#include "MyClass.h"
+
+// Default constructor
+MyClass::MyClass() : m_value(0) {
+    std::cout << "Default constructor called" << std::endl;
+}
+
+// Parameterized constructor
+MyClass::MyClass(int value) : m_value(value) {
+    std::cout << "Parameterized constructor called with value: " << value << std::endl;
+}
+
+// Member function
+void MyClass::display() {
+    std::cout << "Value: " << m_value << std::endl;
+}
+
+```
 
 ## 2.Objects
 
 1. **Instance of a Class**: An object is an instance of a class. It represents a specific instance of the data and behavior defined by the class.
-
 2. **Memory Location**: When an object is created, memory is allocated to store its data members. The size of the memory allocated is determined by the size of the object, which depends on the size of its data members and any additional overhead.
-
 3. **When It's Saved:**
+   Objects are created during runtime, typically on the stack or the heap, depending on how they are created.
+4. **Stack Allocation**: If an object is created as a local variable within a function or as a function parameter, it's usually allocated on the stack. When the function goes out of scope or returns, the memory for these objects is automatically deallocated.
+5. **Heap Allocation**: If an object is created using dynamic memory allocation (e.g., `new` keyword), it's allocated on the heap. The programmer is responsible for deallocating this memory using `delete` when it's no longer needed to avoid memory leaks.
+6. **Data** **section**: if it is a global varaible
 
-    Objects are created during runtime, typically on the stack or the heap, depending on how they are created.
+**Special type object: Temporary objects**
 
-   - **Stack Allocation**: If an object is created as a local variable within a function or as a function parameter, it's usually allocated on the stack. When the function goes out of scope or returns, the memory for these objects is automatically deallocated.
-   - **Heap Allocation**: If an object is created using dynamic memory allocation (e.g., `new` keyword), it's allocated on the heap. The programmer is responsible for deallocating this memory using `delete` when it's no longer needed to avoid memory leaks.
+```cpp
+#include <iostream>
+
+class MyClass 
+{
+public:
+    MyClass() { std::cout << "Constructor called" << std::endl; }
+    ~MyClass() { std::cout << "Destructor called" << std::endl; }
+    void show() { std::cout << "Temporary object method called" << std::endl; }
+};
+
+int main() 
+{
+    MyClass().show(); // MyClass() creates a temporary object used to call show()
+    // Destructor called immediately after the line ends
+    return 0;
+}
+```
+
+
 
 ## 3.Constructor
 
-->  it's a (special function = special method)
--> purpose: is to initialize the newly created object.
-->  you can create it, if you did not compiler will and will give the constructor function the same name as the <class>
-->  you do not call it, it calls itself automatically when creating an (instance = object) 
-->  has no return type, not even void
-->  can be overloaded,  meaning you can have multiple constructors with different parameter lists within the same class.
+- it's a (special function = special method)
+
+- purpose: is to initialize the newly created object.
+
+- you can create it, if you did not compiler will and will give the constructor function the same name as the <class>
+
+- you do not call it, it calls itself automatically when creating an (instance = object) 
+
+- has no return type, not even void
+
+- can be overloaded,  meaning you can have multiple constructors with different parameter lists within the same class.
 
 **Different method to call copy constructor in main** 
 
@@ -48,91 +148,418 @@ int y{x};  // Copy constructor called for initialization
 
 ####      3.1.1 Default constructor (Zero Argument Constructor)
 
--> A constructor that does not take from me any parameters
--> Called once when creating an instance from a class
+- A constructor that does not take from me any parameters
 
-####      3.1.2Parameterized Constructor (Overloaded Constructor)
-
-​        -> many functions with the same name however they have different signatures-> anything after the name of the function like (Parameters, attributes)
-​        -> this concept of similar name different signatures is called name mangling -> handled by compiler in different ways according to your compiler used
-​        -> if you made a Parameterized Constructor it prevents the compiler to create the default constructor, so if you need it you must create it on your own
-
-####      3.1.3 Copy Constructor
-
-​        ->  it's a (special function = special method)
-​        ->  you can create it, if you did not, compiler will, and will give the constructor function the same name as the <class>
-​        ->  you do not call it, it calls itself automatically when copying an (instance = object)   player p2=p1;
-​        -> **you should pass by refrence when calling copy constructor as if you pass by value you will enter infinite recursion** 
-​	-> **Responsible for deep copying if the class contains dynamically allocated resources.**
-​	-> **if you created multiple copies for an object of a class the first copy to be destroyed** 
-​            will delete the ptr pointning to the data of the object copied making it's location accessible for other parts of the program
-​            / making it unreserved memory
-
-
-
-####      3.1.4 Delegating Constructor
-
-​        -> **I'm lazy** : if you call me, I will call another constructor to do my job
-​        -> **it's a good practice**, you make default values for objects even if you just called in 
-
-####      3.1.5 Move Constructor /move semantics(C++)
-
-​        ->  it's a (special function = special method).
-​        ->  you can create it, if you did not compiler will use copy Constructor
-​        ->  you do not call it, it calls itself automatically when giving a temp (instance = object).
-​        -> used in moving ownership of the data from one object to another 
-​        -> benefits of using Moving Constructor over Copy Constructor is better memory use 
-
-​            **in case of copy constructor**  when obj2 is created by copying obj1. During this process, a temporary object is created to hold the copied data, and then obj2 is initialized using this temporary object. Finally, the temporary object is destroyed once the copy construction is complete.
-
-​            **in case of move Constructor** the authority of data is transferred from one obj1 to obj2, that takes less processing time, consume less memory, overall saves resources.
+- Called once when creating an instance from a class
 
 ```cpp
-Mystring(Mystring &&src)
+class MyClass 
 {
-    str=src.str;
-    src.str = nullptr;
+public:
+    MyClass() 
+	{ // Default constructor
+        std::cout << "Default constructor called" << std::endl;
+    }
+};
+```
+
+
+
+```cpp
+int main() 
+{
+    MyClass obj; // Calls the default constructor
+    return 0;
 }
 ```
 
 
 
-### 3.2 Constructor Initialization list
+####      3.1.2Parameterized Constructor (Overloaded Constructor)
+
+- many functions with the same name however they have different signatures-> anything after the name of the function like (Parameters, attributes).
+
+-  this concept of similar name different signatures is called name mangling -> handled by compiler in different ways according to your compiler used.
+-  if you made a Parameterized Constructor it prevents the compiler to create the default constructor, so if you need it you must create it on your own.
 
 ```cpp
-int x = 5;  // C like
-int x (5);  // Constructor like
-int x {5};  // uniform Initilization -> check between the two types of data (expected to send) & (what was actually send) ensure no casting happens
-    int x = {5.3} -> error -> no casting will happen
+#include <iostream>
 
-int x; // reseve empty space in memory
-x = 5; // assignation
-
-    int x=5; //reservation & assignation in the same line
+class MyClass 
+{
+public:
+	MyClass(int value) 
+	{ // Parameterized constructor
+        std::cout << "Parameterized constructor called with value: " << value << std::endl;
+    }
+};
 ```
 
-**Can i do the same in the class?**
- 	Yes,
+```cpp
+int main() 
+{
+    MyClass obj2(42);   // Calls the parameterized constructor
+    return 0;
+}
+```
+
+####      3.1.3 Copy Constructor
+
+- it's a (special function = special method)
+
+-  you can create it, if you did not, compiler will, and will give the constructor function the same name as the <class>
+-  you do not call it, it calls itself automatically when copying an (instance = object)   player p2=p1;​ -> **you should pass by refrence when calling copy constructor as if you pass by value you will enter infinite recursion** 
+-  **Responsible for deep copying if the class contains dynamically allocated resources.**
+-  if you created multiple copies for an object of a class the first copy to be destroyed will delete the ptr pointning to the data of the object copied making it's location unaccessible for other parts of the program making it unreserved memory
+  [Great explanation on WHY to create your own Overloaded Assignment, Copy Constructor, Destructor](https://www.youtube.com/watch?v=F-7Rpt2D-zo)
+
+```cpp
+#include <iostream>
+
+class MyClass 
+{
+public:
+    int* ptr;
+
+     MyClass(const MyClass& other) // Copy constructor
+	{
+         ptr = new int(*other.ptr);
+         std::cout << "Copy constructor called" << std::endl;
+    }
+};
+```
+
+```cpp
+int main() 
+{
+    MyClass obj2 = obj1;    // Calls the copy constructor
+    return 0;
+}
+```
+
+####      3.1.4 Delegating Constructor
+
+-  **I'm lazy** : if you call me, I will call another constructor to do my job
+
+-  **it's a good practice**, you make default values for objects even if you just called in 
+
+```cpp
+#include <iostream>
+
+class MyClass 
+{
+public:
+    int value;
+
+    MyClass() : MyClass(0) // Delegating to parameterized constructor
+	{ 
+        std::cout << "Default constructor called" << std::endl;
+    }
+
+    MyClass(int v)  // Parameterized constructor
+	{ 
+		value = v;
+        std::cout << "Parameterized constructor called with value: " << value << std::endl;
+    }
+};
+```
+
+```cpp
+int main() 
+{
+    MyClass obj1;       // Calls the default constructor
+    return 0;
+}
+```
+
+####      3.1.5 Move Constructor /move semantics(C++)
+
+- it's a (special function = special method).
+
+- you can create it, if you did not, compiler will use copy Constructor
+- used in moving ownership of the data from one object to another 
+- benefits of using Moving Constructor over Copy Constructor is better memory use
+- you must use the library <utility> to use the move constructor 
+- you must use `std::move` keyword to use your move constructor function (look at the code)
+
+- ​            **in case of copy constructor**  when obj2 is created by copying obj1. During this process, a temporary object is created to hold the copied data, and then obj2 is initialized using this temporary object. Finally, the temporary object is destroyed once the copy construction is complete.
+
+
+- ​            **in case of move Constructor** the authority of data is transferred from one obj1 to obj2, that takes less processing time, consume less memory, overall saves resources.
+
+
+```cpp
+#include <iostream>
+#include <utility> // For std::move
+
+class MyClass 
+{
+public:
+    int* ptr;
+
+    MyClass(int value)			  		 // Parameterized constructor
+	{ 
+        ptr = new int(value);
+        std::cout << "Parameterized constructor called" << std::endl;
+    }
+
+    MyClass(const MyClass& other)   		// Copy constructor
+	{ 
+        ptr = new int(*other.ptr);
+        std::cout << "Copy constructor called" << std::endl;
+    }
+
+    MyClass(MyClass&& other) noexcept 		// Move constructor
+	{ 
+        ptr = other.ptr;
+        other.ptr = nullptr;
+        std::cout << "Move constructor called" << std::endl;
+    }
+
+    ~MyClass() 							//Destructor
+	{
+        delete ptr;
+    }
+
+    void display() 
+	{
+        if (ptr)
+            std::cout << "Value: " << *ptr << std::endl;
+        else
+            std::cout << "Pointer is null" << std::endl;
+    }
+};
+```
+
+**`noexcept`keyword** 
+Using `noexcept` with move constructors (and move assignment operators) is a best practice in modern C++ to ensure exception safety and to enable potential optimizations. It guarantees that these operations will not throw exceptions, allowing for more efficient resource management and better performance, especially when used with standard library containers.
+
+```cpp
+int main() 
+{
+    MyClass obj1(42);           	 // Calls the parameterized constructor
+    MyClass obj2 = std::move(obj1);  // Calls the move constructor
+    obj2.display();              	 // Displays value
+    obj1.display();              	 // Displays "Pointer is null"
+    return 0;
+}
+```
+
+
+
+### 3.2 Initialization list
+
+​	**reserve empty space in memory**
+
+```cpp
+int x;
+```
+
+​	**Assignation**
+
+```cpp
+x = 5;
+```
+
+​	**reservation & assignation(Initialization) in the same line**
+
+```cpp
+int x=5; 
+```
+
+#### 3.2.1 for Variable
+
+##### 	3.2.1.1 C like Initialization 
+
+```cpp
+int x = 5;
+```
+
+##### 	3.2.1.2 Constructor like Initialization 
+
+```cpp
+int x (5);
+```
+
+##### 	3.2.1.3 Uniform Initialization
+
+```cpp
+int x {5};
+```
+
+​	**use?**
+​	it check between the two types of data **(expected to send)** & **(what was actually send)** ensure no casting happens.
+
+```cpp
+int x = {5.3} //-> error -> no casting will occur
+```
+
+#### 3.2.2 for class
+
+##### 3.2.2.1 Default Member Initializers
+
+Since C++11, you can initialize members directly in the class definition.
+
+```cpp
+class Person 
+{
+public:
+    std::string name = "None";
+    std::string ID = "None";
+
+Person() 
+{
+    // Constructor body
+}
+
+};
+```
+
+##### 3.2.2.2 Member Initialization Order
+
+###### 3.2.2.2.1 In order Initialization 
 
 in the following code we **reserve & initialize** at the very beginning of the creating an **(object-instance)** of this class
 
 ```cpp
- Person () : name {"None"}, ID{"None"}
+class Person 
+{
+    public:
+        std::string ID;
+        std::string name;
+
+    Person () : ID {"None"}, name{"None"}
     {
-        implementation
+        //implementation
     }
+};
 ```
 
-​    if not in order it will allocate and then initialize
+###### 3.2.2.2.2 Out of order initialization
+
+Member variables are initialized in the order they are declared in the class, not the order they appear in the initializer list.
+
+```cpp
+class Person 
+{
+public:
+    std::string ID;
+    std::string name;
+
+    Person() : name("None"), ID("None") { // ID is initialized before name
+        // Constructor body
+    }
+};
+
+```
+
+the code above the initialization is not in order so. it will allocate and then initialize
+
+##### 3.2.2.3 In-class Member Initializers
+
+In-class member initializers provide default values that can be overridden by the initializer list.
+
+```cpp
+class Person 
+{
+public:
+    std::string name = "Default Name";
+    std::string ID = "Default ID";
+
+    Person() : name("None")    // ID remains "Default ID"
+	{ 
+    }
+};
+
+```
+
+##### 3.2.2.4 Delegating Constructors
+
+```cpp
+class Person 
+{
+public:
+    std::string name;
+    std::string ID;
+
+    Person() : Person("None", "None") // Delegating to another constructor
+	{ 
+		
+    }
+
+    Person(const std::string& name, const std::string& ID) : name(name), ID(ID) 
+	{
+        // Constructor body
+    }
+};
+
+```
 
 ## 4. Destructor 
 
-->  it's a (special function = special method)
-->  you can create it, if you did not compiler will and will give the constructor function the same name as the class but preceded with telda **<~class>**
-->  you do not call it, it calls itself automatically when destroying an (instance = object) 
--> destruction will happen when the program gets out of the scope of the object whether it was `}` or `return 0;`
-->  has no return type
--> can not be overload
+- it's a (special function = special method)
+
+- you can create it, if you did not compiler will and will give the constructor function the same name as the class but preceded with telda **<~class>**
+- the one created by the compiler will lack the deletion of any data referenced in heap, so when you have a class that refrence something in heap you have to make your own destruction function.
+- you do not call it, it calls itself automatically when destroying an (instance = object).
+- destruction will happen when the program gets out of the scope of the object whether it was `}` or `return 0;`
+- has no return type not even void.
+- can not be overload.
+
+**Code Example**
+
+```cpp
+class MyClass 
+{
+public:
+    // Default constructor
+    MyClass() 
+	{
+        std::cout << "Constructor called" << std::endl;
+        ptr = new int[10]; // Dynamically allocate memory
+    }
+
+    // Destructor
+    ~MyClass() 
+	{
+        std::cout << "Destructor called" << std::endl;
+        delete[] ptr; // Clean up dynamically allocated memory
+    }
+
+private:
+    int* ptr;
+};
+```
+
+we can manually call the destructor using pointer to object, but it is not recommended 
+
+```cpp
+#include <iostream>
+
+class MyClass // Ensure consistent capitalization
+{
+public:
+    ~MyClass()
+    {
+        std::cout << "Destructor Called\n";
+    }
+};
+
+int main()
+{
+    MyClass C1; // Stack-allocated object
+    MyClass* c_ptr = &C1;
+
+    c_ptr->~MyClass(); // Manually call the destructor
+
+    // Note: Do not use C1 or c_ptr after this point, as the object is destructed
+
+    return 0;
+}
+
+```
+
+
 
 ## 5. L-R Values
 
@@ -141,6 +568,7 @@ in the following code we **reserve & initialize** at the very beginning of the c
 **What**
 
 An L-value refers to an expression that identifies a **memory location** and can be assigned a value. L-values are typically variables or objects that have a persistent identity and can appear on the left-hand side of an assignment operation, They represent persistent values that can be modified or accessed.
+**so we are basically talking about an address here**
 
 **Why**
 
@@ -148,92 +576,196 @@ L-values are commonly used when assigning values to variables or objects, modify
 
 **Example**
 
-Variables, objects, array elements, dereferenced pointers, and references 
-
-**How**
+1. **Variables**
 
 ```cpp
-int x;                                                 
-int &obj = x   // creating an alias for an existing variable               
-/* obj = x */                                          
-                                                       
-{                                                      
-int &ref = x;                                          
-ref = 50;                                              
-}                                                      
-                                                       
-int &x = 200; //not valid   
+int a = 10; 
+a = 20; 
 ```
 
+2. **Objects**
 
+```cpp
+class MyClass 
+{
+    public:
+        int value;
+        MyClass(int v) : value(v) {}
+};
+
+int main() 
+{
+    MyClass obj(10); // 'obj' is an L-value
+    obj.value = 20; // 'obj.value' can appear on the left-hand side of an assignment
+    std::cout << "Object value: " << obj.value << std::endl; // Output: 20
+    return 0;
+}
+
+```
+
+3. **Array Elements**
+
+```cpp
+int arr[5] = {1, 2, 3, 4, 5}; // 'arr[i]' are L-values
+
+arr[2] = 10; // 'arr[2]' can appear on the left-hand side of an assignment
+
+```
+
+4. **Dereferenced Pointers**
+
+```cpp
+int x = 10; // 'x' is an L-value
+int *p = &x; // 'p' is a pointer to 'x'
+*p = 20; // '*p' (dereferenced pointer) is an L-value
+
+```
+
+5. **References**
+
+```cpp
+int y = 30; // 'y' is an L-value
+int &ref = y; // 'ref' is a reference to 'y' (L-value reference)
+ref = 40; // 'ref' can appear on the left-hand side of an assignment
+```
+
+**L-Value refrence**
+
+An L-value reference in C++ is a reference that binds to an L-value. It allows you to refer to a variable or object by another name, effectively aliasing it. L-value references are declared using the ampersand (`&`) symbol.
+
+```cpp
+int a = 10; // 'a' is an L-value
+int &ref = a; // 'ref' is an L-value reference to 'a'
+
+```
 
 ### 5.2 R-value:
 
-**What**
+- **What**
 
-R-value refers to an expression that represents a temporary or transient value. R-values are typically temporary results of expressions, literals, or values that cannot be directly assigned to.
+R-value refers to an expression that represents a temporary or transient value, it's of course on the Right hand sign of the operation or term.
 
-**Why**
+- **Example**
 
-R-values are commonly used in expressions, such as arithmetic operations, function calls, and initializations.
+**1- Literals (such as numbers or strings)**
 
-**Example**
+```cpp
+int x = 100; // 100 is an R-value literal
+```
 
- Literals (such as numbers or strings), temporary objects, the result of expressions, and the return value of functions are all examples of R-values.
+```cpp
+std::string str = "Hello, World!";
+```
 
-**How**
+**2-temporary objects**
+
+```cpp
+#include <iostream>
+
+class MyClass 
+{
+public:
+    MyClass() { std::cout << "Constructor called" << std::endl; }
+    ~MyClass() { std::cout << "Destructor called" << std::endl; }
+    void show() { std::cout << "Temporary object method called" << std::endl; }
+};
+
+int main() 
+{
+    MyClass().show(); // MyClass() creates a temporary object used to call show()
+    // Destructor called immediately after the line ends
+    return 0;
+}
 
 ```
-int &&x=200;  //valid        as we extend it's life time untill the scope of x ends & created a refrence out of it so i can access it
-cout<<x<<endl;
 
+**3- the result of expressions**
+
+```cpp
+int a = 10, b = 20;
+int sum = a + b;	 // a + b results in an R-value used to initialize sum
+```
+
+**4- Return Value of Functions**
+
+```cpp
+#include <iostream>
+
+class MyClass 
+{
+public:
+    MyClass() { std::cout << "Constructor called" << std::endl; }
+    ~MyClass() { std::cout << "Destructor called" << std::endl; }
+};
+
+MyClass createObject() 
+{
+    return MyClass(); // Returns a temporary MyClass object
+}
+
+int main() 
+{
+    MyClass obj = createObject(); // The return value of createObject() is an R-value
+    // Destructor called when obj goes out of scope
+    return 0;
+}
+
+```
+
+- **Lifetime of R-value refrence**:
+  An R-value typically exists for the duration of the expression in which it appears. Once that expression is evaluated, the temporary R-value is destroyed. For example:
+
+```cpp
+int x = 100 + 200; // 100 + 200 is an R-value expression.
+```
+
+Here, `100 + 200` is an R-value expression that exists temporarily to initialize `x`. After `x` is initialized, the R-value `100 + 200` ceases to exist.
+
+- **Where in memory is the R-Value **
+
+in text code segment, in runtime it gets transferred to register and if there is an operation the result r-value is saved in a register and the result will cease to exist after the operation 
+
+- **R-value Refrence**
+
+While R-Values are a temporary but you can extend there lifetime, by making an R-value refrence.
+the lifetime starts at the initialization and ends at the end of scope of the variable  
+
+```cpp
+int &&x=200;  //valid, as we extend it's life time untill the scope of x ends and created a refrence out of it so i can access it
+cout<<x<<endl;
 {
 int &&Ref = 3;
 Ref = 43;    
 }
 ```
 
-**How to use R-Values and L-Values:**
+**Sum up Example**
 
-```
-int main() 
-{
-    int x = 5; // 'x' is an L-value
-    int y = x + 3; // 'x + 3' is an R-value expression
-    int& ref = x; // 'ref' is an L-value reference
-    // '5' is an R-value literal in the following line
-    int z = 5 + 2; // '5 + 2' is an R-value expression
-
-return 0;
-
-}
-```
-
-# Lecture 2
-
-
+![[L-R]Values](Cache\[L-R]Values.png)
 
 ## 6. Constant Object 
 
 **What**
 
-it's a type to be assigned to a Object
+it's a type qualifier to be assigned to a Object
 
 **Why**
 
-I have important data that I do want it change across time of the program
+I have important data that I do **not** want it change across time of the program
 
 **How**
 
-    const Person p1 ( "Aly" , "1234" );
-    
-    void Person::display_info(void) const
-    {
-        std::cout <<"The name is :"<< name << std::endl;
-        std::cout <<"The ID is :" << ID << std::endl;
-        // the function is constant so i can not change any of the data of the class 
-        // name = "Ahmed";
-    }
+```cpp
+const Person p1 ( "Aly" , "1234" );
+
+void Person::display_info(void) const
+{
+    std::cout <<"The name is :"<< name << std::endl;
+    std::cout <<"The ID is :" << ID << std::endl;
+    // the function is constant so i can not change any of the data of the class 
+    // name = "Ahmed";
+}
+```
 
 
 
@@ -241,7 +773,7 @@ I have important data that I do want it change across time of the program
 
 **What**
 
-it's a type to be assigned to a function 
+it's a type qualifier to be assigned to a function 
 It promises not to modify the state of the object on which it is called.
 Constant member functions can be called on constant objects, as well as on non-constant objects.
 
@@ -251,16 +783,18 @@ in read function to ensure that no function to be called can change any data
 
 **How**
 
-    class MyClass
-    {
-    public:
-        void display_info(void) const 
-    	{
-              std::cout <<"The name is :"<< name << std::endl; 
-       		  std::cout <<"The ID is :" << ID << std::endl;
-    		   // the function is constant so i can not change any of the data of the class 
-        }
-    };
+```cpp
+class MyClass
+{
+public:
+    void display_info(void) const 
+	{
+          std::cout <<"The name is :"<< name << std::endl; 
+   		  std::cout <<"The ID is :" << ID << std::endl;
+		   // the function is constant so i can not change any of the data of the class 
+    }
+};
+```
 
 
 
@@ -295,9 +829,7 @@ int main()
     std::cout<<"the value of the static variable that is shared among the whole class and all of it's objects is: "<<Person::counts<<endl;
     p2.counts++;
     std::cout<<"the value of the static variable that is shared among the whole class and all of it's objects is: "<<Person::counts<<endl;
-
                                     //Printing out the value of 
-
 }
 ```
 
@@ -305,12 +837,12 @@ int main()
 
 ## 9. Static Function 
 
-**What**
+**What?**
 
 It's a functions that is shared among the whole class and all of it's objects and can access the static private data 
 Static functions can be called using the class name, without needing to create an object of the class.
 
-**Why**
+**Why?**
 
 They are typically used for utility functions or operations that do not require access to the non-static members of the class.
 
@@ -318,7 +850,7 @@ normally you won't be able to access private data however to be able to access p
 -> you can make it static variable.
 -> you can access it through Static function.
 
-**How** (try to run this code and see the results)
+**How?** (try to run this code and see the results)
 
 ```cpp
 #include <iostream>
@@ -367,7 +899,7 @@ int main()
 
 **What**
 
-it's a pointer that points to the data of the class, and of  the class only
+it's a pointer that points to the data of the class, and of the class only
 
 **why**
 
@@ -376,7 +908,7 @@ it helps differentiate between local variables and class data
 
 **How**
 
-```
+```cpp
 Person(std::string name, std::string ID) 
 { 
     this->name = name;
@@ -386,15 +918,16 @@ Person(std::string name, std::string ID)
 
 ```
 
-in case of operator overloading 
+**in case of operator overloading** 
 
-# Lecture 3
+
 
 ## 11. friend function/Class
 
 **What**
 
-A friend function in C++ is a function that is not a member of a class but has access to the private and protected members of that class. Friend functions are declared inside a class and preceded by the `friend` keyword. They can access private and protected members of the class as if they were regular member functions.
+A friend function in C++ is a function that is not a member of a class.
+Friend functions are declared inside a class and preceded by the `friend` keyword, and must be implemented outside of the class, They can access **private** and **protected** members of the class as if they were regular member functions.
 
 **Why**
 
@@ -409,73 +942,70 @@ Friend functions are useful in situations where a function needs to access priva
 ```C++
 #include <iostream>
 
-class MyClass {
+class MyClass 
+{
 private:
     int data;
 
 public:
     MyClass(int d) : data(d) {}
 
-// Declare friend function inside the class
-friend void friendFunction(MyClass obj);
-
+    // Declare friend function inside the class
+    friend void friendFunction(MyClass obj);
 };
 
 // Implement the friend function outside the class
-void friendFunction(MyClass obj) {
-    // Friend function can access private members of MyClass
+void friendFunction(MyClass obj)     // Friend function can access private members of MyClass
+{
     std::cout << "Friend function accessed private data: " << obj.data << std::endl;
 }
 
-int main() {
+int main() 
+{
     MyClass obj(10);
     // Call the friend function
     friendFunction(obj);
-
-return 0;
-
+    return 0;
 }
 ```
 
-
-
-## **12**. operator overloading
+## 12. operator overloading
 
 **What**
 
--> Using traditional operators with user-defined data types.
- -> Allow user-defined data types to behave similarly to built-in types.
- -> Can make code more readable and writable.
-->Not done automatically (except for the assignment operator).
--> They must be explicitly defined.
+-  Using traditional operators with user-defined data types.
+
+-  Allow user-defined data types to behave similarly to built-in types.
+- ‍‍‍‍Can make code more readable and writable.
+- Not done automatically (except for the assignment operator).
+- They must be explicitly defined.
 
 **Why**
 
--> Suppose that we have a Number class that models any number
- -->Using function
+- Suppose that we have a Number class that models any number
 
-```
-Number result = multiply(divide(a,b),divide(c,d));
-```
+  **Using function**
 
--->Using operator overloading
+  ```cpp
+  Number result = multiply(divide(a,b),divide(c,d));
+  ```
 
-```
- Number result = (a/b) * (c/d);
-```
+   **Using operator overloading**
+
+  ```cpp
+  Number result = (a/b) * (c/d);
+  ```
 
 **Constraints:**
 
-Some basic rules:
-
--> Precedence and Associativity can not be changed
-->Polarity can not be changed
-->Can not create new operators
--> Can not overload operators for primitive types
+1. Precedence and Associativity can not be changed
+2. Polarity can not be changed
+3. Can not create new operators
+4. Can not overload operators to use with primitive types
 
 The following Operators can not be overloaded
 
-```
+```cpp
 ::						//Scope resolution
 :?						//Conditional Operator
 .*						//Pointer to Member Operator
@@ -485,7 +1015,7 @@ sizeof					//Size of Operator
 
 **How in the past**
 
-```
+```cpp
 class Company
 {
     Private:
@@ -517,33 +1047,137 @@ int main
 
 
 
-### Operator overloading types 
+### Operator overloading types
 
-#### 1- Copy assignment operator
+#### 1. Copy assignment operator
 
-the compiler by default creates a Copy assignment operator the problem with this default copy assignment operator is that it makes a shallow copy operation 
+**Why?**
 
-if you want to make a deep copy version of it you have to implement one yourself 
+- the compiler by default creates a Copy assignment operator the problem with this default copy assignment operator is that it makes a shallow copy operation 
+
+
+- if you want to make a deep copy version of it you have to implement one yourself 
+
+
+- [Great explanation on WHY to create your own Overloaded Assignment, Copy Constructor, Destructor](https://www.youtube.com/watch?v=F-7Rpt2D-zo)
+
+- When to write your own ( Overload assignment operator, copy constructor, destructor )?
+
+whenever we have a class that has members that can reference heap space.
+
+**Example**
 
 ```cpp
-Mystring &operator= (const Mystring &src)
+#include <iostream>
+#include <cstring>
+
+class MyString 
 {
-    //to avoid self copy
-    if (this != &src)
-    {
-        delete[]str;                          // to free what this object had allocated before -> if i did not make this step won't it overwrite the previous data in the next step?
-        str = new char [strlen(src.str)+1];   // allocate new space for the object data ? // why don't we allocate data normally when creating the object 
-        strcpy(str,src.str);				// copying data from src to destination
+private:
+    char* str;
+public:
+    MyString(const char* s = nullptr) 
+	{
+        if (s) 
+		{
+            str = new char[strlen(s) + 1];
+            strcpy(str, s);
+         } 
+		else 
+		{
+            str = nullptr;
+         }
     }
-    return *this;              
+
+    ~MyString() 
+	{
+        delete[] str;
+    }
+
+    // Copy assignment operator
+	void operator=(const MyString& src) 
+	{
+        if (this != &src) // to avoid self-assignment
+		{ 
+            delete[] str;//deallocation of memory potentially previously allocated when creating the calling object
+
+            if (src.str != nullptr) // check if src.str is not null
+            { 
+                str = new char[strlen(src.str) + 1];
+                strcpy(str, src.str);
+             } 
+            else 
+            {
+                str = nullptr;
+            }
+        }
+    }
+
+    // For demonstration purposes
+    void print() const 
+	{
+        if (str) 
+		{
+            std::cout << str << std::endl;
+         } 
+		else 
+		{
+            std::cout << "null" << std::endl;
+         }
+    }
+};
+
+int main()
+{
+    MyString s1("Hello");
+    MyString s2("World");
+    s2 = s1; // Use copy assignment operator
+    s2.print(); // Output: Hello
+    return 0;
 }
 
 ```
 
+**What would happen if I just implemented like this?**
+
+```cpp
+Mystring &operator= (const Mystring &src)
+{
+    //to avoid self copy    
+    if (this != &src)    
+    {        
+        strcpy(str,src.str);    
+    }    
+    return *this;               
+}
+```
+
+
+according to my understanding, the **RHS** object data will overwrite the **LHS** object data meaning i would be able to do copy assignment no problem ? am i right? 
+
+Here's what would happen:
+
+1. **No Memory Allocation Check**:
+   - Your implementation assumes that memory has already been allocated for `str` in the current object. However, if `str` has not been allocated or if it's a dangling pointer (pointing to invalid memory), using `strcpy` will result in undefined behavior, potentially leading to crashes or data corruption.
+   
+2. **No Memory Allocation for `str`**:
+
+   - If the `str` member of the current object (`*this`) has not been allocated memory yet, using `strcpy` will attempt to copy data to an uninitialized or invalid memory location, resulting in undefined behavior.
+
+3. **Memory Overwrite Risk**:
+
+   - If `str` has been previously allocated and contains some data, your implementation will indeed copy the contents of `src.str` to `str`. However, this will lead to the previous data being overwritten by the data from `src.str`. This may be acceptable if you are sure that the memory allocated for `str` is large enough to accommodate the data from `src.str`. Otherwise, it will lead to buffer overflow, causing undefined behavior.
+
+4. **No Memory Allocation for `str` in `src`**:
+
+   - Your implementation assumes that memory has been allocated for the `str` member in the `src` object. If `src.str` is an uninitialized or null pointer, using `strcpy` will result in undefined behavior.
+
+ **implementation in main** 
+
 ```cpp
 int main
 {
-P1=P2  // p1.operator=();
+	P1=P2  // p1.operator=();
 }
 ```
 
@@ -551,13 +1185,26 @@ while the above piece of code is technically correct but it is not used and it v
 a better way to implement Operator overloading is 
 
 ```cpp
-<Classname> &operator= (const <classname> &source)
+Mystring& operator=(const MyString& src) 
 {
-	//body
+    if (this != &src) // to avoid self-assignment
+    { 
+        delete[] str; // delete old string
 
-return *this
+        if (src.str != nullptr) // check if src.str is not null
+        { 
+            str = new char[strlen(src.str) + 1];
+            strcpy(str, src.str);
+         } 
+        else 
+        {
+            str = nullptr;
+        }
+    }
 }
 ```
+
+this code follows the standard and enables the **chaining**
 
 ```cpp
 int main 
@@ -566,13 +1213,20 @@ int main
 }
 ```
 
-this code follows the standard and enables the **chaining**
-why did we use constant?
+**why did we use constant?**
 ask yourself in this situation when you are S2 = S1 for example, do you want the value of S1 to be changed by this operation, the answer should be no so you use constant to make sure that the value will not be changed.
 
-#### **2-move assignment operation**
+#### 2.move assignment operation
 
-copy constructor copy or move, left and right values !!!!
+- it's a (special function = special method).
+- you can create it, if you did not, compiler will use copy Constructor
+- you do not call it, it calls itself automatically when giving a temp (instance = object).
+- used in moving ownership of the data from one object to another 
+- benefits of using Moving assignment over Copy assignment is better memory use 
+
+​            **in case of move assignment **  when obj2 is created by copying obj1. During this process, a temporary object is created to hold the copied data, and then obj2 is initialized using this temporary object. Finally, the temporary object is destroyed once the copy construction is complete.
+
+​            **in case of move assignment ** the authority of data is transferred from one obj1 to obj2, that takes less processing time, consume less memory, overall saves resources.
 
 ```cpp
 Mystring & operator= (Mystring &&src)
@@ -580,83 +1234,561 @@ Mystring & operator= (Mystring &&src)
     //to avoid self movement 
     if (this != &src)
     {
-        delete []str;   //deallocation of memory to be filled by the src data -> 3shan abd2 3la ndafa -> mn 8erha msh h overwrite? 
-        str = src.str;  // assign data from source to the object calling this method
-        src.str = nullptr; .
+        delete []str;   //deallocation of memory potentially previously allocated when creating the calling object
+		if (src.ptr != nullptr)
+        {
+            str = src.str;        // assign data from source to the object calling this method
+            src.str = nullptr; // deleting the pointer of the src object as it won't be needed again and other pointer will have the authority over this data
+        }
     }
 }
 
 ```
 
+##### Q)   Assignment 2 lab 1
+
+- regrading checking on **this pointer** or **ptr** in the Get_Value(); 
+  
+  ```
+  
+  ```
+  
+  
+
+so in my opinion we should implement the 
 
 
-# Lecture 4
+**How to use move assignment operator in main** 
 
-#### 2. Arithmetic operator
+```cpp
+int main ()
+{
+	I2 = std::move(I1);
+}
+```
 
-##### 2.1 Unary Operator (++ , --)
+**what is the difference between `delete pointer` and `pointer = nullptr`;?**
 
+In C++, `delete pointer;` is used to deallocate the memory pointed to by `pointer` and destroy the object it points to if it's dynamically allocated. After `delete pointer;` is executed, the memory previously pointed to by `pointer` is released back to the system for reuse. However, `pointer` itself still holds the address of the deallocated memory, and accessing it can lead to undefined behavior.
 
+On the other hand, `pointer = nullptr;` simply assigns the null pointer value to `pointer`. It doesn't deallocate any memory. This is useful for indicating that `pointer` is no longer pointing to a valid memory location, helping prevent accidental access to deallocated memory.
+
+So, to safely release memory and ensure that `pointer` no longer points to deallocated memory, you typically use both statements together:
+
+#### 3. Arithmetic operator
+
+##### 3.1 Unary Operator (++ , --)
 
 **Constraints:** 
 you can not overload it into binary 
 
-##### 2.2 Binary
+##### 3.2 Binary
 
 **Operation overloading for (-)**
 
-```
+```cpp
 Mystring operator- ()
 {
-char *buffer = new char [std::strlen(str)+1];
-std::strcpy(buffer,str);
-for (size_t i=0 ; i<strlen(str) ; ++i )
-{
-buffer[i] = std::tolower(str[i]);
-}
-Mystring temp = Mystring(buffer);
-delete[] buffer;
-return temp;
+    char *buffer = new char [std::strlen(str)+1];
+    std::strcpy(buffer,str);
+    for (size_t i=0 ; i<strlen(str) ; ++i )
+    {
+        buffer[i] = std::tolower(str[i]);
+    }
+    Mystring temp = Mystring(buffer);
+    delete[] buffer;
+    return temp;
 }
 ```
 
 **Operation overloading for (+)**
 
-```
+```cpp
 Mystring operator+ (const Mystring &rhs)
 {
-char *buffer = new char [std::strlen(str)+std::strlen(rhs.str)+1];  // hwa amta ast5m al this pointer?
-std::strcpy(buffer,str);
-std::strcat(buffer,rhs.str);
-Mystring temp = Mystring(buffer);
-delete[] buffer;
-return temp;
+    char *buffer = new char [std::strlen(str)+std::strlen(rhs.str)+1];  // hwa amta ast5m al this pointer?
+    std::strcpy(buffer,str);
+    std::strcat(buffer,rhs.str);
+    Mystring temp = Mystring(buffer);
+    delete[] buffer;
+    return temp;
 }
 ```
 
-**Operation overloading for (==)**
+
+
+## 13. Concepts of OOP 
+
+### 13.1 Abstraction
+
+#### Types of Abstraction: 
+
+##### 1-Data abstraction:
+
+This type only shows the required information about the data and  hides the unnecessary data. 
+
+##### 2-Control Abstraction: 
+
+This type only shows the required information about the  implementation and hides unnecessary information.
+
+#### how to abstract:
+
+##### 1-Abstraction using Classes
+
+We can implement Abstraction in C++ using classes.-A Class can decide which data member will be visible to the outside  world and which is not. 
+
+##### 2-Abstraction in Header files
+
+abstraction in C++ can be header files. 
+
+##### 3-Abstraction using Access Specifiers-Access
+
+specifiers are the main pillar of implementing abstraction in  C++.-We can use access specifiers to enforce restrictions on class  members.
+
+**Code Example**
+
+```cpp
+#include <iostream>
+
+// Abstract base class
+class AbstractDevice 
+{
+    public:
+        virtual void start() = 0; // Pure virtual function
+        virtual void stop() = 0;  // Pure virtual function
+};
+```
+
+```cpp
+class Printer : public AbstractDevice 
+{
+public:
+    void start() override 
+	{
+        std::cout << "Printer starting..." << std::endl;
+    }
+
+    void stop() override 
+	{
+        std::cout << "Printer stopping..." << std::endl;
+    }
+};
+
+```
+
+```cpp
+class Scanner : public AbstractDevice 
+{
+public:
+    void start() override 
+	{
+        std::cout << "Scanner starting..." << std::endl;
+    }
+
+    void stop() override 
+	{
+        std::cout << "Scanner stopping..." << std::endl;
+    }
+};
+```
+
+```cpp
+void operateDevice(AbstractDevice& device) 
+{
+    device.start();
+    // Perform operations...
+    device.stop();
+}
+
+int main() 
+{
+    Printer printer;
+    Scanner scanner;
+
+     operateDevice(printer); // Outputs: Printer starting... Printer stopping...
+     operateDevice(scanner); // Outputs: Scanner starting... Scanner stopping...
+
+     return 0;
+}
+```
 
 
 
-# Lecture 5
+### 13.2 Encapsulation
 
-## Concepts of OOP 
+**Explanation** 
+Encapsulation is the bundling of data and methods that operate on that data into a single unit, typically a class. Encapsulation serves two purposes: grouping related data and methods together, and controlling access to the data through public methods. It ensures that an object's internal state can only be changed in a controlled manner.
 
-#### Abstraction
+**Visualization** 
 
-#### Encapsulation
+![Encapsulation in C++ - GeeksforGeeks](Cache\ecapsulation_in_cpp.png)
 
-### Data hiding 
+**Code Example**
 
-### Inheritance 
+```cpp
+class BankAccount 
+{
+private:
+    double balance;  // Encapsulated data
 
-**Polymorphism**
+public:
+    BankAccount(double initial_balance) : balance(initial_balance) {}
 
-#### What?
+    // Encapsulated methods to manipulate the data
+    void deposit(double amount) 
+	{
+        if (amount > 0) 
+		{
+            balance += amount;
+         }
+     }
 
+    void withdraw(double amount) 
+	{
+        if (amount > 0 && amount <= balance) 
+		{
+            balance -= amount;
+         }
+     }
+
+    double getBalance() const 
+	{
+        return balance;
+     }
+};
+
+```
+
+
+
+### 13.3 Data hiding
+
+**Explanation** 
+
+Data hiding is a principle in object-oriented programming (OOP) that restricts direct access to some of an object's data and internal workings. The main idea is to protect the integrity of the data by preventing unintended or unauthorized access and modification. This is typically achieved through access modifiers like `private` and `protected` in C++.
+
+**Visualization** 
+![Encapsulation_Visulization](Cache\encapsulation-and-data-hiding.png)
+
+**Code Example**
+
+```cpp
+class BankAccount 
+{
+private:
+    double balance;  // Hidden from outside access
+
+public:
+    BankAccount(double initial_balance) : balance(initial_balance) {}
+
+    // Public methods to interact with the hidden data
+    void deposit(double amount) 
+	{
+        if (amount > 0) 
+		{
+            balance += amount;
+        }
+    }
+
+    void withdraw(double amount) 
+	{
+        if (amount > 0 && amount <= balance) 
+		{
+            balance -= amount;
+        }
+     }
+
+    double getBalance() const 
+	{
+        return balance;
+     }
+};
+
+```
+
+### 13.4 association
+
+Association is a relationship among classes which is used to show that instances of classes could be either linked to each other or combined logically or physically into some aggregation
+
+**association relations** 
+
+1. **one to one**
+
+   One instance of a class is associated with one instance of another class
+   **Example: Person and Passport**
+   Person object can only refer to one passport object
+
+   ![One-to-one_Association](Cache\One-to-one_Association.png)
+
+   **Code:**
+
+   ```cpp
+   class Passport 
+   {
+   public:
+       std::string passportNumber;
+       Passport(const std::string& number) : passportNumber(number) {}
+       void display() const 
+       {
+           std::cout << "Passport Number: " << passportNumber << std::endl;
+       }
+   };
+   ```
+
+   ```cpp
+   class Person 
+   {
+   public:
+       std::string name;
+       Passport* passport; // One-to-one association
+       Person(const std::string& n, Passport* p) : name(n), passport(p) {}
+       void display() const 
+   	{
+           std::cout << "Name: " << name << std::endl;
+           passport->display();
+       }
+   };
+   ```
+
+   ```cpp
+   int main()
+   {
+       Passport passport("123456789");
+       Person person("John Doe", &passport);
+       person.display();
+       return 0;
+   }
+   ```
+
+   
+2. **one to many**
+
+   One instance of a class is associated with multiple instances of another class
+   **Example: Teacher and Students**
+   Teacher has many references to students
+
+   ![One-to-Many](Cache\One-to-Many_Association.png)
+
+   Code:
+
+   ```cpp
+   class Student 
+   {
+   public:
+       std::string name;
+       Student(const std::string& n) : name(n) {}
+       void display() const 
+   	{
+           std::cout << "Student Name: " << name << std::endl;
+       }
+   };
+   ```
+
+   ```cpp
+   class Teacher 
+   {
+   public:
+       std::string name;
+       std::vector<Student*> students; // One-to-many association
+       Teacher(const std::string& n) : name(n) {}
+       void addStudent(Student* student) 
+   	{
+           students.push_back(student);
+       }
+       void display() const 
+   	{
+           std::cout << "Teacher Name: " << name << std::endl;
+           for (const auto& student : students) 
+   		{
+               student->display();
+       	}
+       }
+   };
+   
+   ```
+
+   ```cpp
+   int main() 
+   {
+       Student student1("Alice");
+       Student student2("Bob");
+       Teacher teacher("Mr. Smith");
+       teacher.addStudent(&student1);
+       teacher.addStudent(&student2);
+       teacher.display();
+       return 0;
+   }
+   ```
+
+   
+3. **many to one**
+
+   Multiple instances of a class are associated with one instance of another class
+   **Example: Employees and Department**
+
+   Many employees may only refer to one Department
+   ![Many-to-One_Association](Cache\Many-to-One_Association.png)
+
+   ```cpp
+   class Department 
+   {
+   public:
+       std::string name;
+       Department(const std::string& n) : name(n) {}
+       void display() const 
+   	{
+           std::cout << "Department: " << name << std::endl;
+       }
+   };
+   ```
+
+   ```cpp
+   class Employee 
+   {
+   public:
+       std::string name;
+       Department* department; // Many-to-one association
+       Employee(const std::string& n, Department* d) : name(n), department(d) {}
+       void display() const 
+   	{
+           std::cout << "Employee Name: " << name << std::endl;
+           department->display();
+       }
+   };
+   ```
+
+   ```cpp
+   int main() 
+   {
+       Department dept("HR");
+       Employee employee1("Alice", &dept);
+       Employee employee2("Bob", &dept);
+       employee1.display();
+       employee2.display();
+       return 0;
+   }
+   ```
+
+   
+4. **many to many**
+
+   Multiple instances of a class are associated with multiple instances of another class
+   **Example: Students and Courses** 
+   student may register to multiple courses,
+   course may be registered by multiple students
+
+```cpp
+class Course;
+```
+
+```cpp
+class Student 
+{
+public:
+    std::string name;
+    std::vector<Course*> courses; // Many-to-many association
+    Student(const std::string& n) : name(n) {}
+    void addCourse(Course* course) 
+	{
+        courses.push_back(course);
+    }
+    void display() const 
+	{
+        std::cout << "Student Name: " << name << std::endl;
+        for (const auto& course : courses) 
+		{
+            std::cout << "  Enrolled in: " << course->name << std::endl;
+        }
+    }
+};
+```
+
+```cpp
+class Course 
+{
+public:
+    std::string name;
+    std::vector<Student*> students; // Many-to-many association
+    Course(const std::string& n) : name(n) {}
+    void addStudent(Student* student) 
+	{
+        students.push_back(student);
+    }
+    void display() const 
+	{
+        std::cout << "Course: " << name << std::endl;
+        for (const auto& student : students) 
+		{
+            std::cout << "  Student: " << student->name << std::endl;
+        }
+    }
+};
+```
+
+```cpp
+int main() 
+{
+    Student student1("Alice");
+    Student student2("Bob");
+
+    Course course1("Math");
+    Course course2("Science");
+
+    student1.addCourse(&course1);
+    student1.addCourse(&course2);
+    student2.addCourse(&course1);
+
+    course1.addStudent(&student1);
+    course1.addStudent(&student2);
+    course2.addStudent(&student1);
+
+    student1.display();
+    student2.display();
+    course1.display();
+    course2.display();
+
+    return 0;
+}
+```
+
+**association types**
+
+**Weak Association (Aggregation):** 
+It is a specialized form of association between two or more objects in which the objects have their own life-cycle but there exists an ownership as well. As an example, an employee may belong to multiple departments in the organization. However, if the department is deleted, the employee object wouldn't
+
+
+**Strong Association (Composition):** 
+
+- Composition is a specialized form of association in which if the container object is destroyed, the included objects would cease to exist. It is actually a strong type of association and is also referred to as a "death" relationship. As an example, a house is composed of one or more rooms. If the house is destroyed, all the rooms that are part of the house are also destroyed as they cannot exist by themselves.
+- It represents part-of relationship
+- Embedded object is a form of strong association
+
+### 13.5 Inheritance
+
+#### 13.5.1 types of inheritance
+
+![types of inheritance](.\Cache\inheritance-Types.png)
+
+**What?**
+
+the ability to derive a new class from existing class with attributes & methods with the ability to extend or modify the (attributes, methods).
 It's a method to create a class from an existing class with properties and characteristics and it gives me the ability to extend and modify.
 
-#### Terminology 
+**You can refer/case to the derived class with it's parent** 
+
+```cpp
+Derived(const Derived &source) : Base(source)
+{
+    this->y = source.y;
+    cout << "Copy Constructor of the Derived class" << endl;
+}
+```
+
+the **base class** has some info and the **derived class** has some more additional info to it and when you access an object of derived class through the base class you are accessing the data that is within the base class only.
+
+derived class **is-a** base class
+
+**Terminology** 
 
 **1-Base Class - Parent class - Superclass:**
 class from which we inherit another class.
@@ -664,11 +1796,11 @@ class from which we inherit another class.
 **2-Derived class - child class - Subclass** 
 class that inherits from the Base class 
 
-#### Why?
+**Why**?
 
+-> C++ is based on real life, so it's a logical real life approach to programming
 
-
-#### How?
+**How**?
 
 ```cpp
 class A
@@ -682,9 +1814,9 @@ void display();
 class B : public A
 {
 private:
-int y;
+    int y;
 public:
-display_y();
+    display_y();
 };
 ```
 
@@ -698,29 +1830,29 @@ the default access modifier is **private**
 
 ![Access modifiers](.\Cache\Access_modifiers.png)
 
-in struct default access modifier is **public** 
 
-# Lecture 6
 
-# Lecture 7
+![InhertanceAcessModifier](Cache\InhertanceAcessModifier.png)
+
+
 
 **note** function signature is the combination of function type, function name, and function parameters similar to function prototype, or API
 
-### **Polymorphism** 
+### 13.6 Polymorphism 
 
-#### What ?
+What ?
 
 same function with different behavior ( **function overloading**, **Operator overloading** )
 
 ##### Polymorphism types 
 
-###### Compile time Polymorphism - Static binding - early binding
+###### 1- Compile time Polymorphism - Static binding - early binding
 
 Apply concept during compilation.
 
 example
 
-```C
+```Cpp
 #include <iostream>
 
 class Account
@@ -770,13 +1902,13 @@ int main ()
 }
 ```
 
-###### Runtime Polymorphism - dynamic binding - late binding
+###### 2- Runtime Polymorphism - dynamic binding - late binding
 
 Apply binding during runtime.
 
 example
 
-```
+```cpp
 #include <iostream>
 
 class Account
@@ -885,11 +2017,16 @@ created in the child class it's for the parent class, it points at the virtual f
 
 4- pointer from child class pointing to object from child class too, it simply calls the function in the child class
 
-#### **override Keyword** 
+#### override Keyword 
+
+### Why Use `override`?
+
+1. **Intent Clarification**: It clearly shows that the function is intended to override a base class virtual function.
+2. **Compile-Time Checking**: The compiler will generate an error if there is no matching virtual function in the base class to override, which helps catch mistakes such as mismatched function signatures.
 
 ​	**for function**
 
-```
+```cpp
 derived class:
 { 
 public:
@@ -902,22 +2039,11 @@ public:
 
 it notifies you if the function which is meant to override another virtual function has found the virtual function to be overridden, it helps me to overcome typos errors
 
-​	**for class** !!!!!!!!!!!!!
-
-```
-derived class: override f
-{ 
-public:
- virtual void Withdraw() override
-  {
-    std::cout << "Saving:Withdraw()" << std::endl;
-  }
-}
-```
+When using `override`, you do not need to specify the `virtual` keyword again. The `override` specifier itself implies that the function is virtual and is overriding a virtual function from the base class.
 
 ​	**override final Keyword**
 
-```
+```cpp
 derived class:
 { 
 public:
@@ -932,7 +2058,7 @@ the withdraw function can not be overridden by any other function
 
 ​	**for class** 
 
-```
+```cpp
 derived class: final
 { 
 public:
@@ -945,28 +2071,301 @@ public:
 
 any function inside this class can not be overridden 
 
-#### **base class refrence**  !!!!!!!!!!!!
+#### base class refrence 
 
-#### **Pure virtual function** 
+A "base class reference" refers to a reference variable that is declared to refer to objects of the base class or any of its derived classes. In object-oriented programming, particularly in languages like C++ where inheritance is supported, references and pointers to base classes are commonly used for polymorphic behavior and abstraction.
 
+### Example Scenario
+
+Consider a simple inheritance hierarchy:
+
+```cpp
+cppCopy code#include <iostream>
+
+// Base class
+class Base {
+public:
+    void display() {
+        std::cout << "Base class display()" << std::endl;
+    }
+
+    virtual ~Base() {} // Virtual destructor for proper cleanup
+};
+
+// Derived class
+class Derived : public Base {
+public:
+    void display() override {
+        std::cout << "Derived class display()" << std::endl;
+    }
+};
+
+int main() {
+    Derived derivedObj;
+
+    // Base class reference
+    Base& baseRef = derivedObj;
+
+    // Using the reference to call a method
+    baseRef.display(); // Outputs: "Derived class display()"
+
+    return 0;
+}
 ```
+
+### Explanation
+
+1. **Base Class and Derived Class**:
+   - `Base` is a base class that defines a `display` function.
+   - `Derived` is a derived class that overrides the `display` function.
+2. **Base Class Reference (`Base& baseRef`)**:
+   - `Base& baseRef = derivedObj;` declares a reference `baseRef` that can refer to objects of type `Base` or any of its derived classes, such as `Derived`.
+   - In this example, `baseRef` refers to `derivedObj`, which is an object of type `Derived`.
+3. **Polymorphic Behavior**:
+   - Even though `baseRef` is declared as a reference to `Base`, because `display` is a virtual function in `Base` and overridden in `Derived`, the call `baseRef.display()` resolves to the `display` function in `Derived` due to dynamic polymorphism (runtime binding).
+
+### Benefits of Base Class References
+
+- **Polymorphism**: Allows code to work with objects of different derived classes through a single interface (the base class interface), promoting flexibility and extensibility.
+- **Abstraction**: Encapsulates common behavior and attributes in the base class, allowing derived classes to specialize or extend functionality as needed.
+- **Dynamic Binding**: Enables dynamic dispatch of function calls based on the actual type of the object at runtime, facilitating runtime polymorphism.
+
+### Important Considerations
+
+- Ensure that the base class declares virtual functions when you intend to override them in derived classes to achieve polymorphic behavior.
+- Use references (`Base&`) or pointers (`Base*`) to base classes when you need to work with objects polymorphically, i.e., when you want to treat objects of derived classes uniformly through a common base class interface.
+
+In summary, a "base class reference" is a powerful feature in object-oriented programming that enables polymorphic behavior and abstraction, allowing code to interact with objects of derived classes through a unified base class interface.
+
+#### Pure virtual function 
+
+```cpp
 virtual void pureVirtualFunction() = 0; // Pure virtual function
 ```
 
--> No implementation
--> 
+### Key Characteristics of Pure Virtual Functions:
 
-#### **abstract class** 
+1. **No Implementation**: They are declared with `= 0` in the base class and do not provide an implementation.
+2. **Abstract Base Class**: A class that contains at least one pure virtual function is called an abstract base class. It cannot be instantiated on its own, as it is incomplete due to the lack of implementation for its pure virtual functions.
+3. **Force Implementation in Derived Classes**: Any derived class that does not provide an implementation for all inherited pure virtual functions remains abstract itself and cannot be instantiated
 
--> it's a class that has at least **Pure Virtual function** it is good for abstraction of the code.
--> can not create object from this class.
+#### abstract class 
 
-#### **Interface class**
+- it's a class that has at least **Pure Virtual function** it is good for abstraction of the code.
 
--> it's when a class has all **Pure Virtual function**
--> Can not create object from this class.
+- can not create object from this class.
 
-**Concrete class**
+#### Interface class
 
--> can create object from this class. 
--> have no pure virtual function.
+- it's when a class has all **Pure Virtual function**
+
+- Can not create object from this class.
+
+#### Concrete class
+
+- can create object from this class. 
+
+- have no pure virtual function.
+
+# Lecture 8
+
+## Generic Programming
+
+### Templates in CPP
+
+##### Function Template 
+
+let's take a look at this code
+
+```cpp
+int get_max (int x, int y)
+{
+	return if (x>y)?x:y;
+}
+
+double get_max (double x, double y)
+{
+	return if (x>y)?x:y;
+}
+
+float get_max (float x, floart y)
+{
+	return if (x>y)?x:y;
+}
+```
+
+did you notice a pattern here? yes, there is it's the same function however there is difference in return and parameter type this is the concept of `Function overloading` 
+
+now we can make a template out of this pattern so we don't have to **duplicate** code like we did previously 
+
+```cpp
+Template <Typename T>
+T get_max (T x, T y)
+{
+	return if (x>y)?x:y;
+}
+```
+
+During Application 
+
+```cpp
+int main()
+{
+	get_max<int>(5,10);
+	get_max<float>(5.5,5.2);
+	get_max<double>(5.5,5.2)
+}
+```
+
+##### Memory Talk 
+
+in `function overloading` code each and every function you did make have it's own space in memory, wither you use in your application code or not.
+
+in `Template` code only the function that you did overload in the application code have space in memory.
+
+Can you have multiple types in `template` ? Yes,
+
+##### Class Template 
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+template <typename T>
+
+class type
+{
+    private:
+        T* P_Type;
+    public:
+        type()
+        {
+            P_Type = new T;
+        }
+
+        ~type()
+        {
+            delete P_Type;
+        }
+
+        void Set_value (const T & val)
+        {
+            *P_Type = val;
+        }
+
+        T Get_value (void) const 
+        {
+            return *P_Type;
+        }
+};
+
+int main ()
+{
+    type<double> a;
+    type<int> b;
+    a.Set_value(4.1);
+    b.Set_value(2);
+
+    cout << a.Get_value() << endl;
+    cout << b.Get_value() << endl;
+
+    return 0;
+}
+```
+
+##### non-type parameter to template!
+
+The syntax `template <typename T, int x>` in C++ denotes the declaration of a template. Let's break down what each part means:
+
+### Template Declaration
+
+- **`template <typename T, int x>`**: This line introduces a template declaration in C++. It tells the compiler that what follows is a template definition that may involve one or more template parameters.
+
+### Template Parameters
+
+1. **`typename T`**:
+   - `typename` (or `class`) introduces a type parameter `T`.
+   - This means `T` can be any data type (e.g., `int`, `double`, `std::string`, custom class types).
+2. **`int x`**:
+   - `int` specifies that `x` is an integer parameter.
+   - `x` is a non-type template parameter, meaning its value must be a constant known at compile-time.
+
+### Usage Example
+
+Here’s an example of how you might use this template:
+
+```cpp
+cppCopy code#include <iostream>
+
+// Template definition
+template <typename T, int x>
+class MyClass {
+public:
+    void printValues() {
+        std::cout << "Type T: " << typeid(T).name() << std::endl;
+        std::cout << "Value of x: " << x << std::endl;
+    }
+};
+
+int main() {
+    // Instantiating MyClass with int as T and 10 as x
+    MyClass<int, 10> obj1;
+    obj1.printValues(); // Outputs: Type T: i, Value of x: 10
+
+    // Instantiating MyClass with double as T and 20 as x
+    MyClass<double, 20> obj2;
+    obj2.printValues(); // Outputs: Type T: d, Value of x: 20
+
+    return 0;
+}
+```
+
+### Explanation
+
+- **Template Class `MyClass`**:
+  - `MyClass` is a template class that takes two parameters: `T` (type parameter) and `x` (integer non-type parameter).
+  - Inside `MyClass`, `T` can be used as a type placeholder for any type (e.g., `int`, `double`), and `x` can be used as a constant expression (e.g., `10`, `20`).
+- **Template Instance `obj1` and `obj2`**:
+  - `MyClass<int, 10> obj1;` instantiates `MyClass` with `T` as `int` and `x` as `10`.
+  - `MyClass<double, 20> obj2;` instantiates `MyClass` with `T` as `double` and `x` as `20`.
+- **Output**:
+  - `printValues()` method prints the type `T` using `typeid(T).name()` (which gives a compiler-specific type name) and the value of `x`.
+
+### Key Points
+
+- **Flexibility**: Templates allow you to write generic code that works with different data types (`T`) and constant expressions (`x`).
+- **Compile-Time Determination**: Template parameters are determined at compile-time, ensuring type safety and performance benefits.
+- **Specialization**: Templates can be specialized for specific types or values of `x` if needed, providing customized behavior for particular cases.
+
+In essence, `template <typename T, int x>` defines a template for a class or function where `T` is a type parameter and `x` is a non-type parameter, allowing for flexibility and efficiency in C++ code design.
+
+##### Static with template 
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+template <typename T>
+void func ()
+{
+	static T x = 0;
+    x++;
+    cout << x << endl; 
+}
+
+int main ()
+{
+    func<int>();
+    func<double>();
+    func<float>();
+
+    func<int>();
+    func<double>();
+    func<float>();
+}
+```
+
+##### Template Specialization 
+
