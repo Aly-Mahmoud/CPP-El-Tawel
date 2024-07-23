@@ -1560,7 +1560,6 @@ Association is a relationship among classes which is used to show that instances
    }
    ```
 
-   
 2. **one to many**
 
    One instance of a class is associated with multiple instances of another class
@@ -1620,7 +1619,6 @@ Association is a relationship among classes which is used to show that instances
    }
    ```
 
-   
 3. **many to one**
 
    Multiple instances of a class are associated with one instance of another class
@@ -1669,7 +1667,6 @@ Association is a relationship among classes which is used to show that instances
    }
    ```
 
-   
 4. **many to many**
 
    Multiple instances of a class are associated with multiple instances of another class
@@ -1767,7 +1764,7 @@ It is a specialized form of association between two or more objects in which the
 
 #### 13.5.1 types of inheritance
 
-![types of inheritance](.\Cache\inheritance-Types.png)
+![types of inheritance](Cache/inheritance-Types.png)
 
 **What?**
 
