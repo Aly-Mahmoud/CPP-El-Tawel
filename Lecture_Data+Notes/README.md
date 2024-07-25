@@ -1421,7 +1421,7 @@ Encapsulation is the bundling of data and methods that operate on that data into
 
 **Visualization** 
 
-![Encapsulation in C++ - GeeksforGeeks](Cache\ecapsulation_in_cpp.png)
+![Encapsulation in C++ - GeeksforGeeks](Cache/ecapsulation_in_cpp.png)
 
 **Code Example**
 
@@ -1468,7 +1468,7 @@ public:
 Data hiding is a principle in object-oriented programming (OOP) that restricts direct access to some of an object's data and internal workings. The main idea is to protect the integrity of the data by preventing unintended or unauthorized access and modification. This is typically achieved through access modifiers like `private` and `protected` in C++.
 
 **Visualization** 
-![Encapsulation_Visulization](Cache\encapsulation-and-data-hiding.png)
+![Encapsulation_Visulization](Cache/encapsulation-and-data-hiding.png)
 
 **Code Example**
 
@@ -1518,7 +1518,7 @@ Association is a relationship among classes which is used to show that instances
    **Example: Person and Passport**
    Person object can only refer to one passport object
 
-   ![One-to-one_Association](Cache\One-to-one_Association.png)
+   ![One-to-one_Association](Cache/One-to-one_Association.png)
 
    **Code:**
 
@@ -1566,7 +1566,7 @@ Association is a relationship among classes which is used to show that instances
    **Example: Teacher and Students**
    Teacher has many references to students
 
-   ![One-to-Many](Cache\One-to-Many_Association.png)
+   ![One-to-Many](Cache/One-to-Many_Association.png)
 
    Code:
 
@@ -1625,7 +1625,7 @@ Association is a relationship among classes which is used to show that instances
    **Example: Employees and Department**
 
    Many employees may only refer to one Department
-   ![Many-to-One_Association](Cache\Many-to-One_Association.png)
+   ![Many-to-One_Association](Cache/Many-to-One_Association.png)
 
    ```cpp
    class Department 
@@ -1751,14 +1751,93 @@ int main()
 **association types**
 
 **Weak Association (Aggregation):** 
-It is a specialized form of association between two or more objects in which the objects have their own life-cycle but there exists an ownership as well. As an example, an employee may belong to multiple departments in the organization. However, if the department is deleted, the employee object wouldn't
+
+- It is a specialized form of association between two or more objects in which the objects have their own life-cycle but there exists an ownership as well. As an example, an employee may belong to multiple departments in the organization. However, if the department(the container) is deleted, the employee(the contained) object wouldn't
+- all of the previous examples were aggregation type
 
 
 **Strong Association (Composition):** 
 
 - Composition is a specialized form of association in which if the container object is destroyed, the included objects would cease to exist. It is actually a strong type of association and is also referred to as a "death" relationship. As an example, a house is composed of one or more rooms. If the house is destroyed, all the rooms that are part of the house are also destroyed as they cannot exist by themselves.
-- It represents part-of relationship
+- It represents **part-of** relationship
 - Embedded object is a form of strong association
+
+  - Code Example 
+
+    ```cpp
+    class Point
+    {  
+    private:
+    	int x ;
+    	int y ;
+    public:
+    	Point() {}
+        Point(int m) 
+    	{
+    	x = y = 0 ;
+        cout<<“Point default constructor is calling”<<endl;
+    	}
+    ```
+
+    ```cpp
+    class Line
+    {  
+    private:
+        Point start;  //Embedded object.
+        Point end;	  //Embedded object.
+    public:
+        Line() 
+        {
+            start.setXY(0,0); end.setXY(0,0);
+            cout<<“Line default constructor is calling”<<endl;
+        }
+    
+    ```
+
+    **Constructor and destructor chaining in case of embedded objects (Interview Question).**
+    for the same example above
+
+    ```cpp
+    int main()
+    {
+    	Line myline;
+    	return 0;
+    }
+    ```
+
+    the **constructor channing** when executing `Line myline;`
+
+    ```sql
+    point constructor called
+    point constructor called
+    line constructor called
+    ```
+
+    the **destructor channing** when the main code is done executing 
+
+    ```sql
+    line destructor called
+    point destructor called
+    point destructor called
+    ```
+
+
+
+**which point constructor will be called when executing `Line myline;`? (interview question)**
+
+the default constructor 
+
+**can I change what constructor to be called?**
+
+Yes, you can change the constructor to be called 
+example
+
+```cpp
+Line(int x1, int y1, int x2, int y2) : start(x1, y1) , end(x2, y2)
+ {}
+```
+
+
 
 ### 13.5 Inheritance
 
@@ -1825,13 +1904,11 @@ when creating multiple instances of a class functions are not created multiple t
 **Access modifiers:**
 the default access modifier is **private**
 
-![Access modifiers](.\Cache\Access_modifiers.png)
+![Access modifiers](Cache/Access_modifiers.png)
 
 
 
-![InhertanceAcessModifier](Cache\InhertanceAcessModifier.png)
-
-
+![InhertanceAcessModifier](Cache/InhertanceAcessModifier.png)
 
 **note** function signature is the combination of function type, function name, and function parameters similar to function prototype, or API
 
@@ -1841,7 +1918,7 @@ What ?
 
 same function with different behavior ( **function overloading**, **Operator overloading** )
 
-##### Polymorphism types 
+##### 13.6.1Polymorphism types 
 
 ###### 1- Compile time Polymorphism - Static binding - early binding
 
@@ -1994,11 +2071,11 @@ int main ()
 }
 ```
 
-#### V-Table , Virtual Table 
+#### 13.6.2 V-Table , Virtual Table 
 
 for each child class there is a v-table for the virtual functions 
 
-#### V-Pointer 
+#### 13.6.3 V-Pointer 
 
 created in the child class it's for the parent class, it points at the virtual function that can override the virtual function
 
@@ -2014,14 +2091,14 @@ created in the child class it's for the parent class, it points at the virtual f
 
 4- pointer from child class pointing to object from child class too, it simply calls the function in the child class
 
-#### override Keyword 
+#### 13.6.4 override Keyword 
 
-### Why Use `override`?
+#### 13.6.5 Why Use `override` / `override final`/`final`?
 
 1. **Intent Clarification**: It clearly shows that the function is intended to override a base class virtual function.
 2. **Compile-Time Checking**: The compiler will generate an error if there is no matching virtual function in the base class to override, which helps catch mistakes such as mismatched function signatures.
 
-​	**for function**
+**for function**
 
 ```cpp
 derived class:
@@ -2038,7 +2115,7 @@ it notifies you if the function which is meant to override another virtual funct
 
 When using `override`, you do not need to specify the `virtual` keyword again. The `override` specifier itself implies that the function is virtual and is overriding a virtual function from the base class.
 
-​	**override final Keyword**
+**override final Keyword**
 
 ```cpp
 derived class:
@@ -2053,7 +2130,7 @@ public:
 
 the withdraw function can not be overridden by any other function 
 
-​	**for class** 
+**for class** 
 
 ```cpp
 derived class: final
@@ -2068,21 +2145,23 @@ public:
 
 any function inside this class can not be overridden 
 
-#### base class refrence 
+## 14. base class refrence 
 
 A "base class reference" refers to a reference variable that is declared to refer to objects of the base class or any of its derived classes. In object-oriented programming, particularly in languages like C++ where inheritance is supported, references and pointers to base classes are commonly used for polymorphic behavior and abstraction.
 
-### Example Scenario
+Example Scenario
 
 Consider a simple inheritance hierarchy:
 
 ```cpp
-cppCopy code#include <iostream>
+#include <iostream>
 
 // Base class
-class Base {
+class Base 
+{
 public:
-    void display() {
+    void display() 
+	{
         std::cout << "Base class display()" << std::endl;
     }
 
@@ -2090,14 +2169,17 @@ public:
 };
 
 // Derived class
-class Derived : public Base {
+class Derived : public Base 
+{
 public:
-    void display() override {
+    void display() override 
+	{
         std::cout << "Derived class display()" << std::endl;
     }
 };
 
-int main() {
+int main() 
+{
     Derived derivedObj;
 
     // Base class reference
@@ -2110,7 +2192,7 @@ int main() {
 }
 ```
 
-### Explanation
+Explanation
 
 1. **Base Class and Derived Class**:
    - `Base` is a base class that defines a `display` function.
@@ -2121,30 +2203,32 @@ int main() {
 3. **Polymorphic Behavior**:
    - Even though `baseRef` is declared as a reference to `Base`, because `display` is a virtual function in `Base` and overridden in `Derived`, the call `baseRef.display()` resolves to the `display` function in `Derived` due to dynamic polymorphism (runtime binding).
 
-### Benefits of Base Class References
+Benefits of Base Class References
 
 - **Polymorphism**: Allows code to work with objects of different derived classes through a single interface (the base class interface), promoting flexibility and extensibility.
 - **Abstraction**: Encapsulates common behavior and attributes in the base class, allowing derived classes to specialize or extend functionality as needed.
 - **Dynamic Binding**: Enables dynamic dispatch of function calls based on the actual type of the object at runtime, facilitating runtime polymorphism.
 
-### Important Considerations
+Important Considerations
 
 - Ensure that the base class declares virtual functions when you intend to override them in derived classes to achieve polymorphic behavior.
 - Use references (`Base&`) or pointers (`Base*`) to base classes when you need to work with objects polymorphically, i.e., when you want to treat objects of derived classes uniformly through a common base class interface.
 
 In summary, a "base class reference" is a powerful feature in object-oriented programming that enables polymorphic behavior and abstraction, allowing code to interact with objects of derived classes through a unified base class interface.
 
-#### Pure virtual function 
+## 15. Pure virtual function 
 
 ```cpp
 virtual void pureVirtualFunction() = 0; // Pure virtual function
 ```
 
-### Key Characteristics of Pure Virtual Functions:
+**Key Characteristics of Pure Virtual Functions:**
 
 1. **No Implementation**: They are declared with `= 0` in the base class and do not provide an implementation.
 2. **Abstract Base Class**: A class that contains at least one pure virtual function is called an abstract base class. It cannot be instantiated on its own, as it is incomplete due to the lack of implementation for its pure virtual functions.
 3. **Force Implementation in Derived Classes**: Any derived class that does not provide an implementation for all inherited pure virtual functions remains abstract itself and cannot be instantiated
+
+
 
 #### abstract class 
 
@@ -2164,13 +2248,11 @@ virtual void pureVirtualFunction() = 0; // Pure virtual function
 
 - have no pure virtual function.
 
-# Lecture 8
+## 16.Generic Programming
 
-## Generic Programming
+### 16.1 Templates in CPP
 
-### Templates in CPP
-
-##### Function Template 
+##### 16.1.1 Function Template 
 
 let's take a look at this code
 
@@ -2214,7 +2296,7 @@ int main()
 }
 ```
 
-##### Memory Talk 
+**Memory Talk** 
 
 in `function overloading` code each and every function you did make have it's own space in memory, wither you use in your application code or not.
 
@@ -2222,7 +2304,7 @@ in `Template` code only the function that you did overload in the application co
 
 Can you have multiple types in `template` ? Yes,
 
-##### Class Template 
+##### 16.1.2 Class Template 
 
 ```cpp
 #include <iostream>
@@ -2271,29 +2353,29 @@ int main ()
 }
 ```
 
-##### non-type parameter to template!
-
-The syntax `template <typename T, int x>` in C++ denotes the declaration of a template. Let's break down what each part means:
-
-### Template Declaration
+**Template Declaration**
 
 - **`template <typename T, int x>`**: This line introduces a template declaration in C++. It tells the compiler that what follows is a template definition that may involve one or more template parameters.
 
-### Template Parameters
+##### 16.1.3 non-type parameter to template!
+
+The syntax `template <typename T, int x>` in C++ denotes the declaration of a template. Let's break down what each part means:
+
+**Template Parameters**
 
 1. **`typename T`**:
-   - `typename` (or `class`) introduces a type parameter `T`.
+   - `typename` or `class` introduces a type parameter `T`.
    - This means `T` can be any data type (e.g., `int`, `double`, `std::string`, custom class types).
 2. **`int x`**:
    - `int` specifies that `x` is an integer parameter.
    - `x` is a non-type template parameter, meaning its value must be a constant known at compile-time.
 
-### Usage Example
+**Usage Example**
 
 Here’s an example of how you might use this template:
 
 ```cpp
-cppCopy code#include <iostream>
+#include <iostream>
 
 // Template definition
 template <typename T, int x>
@@ -2318,7 +2400,7 @@ int main() {
 }
 ```
 
-### Explanation
+**Explanation**
 
 - **Template Class `MyClass`**:
   - `MyClass` is a template class that takes two parameters: `T` (type parameter) and `x` (integer non-type parameter).
@@ -2329,7 +2411,7 @@ int main() {
 - **Output**:
   - `printValues()` method prints the type `T` using `typeid(T).name()` (which gives a compiler-specific type name) and the value of `x`.
 
-### Key Points
+**Key Points**
 
 - **Flexibility**: Templates allow you to write generic code that works with different data types (`T`) and constant expressions (`x`).
 - **Compile-Time Determination**: Template parameters are determined at compile-time, ensuring type safety and performance benefits.
