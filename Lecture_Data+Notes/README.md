@@ -1,6 +1,4 @@
-# **CPP El-Taweel**
-
-
+# **CPP **
 
 ## 1.Class
 
@@ -347,7 +345,7 @@ int main()
 
 
 
-### 3.2 Initialization list
+## 4. Initialization list
 
 ​	**reserve empty space in memory**
 
@@ -367,21 +365,21 @@ x = 5;
 int x=5; 
 ```
 
-#### 3.2.1 for Variable
+### 4.1 for Variable
 
-##### 	3.2.1.1 C like Initialization 
+#### 	4.1.1 C like Initialization 
 
 ```cpp
 int x = 5;
 ```
 
-##### 	3.2.1.2 Constructor like Initialization 
+#### 	4.1.2 Constructor like Initialization 
 
 ```cpp
 int x (5);
 ```
 
-##### 	3.2.1.3 Uniform Initialization
+#### 	4.1.3 Uniform Initialization
 
 ```cpp
 int x {5};
@@ -394,9 +392,9 @@ int x {5};
 int x = {5.3} //-> error -> no casting will occur
 ```
 
-#### 3.2.2 for class
+### 4.2 for class
 
-##### 3.2.2.1 Default Member Initializers
+#### 4.2.1 Default Member Initializers
 
 Since C++11, you can initialize members directly in the class definition.
 
@@ -415,9 +413,9 @@ Person()
 };
 ```
 
-##### 3.2.2.2 Member Initialization Order
+#### 4.2.2 Member Initialization Order
 
-###### 3.2.2.2.1 In order Initialization 
+##### 4.2.2.1 In order Initialization 
 
 in the following code we **reserve & initialize** at the very beginning of the creating an **(object-instance)** of this class
 
@@ -435,7 +433,7 @@ class Person
 };
 ```
 
-###### 3.2.2.2.2 Out of order initialization
+##### 4.2.2.2 Out of order initialization
 
 Member variables are initialized in the order they are declared in the class, not the order they appear in the initializer list.
 
@@ -455,7 +453,7 @@ public:
 
 the code above the initialization is not in order so. it will allocate and then initialize
 
-##### 3.2.2.3 In-class Member Initializers
+##### 4.2.2.3 In-class Member Initializers
 
 In-class member initializers provide default values that can be overridden by the initializer list.
 
@@ -473,7 +471,7 @@ public:
 
 ```
 
-##### 3.2.2.4 Delegating Constructors
+##### 4.2.2.4 Delegating Constructors Initialization 
 
 ```cpp
 class Person 
@@ -495,7 +493,7 @@ public:
 
 ```
 
-## 4. Destructor 
+## 5. Destructor 
 
 - it's a (special function = special method)
 
@@ -561,9 +559,9 @@ int main()
 
 
 
-## 5. L-R Values
+## 6. L-R Values
 
-### 5.1 L-value:
+### 6.1 L-value
 
 **What**
 
@@ -639,7 +637,7 @@ int &ref = a; // 'ref' is an L-value reference to 'a'
 
 ```
 
-### 5.2 R-value:
+### 6.2 R-value
 
 - **What**
 
@@ -743,7 +741,7 @@ Ref = 43;
 
 ![[L-R]Values](Cache\[L-R]Values.png)
 
-## 6. Constant Object 
+## 7. Constant Object 
 
 **What**
 
@@ -769,7 +767,7 @@ void Person::display_info(void) const
 
 
 
-## 7. Constant function
+## 8. Constant function
 
 **What**
 
@@ -799,7 +797,7 @@ public:
 
 
 
-## 8. Static variable 
+## 9. Static variable 
 
 **What**
 
@@ -835,7 +833,7 @@ int main()
 
 
 
-## 9. Static Function 
+## 10. Static Function 
 
 **What?**
 
@@ -895,7 +893,7 @@ int main()
 
 
 
-## 10. this  pointer
+## 11. this  pointer
 
 **What**
 
@@ -922,7 +920,7 @@ Person(std::string name, std::string ID)
 
 
 
-## 11. friend function/Class
+## 12. friend function/Class
 
 **What**
 
@@ -969,7 +967,7 @@ int main()
 }
 ```
 
-## 12. operator overloading
+## 13. operator overloading
 
 **What**
 
@@ -1047,9 +1045,9 @@ int main
 
 
 
-### Operator overloading types
+### 13.1 Operator overloading types
 
-#### 1. Copy assignment operator
+#### 13.1.1 Copy assignment operator
 
 **Why?**
 
@@ -1216,7 +1214,7 @@ int main
 **why did we use constant?**
 ask yourself in this situation when you are S2 = S1 for example, do you want the value of S1 to be changed by this operation, the answer should be no so you use constant to make sure that the value will not be changed.
 
-#### 2.move assignment operation
+#### 13.1.2 move assignment operation
 
 - it's a (special function = special method).
 - you can create it, if you did not, compiler will use copy Constructor
@@ -1275,14 +1273,14 @@ On the other hand, `pointer = nullptr;` simply assigns the null pointer value to
 
 So, to safely release memory and ensure that `pointer` no longer points to deallocated memory, you typically use both statements together:
 
-#### 3. Arithmetic operator
+#### 13.1.3 Arithmetic operator
 
-##### 3.1 Unary Operator (++ , --)
+##### 13.1.3.1 Unary Operator (++ , --)
 
 **Constraints:** 
 you can not overload it into binary 
 
-##### 3.2 Binary
+##### 13.1.3.2 Binary
 
 **Operation overloading for (-)**
 
@@ -1317,9 +1315,9 @@ Mystring operator+ (const Mystring &rhs)
 
 
 
-## 13. Concepts of OOP 
+## 14. Concepts of OOP 
 
-### 13.1 Abstraction
+### 14.1  Abstraction
 
 #### Types of Abstraction: 
 
@@ -1331,7 +1329,7 @@ This type only shows the required information about the data and  hides the unne
 
 This type only shows the required information about the  implementation and hides unnecessary information.
 
-#### how to abstract:
+#### how to abstract
 
 ##### 1-Abstraction using Classes
 
@@ -1414,7 +1412,7 @@ int main()
 
 
 
-### 13.2 Encapsulation
+### 14.2 Encapsulation
 
 **Explanation** 
 Encapsulation is the bundling of data and methods that operate on that data into a single unit, typically a class. Encapsulation serves two purposes: grouping related data and methods together, and controlling access to the data through public methods. It ensures that an object's internal state can only be changed in a controlled manner.
@@ -1461,14 +1459,14 @@ public:
 
 
 
-### 13.3 Data hiding
+### 14.3 Data hiding
 
 **Explanation** 
 
 Data hiding is a principle in object-oriented programming (OOP) that restricts direct access to some of an object's data and internal workings. The main idea is to protect the integrity of the data by preventing unintended or unauthorized access and modification. This is typically achieved through access modifiers like `private` and `protected` in C++.
 
 **Visualization** 
-![Encapsulation_Visulization](Cache/encapsulation-and-data-hiding.png)
+                                           ![Encapsulation_Visulization](Cache/encapsulation-and-data-hiding.png)
 
 **Code Example**
 
@@ -1506,7 +1504,7 @@ public:
 
 ```
 
-### 13.4 association
+### 14.4 association
 
 Association is a relationship among classes which is used to show that instances of classes could be either linked to each other or combined logically or physically into some aggregation
 
@@ -1625,7 +1623,7 @@ Association is a relationship among classes which is used to show that instances
    **Example: Employees and Department**
 
    Many employees may only refer to one Department
-   ![Many-to-One_Association](Cache/Many-to-One_Association.png)
+   						![Many-to-One_Association](Cache/Many-to-One_Association.png)
 
    ```cpp
    class Department 
@@ -1807,7 +1805,7 @@ int main()
 
     the **constructor channing** when executing `Line myline;`
 
-    ```sql
+    ```ABAP
     point constructor called
     point constructor called
     line constructor called
@@ -1815,7 +1813,7 @@ int main()
 
     the **destructor channing** when the main code is done executing 
 
-    ```sql
+    ```ABAP
     line destructor called
     point destructor called
     point destructor called
@@ -1837,11 +1835,9 @@ Line(int x1, int y1, int x2, int y2) : start(x1, y1) , end(x2, y2)
  {}
 ```
 
+### 14.5 Inheritance
 
-
-### 13.5 Inheritance
-
-#### 13.5.1 types of inheritance
+#### 14.5.1 types of inheritance
 
 ![types of inheritance](Cache/inheritance-Types.png)
 
@@ -1874,7 +1870,7 @@ class that inherits from the Base class
 
 **Why**?
 
--> C++ is based on real life, so it's a logical real life approach to programming
+C++ is based on real life, so it's a logical real life approach to programming
 
 **How**?
 
@@ -1912,15 +1908,15 @@ the default access modifier is **private**
 
 **note** function signature is the combination of function type, function name, and function parameters similar to function prototype, or API
 
-### 13.6 Polymorphism 
+### 14.6 Polymorphism 
 
 What ?
 
 same function with different behavior ( **function overloading**, **Operator overloading** )
 
-##### 13.6.1Polymorphism types 
+##### 14.6.1Polymorphism types 
 
-###### 1- Compile time Polymorphism - Static binding - early binding
+###### 14.6.1.1  Compile time Polymorphism - Static binding - early binding
 
 Apply concept during compilation.
 
@@ -1976,7 +1972,17 @@ int main ()
 }
 ```
 
-###### 2- Runtime Polymorphism - dynamic binding - late binding
+**Output**
+
+```makefile
+Account::Deposite()
+Saving::Deposite
+Account::Deposite()
+```
+
+
+
+###### 14.6.1.2 Runtime Polymorphism - dynamic binding - late binding
 
 Apply binding during runtime.
 
@@ -2063,7 +2069,7 @@ void change_balance(Account *acc)
 
 int main ()
 {
-    //Binding Binding -> 
+    //dynamic Binding -> 
     Account *ptr = new Saving; 
     ptr->Deposite();
     delete ptr;
@@ -2071,11 +2077,21 @@ int main ()
 }
 ```
 
-#### 13.6.2 V-Table , Virtual Table 
+Output
+
+```makefile
+Saving::Deposite
+Saving::destructor
+Account::destructor
+```
+
+
+
+#### 14.6.2 V-Table , Virtual Table 
 
 for each child class there is a v-table for the virtual functions 
 
-#### 13.6.3 V-Pointer 
+#### 14.6.3 V-Pointer 
 
 created in the child class it's for the parent class, it points at the virtual function that can override the virtual function
 
@@ -2091,9 +2107,9 @@ created in the child class it's for the parent class, it points at the virtual f
 
 4- pointer from child class pointing to object from child class too, it simply calls the function in the child class
 
-#### 13.6.4 override Keyword 
+#### 14.6.4 override Keyword 
 
-#### 13.6.5 Why Use `override` / `override final`/`final`?
+**Why Use `override` / `override final`/`final`?**
 
 1. **Intent Clarification**: It clearly shows that the function is intended to override a base class virtual function.
 2. **Compile-Time Checking**: The compiler will generate an error if there is no matching virtual function in the base class to override, which helps catch mistakes such as mismatched function signatures.
@@ -2149,7 +2165,7 @@ any function inside this class can not be overridden
 
 A "base class reference" refers to a reference variable that is declared to refer to objects of the base class or any of its derived classes. In object-oriented programming, particularly in languages like C++ where inheritance is supported, references and pointers to base classes are commonly used for polymorphic behavior and abstraction.
 
-Example Scenario
+**Example Scenario**
 
 Consider a simple inheritance hierarchy:
 
@@ -2157,7 +2173,7 @@ Consider a simple inheritance hierarchy:
 #include <iostream>
 
 // Base class
-class Base 
+class Base
 {
 public:
     void display() 
@@ -2248,7 +2264,416 @@ virtual void pureVirtualFunction() = 0; // Pure virtual function
 
 - have no pure virtual function.
 
-## 16.Generic Programming
+## 16. Vectors
+
+**What is Vector?**
+
+- vector is a **dynamic array** (can grow and shrink in size at exaction time) **unlike array**
+
+- Elements are all the **same type** **like array** defined between angle brackets < >.
+
+- Stored **contagiously** in memory **like array.**
+
+- individual elements can by accessed by their position or index **like array**.
+
+- First element  is at index 0 **like array** 
+
+- Last element is at index (size-1) **like array**
+- if you use subscript operator [  ] to access a specific element there will no checking if you are out of bound **like array.**
+  - however, it provides many useful function that do bounds check **unlike array** 
+
+- it's an OOP **container** in **STL** 
+  so in order to use it you must write
+
+```
+#include <vetcor>
+using namespace std;
+```
+
+- elements initialized to zero **unlike arrays** 
+
+- very efficient 
+
+- iteration (looping) is often used to process.
+
+### Declaring vector
+
+```cpp
+#include <vector>
+using namespace std;
+
+vector <char> vowels;
+vector <int> test_scores (10);
+```
+
+### Initialize Vector
+
+#### array like initialization 
+
+```cpp
+vector <char> vowels {'a', 'e', 'i', 'o', 'u'};
+vector <int> test_scores {100, 98, 89, 85, 93};
+```
+
+#### initializing a number of vectors with one value 
+
+```cpp
+vetor <double> hi_temp (365,80.0);
+```
+
+now you have **one vector** with **365 elements** each one of them is a **double** initialized to the value of **80.0**
+
+you can declare a vector to be a copy of an array 
+
+```cpp
+
+```
+
+you can declare a vector to be a copy of another vector
+
+```
+
+```
+
+### Accessing vector elements 
+
+#### Accessing vector elements  - array syntax
+
+```cpp
+vector_name [element_index]
+```
+
+Example Code:
+
+```cpp
+vector <int> test_scores {100, 95, 99, 87, 88};
+
+cout << "1st score at index 0: " << test_scores[0] << endl;
+cout << "2nd score at index 1: " << test_scores[1] << endl;
+cout << "3rd score at index 2: " << test_scores[2] << endl; 
+cout << "4th score at index 3: " << test_scores[3] << endl;
+cout << "5th score at index 4: " << test_scores[4] << endl;
+```
+
+#### Accessing vector elements - vector syntax 
+
+using at method of the class vector 
+
+```cpp
+vector_name.at(element_index)
+```
+
+Example Code:
+
+```cpp
+vector <int> test_scores {100, 95, 99, 87, 88};
+
+cout << "1st score at index 0: " << test_scores.at(0) << endl;
+cout << "2nd score at index 1: " << test_scores.at(1) << endl;
+cout << "3rd score at index 2: " << test_scores.at(2) << endl;
+cout << "4th score at index 3: " << test_scores.at(4) << endl;
+cout << "5th score at index 4: " << test_scores.at(5) << endl;
+```
+
+### Vector dynamic allocation 
+
+#### push_back method
+
+push_back method is a method that append elements to the vector at the end side of the vector
+
+Example code
+
+```cpp
+vector <char> vowels {'a', 'l', 'y'};
+vowels.push_back('z');
+vowels.push_back('i');
+```
+
+Q) How can vectors be **sequentially** ordered and have the option of dynamically adding elements to it 
+
+### Dynamic Growth and Reallocation
+
+When you add elements to the vector using `push_back` or other modifying methods, the vector may need to allocate more memory if its current capacity is exceeded. This is where the concept of reallocation comes into play:
+
+1. **Capacity vs. Size**:
+   - **Size**: The number of elements currently stored in the vector.
+   - **Capacity**: The amount of memory allocated for the vector, which may be greater than the current size to accommodate future growth without frequent reallocations.
+2. **Reallocation**:
+   - If the vector's size exceeds its current capacity, the vector allocates a new block of memory, usually larger than the previous one (often by a growth factor, typically 2x).
+   - It then copies the existing elements to the new memory block and deallocates the old block.
+
+### Vector boundary checking
+
+- boundary checking does not occur in subscript operator [ ].
+- boundary checking occurs in the methods provided by the vector class. 
+
+```cpp
+vector <int> test_scores {100,95};
+cin >> test_scores.at(5);
+```
+
+```cpp
+Output
+treminate called after throwing an instance of 'std::out_of_range' 
+what (): vector::_M_range_check: __n (which is 5) >= this->size() (which is 2) this application has requested the Runtime to terminate it in an unusual way.
+please contact the application's support team for more information.
+```
+
+### Vector size identification
+
+to know the size of an vector you can use the `.size ()` method
+
+Code Example 
+
+```cpp
+vector <int> test_scores {100,95};
+cout << test_scores.size() << endl;
+```
+
+### 2D Vectors
+
+#### declaration 
+
+```cpp
+vector <vector<int>> movie_ratings [4][3]
+```
+
+#### initialization
+
+```cpp
+vector <vector<int>> movie_ratings
+{
+    {1,2,3,4},
+    {1,2,4,4},
+    {1,3,4,5}
+}
+```
+
+#### Accessing 
+
+##### Accessing vector elements  - array syntax
+
+```cpp
+movie_ratings [0][1]
+```
+
+#####  Accessing vector elements  - vector syntax
+
+```cpp
+movie_rating.at(0).at(1)
+```
+
+
+
+## 16. Smart pointers
+
+- **What are smart pointers ?**
+
+  - objects 
+
+  - implemented as C++ template class
+
+  - can only point to heap-allocated memory
+  - adhere to [RAII](
+    Resource acquisition is Initilization
+    Rescoruce Acquistion Example:
+    Open file.
+    Allocated memory
+    Acquire a lock.
+    Is Initilization means:
+    happens in the object constructor.
+    Rescorce relinquishing:
+    happens in the object destructor:
+    Close the file.
+    Deallocated the memory
+    release the lock.
+    ) principles
+
+- **What makes smart pointers smart?**
+  - Automatically call delete when no longer needed
+
+- **Why the need for smart pointers ?**
+  - Pointer purpose is to give you more control and fixability over memory. however most application **faults** written in languages that supports raw pointer are a pointer related problems. that encouraged the need for smart pointers concept 
+
+- **smart pointer constrains**
+  - you can not use arithmetic operation on smart pointer (++, --, etc.)
+
+**Smart Pointers Types** 
+
+### Unique pointer (unique_ptr)
+
+- **Unique pointer characteristics**
+
+  - Points to an object of type T on the heap
+
+  - it is unique - there can only be one unique_ptr<T> pointing to the object on the heap, but raw pointer can be assigned to the same object (not good practice).
+
+  - Owns what it points to 
+  - can be moved
+
+- **Unique pointer constrains**
+
+  - can not be assigned 
+
+  - can not be copied
+    - makes sense as you can not have two unique pointer pointing at the same thing.
+
+- **Example Code:**
+
+  - **Example 1**: creating, initializing and using
+
+    ```cpp
+    {
+        std::unique_ptr<int> p1 {new int {100}};
+    	std::cout << *p1 << std::endl; //100
+    	*p1 = 200;
+    	std::cout << *p1 << std::endl; //200
+    } // when goes out of scope it deletes whatever it was pointing to
+    ```
+
+    ```
+    ________
+    |Output|
+    ----------------------
+    100
+    200
+    ```
+
+  - **Example 2:**
+
+    ```cpp
+    {
+    	std::unique_ptr<Account> p1 {new Account {"Larry"}};
+    	std::cout <<*p1<<std::endl;
+    	p1->deposite(1000);
+    	pq->withdraw(500);
+    }
+    ```
+
+  - **Example 3:** unique pointer with vectors
+
+    ```cpp
+    {
+    	//creating a vector of unique pointers
+    	std::vector<std::unique_ptr<int>> vec;
+    	// creating a unique pointer
+    	std::unique_ptr<int> ptr {new int {100}}; 
+    	// trying to add the unique pointer created into the back of vector
+    	vec.push_back(ptr);
+    }
+    ```
+
+    ```makefile
+    ________
+    |Output|
+    ----------------------
+    Error - Copy not allowed for unique vectors
+    ```
+
+    we get an **error** in the output as vector push_back method initiate coping of the object to be pushed but unique pointer can not be copied
+
+  - **Example 4**: Solution to **Example 3**
+
+    ```cpp
+    {
+    	//creating a vector of unique pointers
+    	std::vector<std::unique_ptr<int>> vec;
+    	// creating a unique pointer
+    	std::unique_ptr<int> ptr {new int {100}}; 
+    	// trying to add the unique pointer created into the back of vector
+    	vec.push_back(std::move(ptr);
+    }
+    ```
+
+    
+
+  - **Useful methods** 
+
+    - **make_unique<>()**
+      a better way to initialize a pointer 
+      **why?** 
+
+      - in the traditional way 
+
+        1. we construct the default pointer
+
+        2. assign value to it 
+
+        ```cpp
+        std::unique_ptr<int> p1 {new int {100}};
+        ```
+
+      - using make_unique|
+
+        1. we pass initialization values into the constructor 
+
+        ```cpp
+        {
+            std::unique_ptr<int> p1 = make_unique<int>(100);
+        }
+        ```
+
+      
+
+    - **get()**: gets the address of what this pointer points to
+
+      ```cpp
+      {
+      	std::unique_ptr<int> p1 {new int {100}};
+      	std::cout << p1.get() << std::endl;
+      } // when goes out of scope it deletes whatever it was pointing to
+      ```
+
+      ```cpp
+      ________
+      |Output|
+      ----------------------
+      0x564388
+      ```
+
+    - **reset()**: release the memory from this pointer (ie.) makes the pointer points to null
+
+      ```cpp
+      {
+              std::unique_ptr<int> p1 {new int {100}};
+              p1.reset();
+          if(!p1)
+      		std::cout<< "this pointer is null" << std::endl;
+      }
+      ```
+
+      ```cpp
+      ________
+      |Output|
+      ----------------------
+      this pointer is null
+      ```
+
+      
+
+
+
+### Shared pointer (shared_ptr)
+
+
+
+### Weak pointer(weak_ptr)
+
+
+
+### Auto pointer (auto_ptr)
+
+makes the compiler deduce the type of pointer based on what return data type.
+
+```cpp
+std::auto_ptr p1 = make_unique<player>("Hero", 100, 100);
+```
+
+**Why?**
+it makes the code more readable and more writeable.
+Removes the headache of searching of what type of pointer that we created is.
+
+## 17.Generic Programming
 
 ### 16.1 Templates in CPP
 
@@ -2448,3 +2873,100 @@ int main ()
 
 ##### Template Specialization 
 
+
+
+## 18. Exotic notes
+
+### 	18.1  range-based for Loop(C++)
+
+#### 	18.1.1normal range-based for loop
+
+ 	a for loop without having to worry about the elements number or incrementing/decrementing a counter variable.
+
+```cpp
+int scores [] {100, 90,97};
+
+for (int score : scores)
+	std::cout<< score << std::endl;
+```
+
+*output*
+
+```makefile
+100
+90
+97
+```
+
+- **advantages** 
+
+  - easy, simple, elegant.
+
+  - less error prone.
+
+#### 18.1.2 initializer list range-based for loop (on the go)
+
+```cpp
+double average_temp {};
+double running_sum {};
+int size {0};
+
+for (auto temp: {60.2, 80.1, 90.0, 78.2})
+{
+	running_sum += temp;
+	++size;
+}
+average_temp = running_sum/size;
+```
+
+
+
+#### 18.1.3 string range-based for loop
+
+```cpp
+for (auto c:"Frank")
+	cout<< c << endl;
+```
+
+*output*
+
+```cpp
+F
+r
+a
+n
+k
+```
+
+
+
+
+
+### 18.2 auto
+
+let's make it even easier by using **auto** keyword
+
+```cpp
+int scores [] {100, 90,97};
+
+for (auto score : scores)
+	std::cout<< score << std::endl;
+```
+
+- auto keyword let the compiler deduce the type of the variable so instead of writing **int** you can just write **auto** and compiler will use **int** data type.
+- you might think will there is no much headache using **int** instead of **auto**, well you are correct but working in real big project declaring a variable will be much challenging thing, you might declare a variable in 2 lines of code.
+
+### 18.3 setprecision()
+
+it adjusts how many numbers you want after the decimal point (rounding)
+
+```cpp
+#include <iomanip>
+
+double number = 99.99999
+
+std::cout << fixed << std::setprecision(1);
+std::cout << number << std::endl;
+```
+
+tab representation in code is \t
