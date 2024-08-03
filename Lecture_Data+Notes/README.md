@@ -2603,9 +2603,9 @@ movie_rating.at(0).at(1)
         std::unique_ptr<int> p1 {new int {100}};
         ```
 
-      - using make_unique|
+      - using make_unique
 
-        1. we pass initialization values into the constructor 
+        1. we pass initialization values into the constructor  (compiler generates much more efficient code)
 
         ```cpp
         {
@@ -2655,11 +2655,186 @@ movie_rating.at(0).at(1)
 
 ### Shared pointer (shared_ptr)
 
+- **Shared pointer characteristics** 
+  - provides shared ownership of heap objects, so you can have multiple shared pointers pointing to the same object.
+  - points to an object of type <T> on the heap
+  - can be assigned
+  - can be copied
+  - can be moved
+  - when the use count is zero, the managed object on the heap get destroyed. 
+- **Shared pointer Constrains** 
+  - does not support managing arrays by default
 
+**Example 1: ** crating, initializing and using
+
+```cpp
+{
+	std::shared_ptr<int> p1 {new int {100}};
+	std::cout << *p1 << std::endl;
+	*p1 = 200;
+	std::cout << *p1 << std::endl;
+}
+```
+
+*output*
+
+```makefile
+100
+200
+```
+
+**Example 2:** user defined classes
+
+```cpp
+{
+	std::shared_ptr<Account> p1 {new Account {"Larry"}};
+	std::cout << *p1 << std::endl;
+	
+	p1->deposit(1000);
+	p1->withdraw(500)
+}
+```
+
+**Example 3:** vector and move
+
+```cpp
+std::vector<std::shared_ptr<int>> vec
+std::shared_ptr<int> ptr {new int {100}};
+
+vec.push_back(ptr);
+
+std::cout << ptr.use_count() << std::endl;
+```
+
+*output*
+
+```makefile
+2
+```
+
+**Example 4:** 
+
+- **Useful methods**
+
+  - make_shared(c++11):
+
+  - a better way to initialize a pointer 
+    **why?** 
+
+    - in the traditional way 
+
+      1. we construct the default pointer
+         - compiler generates data structure that hold info about:
+           - refrence count
+
+           - raw pointer
+    
+           - actual heap object
+
+           - etc.
+
+      2. assign value to it 
+
+      ```cpp
+      std::shared_ptr<int> p1 {new int {100}};
+      ```
+    
+    - using **make_shared**
+
+      1. we pass initialization values into the constructor (compiler generates much more efficient code)
+
+      ```cpp
+      {
+          std::unique_ptr<int> p1 = make_shared<int>(100);
+      }
+      ```
+    
+      
+    
+      Example Code:
+    
+      ```cpp
+      {
+      	std::shared_ptr<int> p1 = std::make_shared<int> (100);
+      	std::shared_ptr<int> p2 {p1};
+      	stdLLshared_ptr<int> p3;
+      	
+      	p3=p1;
+          std::cout<< p3.use_count() << std::endl;
+      }
+      ```
+
+      *output*
+
+      ```makefile
+      3
+      ```
+    
+      **in what order would the pointers be destroyed?**
+    
+      last to first 
+      
+      **Which shared pointer is responsible for cleaning up the heap storage?**
+      
+      the last pointer that refrence it, in this case p1 
+    
+    
+    
+  - **use_count() :** shows you how many pointer are pointing to the same object.
+  
+  ```cpp
+  {
+  	//use_count - the number of shared_ptr objects managing the heap object
+      std::shared_ptr<int> p1 {new int {100}};
+  	std::cout << p1.use_count() << std::endl;
+  	std::shared_ptr<int> p2 {p1};
+  	std::cout << p1.use_count() <<std::endl;
+  
+  	p1.reset; // decrement the use_count; p1 is nulled out
+      std::cout << p1.use_count() <<syd::endl;
+  	std::cout << p2.use_count() <<std:endl
+          
+  }
+  ```
+  
+  * *output*
+  
+  ```makefile
+  1
+  2
+  0
+  1
+  ```
+  
+  
 
 ### Weak pointer(weak_ptr)
 
+- **Weak pointer characteristics**
+  - provides a non-owning refrence
+    - does not increment or decrement refrence use count
+  - points to an object of type <T> on the heap
+  - created from a shared_ptr
 
+- **Use case**
+
+  - used to prevent strong refrence cycle which could prevent from being deleted
+
+    - Visualization 
+
+      ![Weak_ptr-circular_refrence](Cache/Weak_ptr-circular_refrence.png)
+
+      When they go out of scope, they'll be destroyed from the stack,
+
+      but their shared resources on the heap will not be destroyed and will leak memory.
+
+      **A** keeps B alive, and **B** keeps **A** alive
+
+      - solution
+
+        ![Weak_ptr-circular_refrence_sol](Cache\Weak_ptr-circular_refrence_sol.png)
+
+  - used as temp refrence for example an "iterator"
 
 ### Auto pointer (auto_ptr)
 
@@ -2668,6 +2843,54 @@ makes the compiler deduce the type of pointer based on what return data type.
 ```cpp
 std::auto_ptr p1 = make_unique<player>("Hero", 100, 100);
 ```
+
+### Custom deleters
+
+- **What are custom deleters?**
+
+  - when a smart pointer goes out of scope it should delete the objects it points to & nulls it self out. or at least that is the default, but what if you need to make your own deleters for the pointer to make more than just the default deleters does
+
+- **Why use of custom deleters?**
+
+  - when you have a special case where you  need more than the default deleters offers to you.
+
+- **Constrains of creating custom deleters**
+
+  - you can't use make_unique(), make_shared(), or make_weak(), methods when using your custom deleters as they do not support that.
+    - so. you need to make your own creating method 
+
+- **How to create your own custom deleters?**
+
+  - **function**
+
+    - ```cpp
+      void my_deletrs (some_CLass *raw_pointer)
+      {
+          std::cout<< "In my custom deleter"<<std::endl;
+      	delter raw_pointer;
+      }
+      ```
+
+    - **How to create a pointer when using a custom deleters**
+
+      ```cpp
+      shared_ptr<some_Class> ptr {new Some_class {100}, my_delter}
+      ```
+
+  - **Lamda**
+
+  - in a nut shell, lambda is an anonymous function that has no name and can be defined inline.
+
+    - ```cpp
+      shared_ptr<some_Class> ptr {
+      new Some_class {100}
+      , 
+      std::cout<<"In my custom deletrs"}std::endl;
+      delete ptr;
+      }
+      ```
+
+  
 
 **Why?**
 it makes the code more readable and more writeable.
