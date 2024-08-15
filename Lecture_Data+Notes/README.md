@@ -2896,28 +2896,650 @@ std::auto_ptr p1 = make_unique<player>("Hero", 100, 100);
 it makes the code more readable and more writeable.
 Removes the headache of searching of what type of pointer that we created is.
 
-## 17.Generic Programming
+## 17.standart template library (STL)
 
-### 16.1 Templates in CPP
+**STL Elements**
 
-##### 16.1.1 Function Template 
+### 17.1 Containers
+
+- Data structure that can store object of almost any type
+- Each container has member functions
+  - some are specific to all the container
+  - Other are available to all containers
+- Each container has an associated header file.
+  - `#include <container_type>`
+
+Containers most common functions
+
+![Most_Common_STL_Functions_1of2](Cache/Most_Common_STL_Functions_1of2.png)
+
+![Most_Common_STL_Functions_2of2](Cache/Most_Common_STL_Functions_2of2.png)
+
+![Complexity_of_Operations](Cache/ContainersOperation_Complexity.jpg)
+
+#### 17.1.1 sequence containers
+
+- description:
+  - containers that save the variables in memory sequentially
+
+##### array 
+
+```cpp
+int arr[5];
+```
+
+##### vector
+
+```
+std::vector<int> vec;
+```
+
+##### list
+
+it's a simple linked list 
+
+declaration
+
+```cpp
+std::list<std::string>
+```
+
+##### forward_list
+
+```
+
+```
+
+##### deque
+
+```
+
+```
+
+#### 17.1.2 associative containers
+
+- description:
+
+  - insert elements in a
+
+    - predefined order or no order at all.
+
+    - no duplicates or allow duplicates 
+
+##### set
+
+```
+
+```
+
+##### multi set
+
+```
+
+```
+
+##### map
+
+it's an associative container that has a key and a value and you can use pair object with it
+
+```cpp
+std::map<std::string,std::string> favourites
+{
+    {"key","Value"};
+    {"Aly","C"};
+    {"Frank", "C++};
+};
+    
+auto it = favourites.begin();
+    while (it!=favourites.end())
+    {
+        std::cout<<it->first << ":" << it->secound <<std::endl;
+        it++;
+	}
+```
+
+*output*
+
+```cpp
+Aly : C
+Key : Value
+Frank : C++
+```
+
+notice here the output is not in the same order of initialization.
+
+##### multi map
+
+```
+
+```
+
+#### 17.1.3 container adapters
+
+- variations of others the containers
+  - Constrains
+    - can not be used with **STL** algorithms
+
+
+##### 17.1.3.1 stack
+
+```
+
+```
+
+##### 17.1.3.2 queue
+
+```
+
+```
+
+##### 17.1.3.3 priority queue
+
+```
+
+```
+
+### 17.2 Algorithms (~60)
+
+STL **algorithms** work on sequence of **conatianers **elements provided to them by an **iterator**.
+
+Many algorithms require extra information in order to do their work
+
+- Functors (Function objects)
+- Function pointers
+- Lambda expression(C++)
+
+```cpp
+#include <algorithm>
+```
+
+- not all algorithms are compatable with all containers
+  - as containers only support different types of iterators
+    - and iterators are a must parameter to be passed to the algorithm
+
+
+
+#### 17.2 Non-modifying
+
+##### 17.2.1 find
+
+tries to locate the 1st occurrence of an element in a container
+
+- returns:
+
+  - if element is found:
+    -  an iterator pointing to located element
+
+  - if element is not found:
+    - an iterator pointing to end()
+
+**function prototype**
+
+```cpp
+std::find(container_instance.being(),conatiner_instance.end(), key_to_find);
+```
+
+**Example Primitive types**
+
+```
+std::vecotr<int> vec {1,2,3}l
+std::vector<int>::iterator loc = std::find(vec.begin(), vec.end(), 3)
+if (loc != vec.end())
+{
+	std::cout << *loc << std::endl;
+}
+```
+
+**Example User-defined types**
+
+```cpp
+#include <algorithms>
+#include <vector>
+#include <iostream>
+
+std::vector<players> team {/* assume initilized*/.}
+player p {"Hero", 100, 12};
+
+std::vector<player>::iterator loc = std::find(team.begin(), team.end(), p);
+
+if (loc!=team.end())
+    std::cout << *loc << std::endl;
+```
+
+
+
+##### 17.2.2 max
+
+```
+
+```
+
+##### 17.2.3 count
+
+```
+
+```
+
+##### 17.2.4 accumulate
+
+**description:**
+accumulates the data provided
+
+**function signature:**
+
+```cpp
+std::accumulate(the_begining_of_the_data_range, the_ending_of_data_range, start_value);
+```
+
+**Code Example**
+
+```cpp
+int sum {};
+sum = std::accumulate(v.begin(), v.end(), 0)
+std::cout << sum << std::endl;
+```
+
+*output*
+
+```makefile
+9
+```
+
+##### 17.2.5 for_each
+
+algorithm applies a whatever **function** you provide to each element in the **iterator sequence**
+
+- **algorithm needs at least one**
+
+  - functor(function object)
+
+  - Function pointer
+
+  - Lambda expression ()
+
+**Example: using functor**
+
+```cpp
+struct Square_Functor
+{
+	void operator() (int x)
+	{
+		std::cout << x * x < " ";
+	}
+};
+
+Square_Functor square;
+
+std::vector <int> vec {1,2,3,4};
+std::for_each(vec.begin(), vec.end(), square);
+```
+
+**Example: Using Function pointer**
+
+the name of the function is the address of it
+
+```cpp
+void square (int x)
+{
+	std::cout << x*x << " ";
+}
+std::vector<int> vec {1,2,3,4};
+std::for_each(vec.begin(), vec.end(), square);
+```
+
+**Example: Using Lambda Expression**
+
+```cpp
+std::vector<int> vec {1,2,3,4};
+std::for_each(vec.begin(),vec.end(),[](int x) {std::cout << x*x << " ";})
+```
+
+
+
+#### 17.3 modifying
+
+##### 17.3.1 sort
+
+**description:** 
+
+sort in ascending order
+
+**prototype:**
+
+```cpp
+std::sort(the_begining_of_the_data_range, the_ending_of_data_range);
+```
+
+**Example code**
+
+```cpp
+#include <vector>
+#include <algorithm>
+
+std::vector<int> v {1,5,3};
+
+std::sort(v.begin(),v.end()); // u give this function where to begin sorting and where to end sorting
+
+for(auto elem: v)
+    std::cout << elem << std::endl;
+```
+
+*output*
+
+```
+1
+3
+5
+```
+
+##### 17.3.2 reverse
+
+```cpp
+#include <vector>
+#include <algorithm>
+
+std::vector<int> v {1,5,3};
+
+std::reverse(v.begin(),v.end()); // u give this function where to begin sorting and where to end sorting
+
+for(auto elem: v)
+    std::cout << elem << std::endl;
+```
+
+*output*
+
+```makefile
+5
+3
+1
+```
+
+
+
+### 17.3 Iterators
+
+- Allow abstracting an arbitrary container as a sequence of elements.
+- they are objects that work like pointers by desgin
+- most container classes can be traversed with iterators
+- iterators must be declared based on the container type
+
+- **How to declare an iterators**
+
+  - ```cpp
+    container_type::iterator_type iterator_name;
+    ```
+
+  - Examples
+
+    - ```cpp
+      std::vector<int>::iterator it1;
+      ```
+
+    - ```cpp
+      std::list<int::string>::iterator it2;
+      ```
+
+    - ```cpp
+      std::map<std::string, std::string>::iterator it3;
+      ```
+
+    - ```cpp
+      std::set<char>::iterator it4;
+      ```
+
+#### iterator methods
+
+![Iterator_Methods](Cache/iterator_Methods.png)
+
+##### iterator begin & iterator end
+
+**Example1:** an iterator for a **sequence** container
+
+```cpp
+std::vetor<int> vec {1,2,3};
+```
+
+```cpp
+vec.begin();
+```
+
+-  returns an iterator to the first element of the container.
+
+```cpp
+vec.end();
+```
+
+- returns an iterator **after** the last element of the container.
+
+![begin&end_iter_methods](Cache/begin&end_iter_methods.png)
+
+**Example 2:**an iterator for an associative containers.
+
+```cpp
+std::set<char> suits {'C','H','S','D'};
+```
+
+```cpp
+suits.begin();
+```
+
+-  returns an iterator to the first element of the container.
+
+```cpp
+suits.end();
+```
+
+- returns an iterator **after** the last element of the container.
+
+![begin&end_iter_methods_with_sets](Cache/begin&end_iter_methods_with_sets.png)
+
+
+
+
+
+#### iterator operations
+
+![iterators_operators](Cache/iterators_operators.png)
+
+#### Iterator types 
+
+##### 17.3.1 input iterator
+
+```
+
+```
+
+##### 17.3.2 output iterator
+
+```
+
+```
+
+##### 17.3.3 forward iterator
+
+###### 17.3.3.1 regulars iterator 
+
+- Works in forward
+- 1st for iterator = 1st element in container
+- last for iterator = last element in container
+- `++` moves forward, `--` moves backward.
+
+```cpp
+std::vector<int> vec {1,2,3}
+std::vector<int>::iterator it = vec.begin();
+while (it != vec.end())
+{
+	std::cout << *it << " ";
+    ++it;
+}
+```
+
+*Output*
+
+```makefile
+1 2 3 
+```
+
+this is actually how a **range based for loop** works behind the scene inside the compiler.
+
+###### 17.3.3.2 constant iterator
+
+in the previous example we could have used constant iterators as we transverse the vector without changing it
+
+```cpp
+std::vector<int> vect{1,2,3}
+std::vector<int>::const_iterator it = vec.cbegin();
+while ( it != vec.end())
+{
+	std::cout << *it << " ";
+	++it;
+}
+```
+
+```
+1 2 3
+```
+
+
+
+##### 17.3.4 reverse iterator
+
+- Works in reverse
+- 1st for iterator = last element in container
+- last for iterator = 1st element in container
+- `++` moves forward, `--` moves backward.
+
+```cpp
+std::vector<int> vec {1,2,3};
+std::vector<int>::reverse_iterator it = vec.begin();
+while (it != vec.end() )
+    {
+		cout<<*it<< " ";
+    	++it;
+    }
+```
+
+*Output*
+
+```makefile
+3 2 1 
+```
+
+
+
+##### 17.3.5 bi-directional iterator
+
+```
+
+```
+
+##### 17.3.6 random access iterator
+
+```
+
+```
+
+
+
+
+
+
+
+### 17.4 Generic programming 
+
+#### 17.4.1 Macros
+
+##### 	variables like macros
+
+​	just like you know them in good old C 
+
+language
+
+```cpp
+#define PI 3.141592
+#define MAX_SIZE 100
+```
+
+
+
+##### 	function like macros
+
+​	just like you know them in good old C language
+
+- let's take a look at this code
+
+```cpp
+int get_max (int x, int y)
+{
+	return (x>y)?x:y;
+}
+
+double get_max (double x, double y)
+{
+	return (x>y)?x:y;
+}
+
+float get_max (float x, floart y)
+{
+	return (x>y)?x:y;
+}
+```
+
+did you notice a pattern here? yes, there is it's the same function however there is difference in return and parameter type
+
+**you can use function like macro here**
+
+```cpp
+#define get_max(a,b) ((a > b)?a:b)
+```
+
+**problem with function like macro**
+
+```cpp
+#define SQUARE(a) a*a
+
+result = SQUARE(5);      // Expect 25
+std::cout << result << std::endl;
+result = 100/SQUARE(5);  // Expect 4
+std::cout << result << std::endl;
+```
+
+*output*
+
+```makefile
+25
+100 // expected value = 4
+```
+
+**cause**
+macros are pre-compiler directives so it just acts as a text replacement.
+
+**solution**
+
+use parentheses
+
+#### 17.4.2 Templates
+
+​	Occurs at compile time in C++
+
+##### 17.4.2.1 Function templates
 
 let's take a look at this code
 
 ```cpp
 int get_max (int x, int y)
 {
-	return if (x>y)?x:y;
+	return (x>y)?x:y;
 }
 
 double get_max (double x, double y)
 {
-	return if (x>y)?x:y;
+	return (x>y)?x:y;
 }
 
 float get_max (float x, floart y)
 {
-	return if (x>y)?x:y;
+	return (x>y)?x:y;
 }
 ```
 
@@ -2926,11 +3548,19 @@ did you notice a pattern here? yes, there is it's the same function however ther
 now we can make a template out of this pattern so we don't have to **duplicate** code like we did previously 
 
 ```cpp
-Template <Typename T>
+Template <Typename T> 
 T get_max (T x, T y)
 {
 	return if (x>y)?x:y;
 }
+```
+
+we can use 
+
+```cpp
+template <typename T>
+//or
+template <class T>
 ```
 
 During Application 
@@ -2944,15 +3574,54 @@ int main()
 }
 ```
 
+Cool Q) in the next code what would be the output
+
+```cpp
+int main()
+{
+	std::cout<< get_max(12,15) << std::cout;
+}
+```
+
+*Output*
+
+a.
+
+```makefile
+Compiler error
+```
+
+b.
+
+```
+15
+```
+
+c.
+
+```makefile
+rubbish data
+```
+
+the answer is **b.)** as the compiler would be able to deduce the type on it's own. (most of the time -> with easy types), other wise it will give compiler error
+
 **Memory Talk** 
 
 in `function overloading` code each and every function you did make have it's own space in memory, wither you use in your application code or not.
 
 in `Template` code only the function that you did overload in the application code have space in memory.
 
-Can you have multiple types in `template` ? Yes,
+Can you have multiple types in `template` ? Yes, and there is no limit on the number of limit parameters 
 
-##### 16.1.2 Class Template 
+```cpp
+template <typename T1, typename T2>
+void func (T1 x, T2 y)
+{
+	std::cout << x << "" <<y <<std::endl;
+}
+```
+
+##### 17.4.2.2 class template
 
 ```cpp
 #include <iostream>
@@ -3003,9 +3672,7 @@ int main ()
 
 **Template Declaration**
 
-- **`template <typename T, int x>`**: This line introduces a template declaration in C++. It tells the compiler that what follows is a template definition that may involve one or more template parameters.
-
-##### 16.1.3 non-type parameter to template!
+######  non-type parameter to template
 
 The syntax `template <typename T, int x>` in C++ denotes the declaration of a template. Let's break down what each part means:
 
@@ -3067,7 +3734,7 @@ int main() {
 
 In essence, `template <typename T, int x>` defines a template for a class or function where `T` is a type parameter and `x` is a non-type parameter, allowing for flexibility and efficiency in C++ code design.
 
-##### Static with template 
+###### Static with template 
 
 ```cpp
 #include <iostream>
@@ -3094,7 +3761,13 @@ int main ()
 }
 ```
 
-##### Template Specialization 
+###### Template Specialization 
+
+```
+
+```
+
+
 
 
 
@@ -3122,10 +3795,9 @@ for (int score : scores)
 ```
 
 - **advantages** 
-
-  - easy, simple, elegant.
-
-  - less error prone.
+- easy, simple, elegant.
+  
+- less error prone.
 
 #### 18.1.2 initializer list range-based for loop (on the go)
 
@@ -3161,7 +3833,7 @@ n
 k
 ```
 
-
+#### 18.1.4 counter based for loop!
 
 
 
@@ -3192,4 +3864,37 @@ std::cout << fixed << std::setprecision(1);
 std::cout << number << std::endl;
 ```
 
+### 18.4 how to add tab space in code
+
 tab representation in code is \t
+
+### 18.5 pair
+
+there is a class called pair
+
+```cpp
+std::pair
+```
+
+you can use it and it can be implemented in some container like map
+
+**Example**
+
+you can use the **first** keyword and **second** keyword to refer to the respected part of the pair
+
+```cpp
+std::map<std::string,std::string> favourites
+{
+    {"key","Value"};
+    {"Aly","C"};
+    {"Frank", "C++};
+};
+    
+auto it = favourites.begin();
+    while (it!=favourites.end())
+    {
+        std::cout<<it->first << ":" << it->secound <<std::endl;
+        it++;
+	}
+```
+
