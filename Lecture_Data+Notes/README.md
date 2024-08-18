@@ -2877,7 +2877,7 @@ std::auto_ptr p1 = make_unique<player>("Hero", 100, 100);
       shared_ptr<some_Class> ptr {new Some_class {100}, my_delter}
       ```
 
-  - **Lamda**
+  - **Lambda**
 
   - in a nut shell, lambda is an anonymous function that has no name and can be defined inline.
 
@@ -3332,8 +3332,6 @@ suits.end();
 - returns an iterator **after** the last element of the container.
 
 ![begin&end_iter_methods_with_sets](Cache/begin&end_iter_methods_with_sets.png)
-
-
 
 
 
