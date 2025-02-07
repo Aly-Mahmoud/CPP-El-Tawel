@@ -3062,7 +3062,7 @@ std::cout << ptr.use_count() << std::endl;
 
       - solution
 
-        ![Weak_ptr-circular_refrence_sol](.\Cache\Weak_ptr-circular_refrence_sol.png)
+        ![Weak_ptr-circular_refrence_sol](Cache\Weak_ptr-circular_refrence_sol.png)
 
   - used as temp reference for example an "iterator"
 
@@ -3726,7 +3726,7 @@ std::deque<std::string> stooges
 
 **deque methods**
 
-![deque](.\Cache\deque.png)
+![deque](Cache\deque.png)
 
 - back();
 
@@ -3742,7 +3742,7 @@ std::deque<std::string> stooges
 d.push_back(4);
 ```
 
-![deque_push_back](.\Cache\deque_push_back.png)
+![deque_push_back](Cache\deque_push_back.png)
 
 - emplace_back 
 
@@ -3767,7 +3767,7 @@ d.front();
 
 - push_front();
 
-![deque Push_front](.\Cache\deque_push_front.png)
+![deque Push_front](Cache\deque_push_front.png)
 
 ```
 d.push_front(10);
@@ -3823,7 +3823,7 @@ d.at();
 
 It's like a linked list of vector, if there is space it the element will be allocated, if there is not a memory allocation will occur and the the previous memory allocation will point to to next
 
-![image-20241202154154395](.\Cache\dequeallocation.png)
+![dequeallocation](Cache\dequeallocation.png)
 
 
 
