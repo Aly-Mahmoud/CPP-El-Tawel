@@ -1,16 +1,18 @@
-# **CPP **
+# CPP 
+
 
 ## 1.Class
 
-1. **Definition**: A class is a blueprint for creating objects. It defines the properties (data members) and behaviors (member functions) that objects of that class will have.
+1. **Definition**: A class is a blueprint for creating objects. It defines the properties (data members) and behaviors (member functions) of that objects of that class will have.
 
-2. **Memory Location**: The class definition itself is typically stored in the program's code segment (also known as the text segment). This segment contains the executable code of the program.
+2. **Memory Location**: The class definition itself is typically stored in the program's code segment (also known as the **text segmen**t). This segment contains the executable code of the program.
 
 3. **When It's Saved**: The class definition is compiled into the program during the compilation process. It exists in the program's code even before any objects of that class are created.
 
 4. **Declaration:**
 
    ```cpp
+   #include <string>
    using namespace std;
    class Person
    {
@@ -40,20 +42,21 @@ class Person
 
 
 
-**MyClass.h** (Specification)
+**MyClass.hpp** (Specification)
 
 ```cpp
 #ifndef MYCLASS_H
 #define MYCLASS_H
 
-class MyClass {
+class MyClass 
+{
+private:
+    int m_value;         // Data member
 public:
     MyClass();           // Default constructor
     MyClass(int value);  // Parameterized constructor
     void display();      // Member function
 
-private:
-    int m_value;         // Data member
 };
 
 #endif // MYCLASS_H
@@ -67,17 +70,20 @@ private:
 #include "MyClass.h"
 
 // Default constructor
-MyClass::MyClass() : m_value(0) {
+MyClass::MyClass() : m_value(0) 
+{
     std::cout << "Default constructor called" << std::endl;
 }
 
 // Parameterized constructor
-MyClass::MyClass(int value) : m_value(value) {
+MyClass::MyClass(int value) : m_value(value) 
+{
     std::cout << "Parameterized constructor called with value: " << value << std::endl;
 }
 
 // Member function
-void MyClass::display() {
+void MyClass::display() 
+{
     std::cout << "Value: " << m_value << std::endl;
 }
 
@@ -86,12 +92,12 @@ void MyClass::display() {
 ## 2.Objects
 
 1. **Instance of a Class**: An object is an instance of a class. It represents a specific instance of the data and behavior defined by the class.
-2. **Memory Location**: When an object is created, memory is allocated to store its data members. The size of the memory allocated is determined by the size of the object, which depends on the size of its data members and any additional overhead.
-3. **When It's Saved:**
+2. **Memory Location size**: When an object is created, memory is allocated to store its data members. The size of the memory allocated is determined by the size of the object, which depends on the size of its data members and any additional overhead **(Link)** which is used for calling the class functions.
+3. **When & Where It's Saved:**
    Objects are created during runtime, typically on the stack or the heap, depending on how they are created.
 4. **Stack Allocation**: If an object is created as a local variable within a function or as a function parameter, it's usually allocated on the stack. When the function goes out of scope or returns, the memory for these objects is automatically deallocated.
 5. **Heap Allocation**: If an object is created using dynamic memory allocation (e.g., `new` keyword), it's allocated on the heap. The programmer is responsible for deallocating this memory using `delete` when it's no longer needed to avoid memory leaks.
-6. **Data** **section**: if it is a global varaible
+6. **Data** **section**: if it is a global variable
 
 **Special type object: Temporary objects**
 
@@ -103,7 +109,7 @@ class MyClass
 public:
     MyClass() { std::cout << "Constructor called" << std::endl; }
     ~MyClass() { std::cout << "Destructor called" << std::endl; }
-    void show() { std::cout << "Temporary object method called" << std::endl; }
+    static void show() { std::cout << "Temporary object method called" << std::endl; }
 };
 
 int main() 
@@ -114,30 +120,60 @@ int main()
 }
 ```
 
+**With data**
+
+```cpp
+#include <iostream>
+
+class MyClass
+{
+    public:
+    constexpr static int data = 0;
+    MyClass()
+    {
+        std::cout << "Constructor called" <<std::endl;
+    }
+    ~MyClass()
+    {
+        std::cout << "destructor called" <<std::endl;
+    }
+    static void show()
+    {
+        std::cout <<"Temporary object is called with data = " << data << std::endl;
+    }
+};
+
+int main ()
+{
+    MyClass::show();
+    return 0;
+}
+```
+
 
 
 ## 3.Constructor
 
-- it's a (special function = special method)
+- it's a (special function = special method).
 
 - purpose: is to initialize the newly created object.
 
-- you can create it, if you did not compiler will and will give the constructor function the same name as the <class>
+- you can create it, if you did not compiler will and will give the constructor function the same name as the <class>.
 
-- you do not call it, it calls itself automatically when creating an (instance = object) 
+- you do not call it, it calls itself automatically when creating an (instance = object).
 
-- has no return type, not even void
+- has no return type, not even void.
 
 - can be overloaded,  meaning you can have multiple constructors with different parameter lists within the same class.
 
 **Different method to call copy constructor in main** 
 
-```
+```cpp
 MyClass obj1;            // Default constructor
 MyClass obj2 = obj1;     // Copy constructor called for initialization
 ```
 
-```
+```cpp
 int x = 5;
 int y{x};  // Copy constructor called for initialization
 ```
@@ -154,14 +190,12 @@ int y{x};  // Copy constructor called for initialization
 class MyClass 
 {
 public:
-    MyClass() 
-	{ // Default constructor
+    MyClass() // Default constructor
+	{ 
         std::cout << "Default constructor called" << std::endl;
     }
 };
 ```
-
-
 
 ```cpp
 int main() 
@@ -173,11 +207,11 @@ int main()
 
 
 
-####      3.1.2Parameterized Constructor (Overloaded Constructor)
+####      3.1.2 Parameterized Constructor (Overloaded Constructor)
 
 - many functions with the same name however they have different signatures-> anything after the name of the function like (Parameters, attributes).
 
--  this concept of similar name different signatures is called name mangling -> handled by compiler in different ways according to your compiler used.
+-  this concept of similar name different signatures is called **name mangling** -> handled by compiler in different ways according to compiler used.
 -  if you made a Parameterized Constructor it prevents the compiler to create the default constructor, so if you need it you must create it on your own.
 
 ```cpp
@@ -206,9 +240,9 @@ int main()
 - it's a (special function = special method)
 
 -  you can create it, if you did not, compiler will, and will give the constructor function the same name as the <class>
--  you do not call it, it calls itself automatically when copying an (instance = object)   player p2=p1;​ -> **you should pass by refrence when calling copy constructor as if you pass by value you will enter infinite recursion** 
+-  you do not call it, it calls itself automatically when copying an (instance = object)   player p2=p1; -> **you should pass by reference when calling copy constructor as if you pass by value you will enter infinite recursion** 
 -  **Responsible for deep copying if the class contains dynamically allocated resources.**
--  if you created multiple copies for an object of a class the first copy to be destroyed will delete the ptr pointning to the data of the object copied making it's location unaccessible for other parts of the program making it unreserved memory
+-  if you created multiple copies for an object of a class the first copy to be destroyed will delete the `ptr` pointing to the data of the object copied making it's location inaccessible for other parts of the program making it unreserved memory
   [Great explanation on WHY to create your own Overloaded Assignment, Copy Constructor, Destructor](https://www.youtube.com/watch?v=F-7Rpt2D-zo)
 
 ```cpp
@@ -340,6 +374,19 @@ int main()
     obj2.display();              	 // Displays value
     obj1.display();              	 // Displays "Pointer is null"
     return 0;
+}
+```
+
+What happens if:
+
+```cpp
+class MyClass
+{
+	private:
+		int x;
+		int y;
+		MyClass(int n, int m) : x(n), y(m)
+		{}
 }
 ```
 
@@ -493,12 +540,64 @@ public:
 
 ```
 
+### 4.3 for function 
+
+#### 	Default argument in function calls
+
+```cpp
+int sum (int x, int y, int z, int m)
+{
+    return x+y+z+m;
+}
+```
+
+```cpp
+int main()
+{
+    sum (1,2,3,4); 
+    sum (1,2,3); //error
+}
+```
+
+*solution*
+
+```cpp
+int sum (int x, int y, int z = 0, int m = 0)
+{
+	return x+y+z+m;
+}
+```
+
+```cpp
+int main()
+{
+    sum (1,2,3,4); 
+    sum (1,2,3); // no error
+	sum (1,2); // no error
+    sum (1,2, ,4); // Error 
+}
+```
+
+> note : you can reach the same result by using polymorphism however if you used both default arguments in function calls and polymorphism you will get a compiler error
+
+```cpp
+int sum (int x, int y=0);
+int sum (int x);
+```
+
+```yaml
+result
+compiler error
+```
+
+
+
 ## 5. Destructor 
 
 - it's a (special function = special method)
 
-- you can create it, if you did not compiler will and will give the constructor function the same name as the class but preceded with telda **<~class>**
-- the one created by the compiler will lack the deletion of any data referenced in heap, so when you have a class that refrence something in heap you have to make your own destruction function.
+- you can create it, if you did not compiler will and will give the destructor function the same name as the class but preceded with telda **<~class>**
+- the one created by the compiler will lack the deletion of any data referenced in heap, so when you have a class that reference something in heap you have to make your own destruction function.
 - you do not call it, it calls itself automatically when destroying an (instance = object).
 - destruction will happen when the program gets out of the scope of the object whether it was `}` or `return 0;`
 - has no return type not even void.
@@ -509,27 +608,27 @@ public:
 ```cpp
 class MyClass 
 {
-public:
-    // Default constructor
-    MyClass() 
-	{
-        std::cout << "Constructor called" << std::endl;
-        ptr = new int[10]; // Dynamically allocate memory
-    }
+    private:
+        int* ptr;
 
-    // Destructor
-    ~MyClass() 
-	{
-        std::cout << "Destructor called" << std::endl;
-        delete[] ptr; // Clean up dynamically allocated memory
-    }
+    public:
+        // Default constructor
+        MyClass() 
+        {
+            std::cout << "Constructor called" << std::endl;
+            ptr = new int[10]; // Dynamically allocate memory
+        }
 
-private:
-    int* ptr;
+        // Destructor
+        ~MyClass() 
+        {
+            std::cout << "Destructor called" << std::endl;
+            delete[] ptr; // Clean up dynamically allocated memory
+        }
 };
 ```
 
-we can manually call the destructor using pointer to object, but it is not recommended 
+we can manually call the destructor using pointer to object, but it is not recommended as it will result in undefined behavior 
 
 ```cpp
 #include <iostream>
@@ -551,7 +650,6 @@ int main()
     c_ptr->~MyClass(); // Manually call the destructor
 
     // Note: Do not use C1 or c_ptr after this point, as the object is destructed
-
     return 0;
 }
 
@@ -566,6 +664,7 @@ int main()
 **What**
 
 An L-value refers to an expression that identifies a **memory location** and can be assigned a value. L-values are typically variables or objects that have a persistent identity and can appear on the left-hand side of an assignment operation, They represent persistent values that can be modified or accessed.
+
 **so we are basically talking about an address here**
 
 **Why**
@@ -614,7 +713,7 @@ arr[2] = 10; // 'arr[2]' can appear on the left-hand side of an assignment
 
 ```cpp
 int x = 10; // 'x' is an L-value
-int *p = &x; // 'p' is a pointer to 'x'
+int *p = &x; // 'p' is a pointer to 'x' 'p' L-Value
 *p = 20; // '*p' (dereferenced pointer) is an L-value
 
 ```
@@ -652,7 +751,7 @@ int x = 100; // 100 is an R-value literal
 ```
 
 ```cpp
-std::string str = "Hello, World!";
+std::string str = "Hello, World!"; // "Hello, World" R-value literal
 ```
 
 **2-temporary objects**
@@ -681,7 +780,7 @@ int main()
 
 ```cpp
 int a = 10, b = 20;
-int sum = a + b;	 // a + b results in an R-value used to initialize sum
+int sum = a + b;	 // 'a + b' results in an R-value used to initialize sum
 ```
 
 **4- Return Value of Functions**
@@ -721,7 +820,7 @@ Here, `100 + 200` is an R-value expression that exists temporarily to initialize
 
 - **Where in memory is the R-Value **
 
-in text code segment, in runtime it gets transferred to register and if there is an operation the result r-value is saved in a register and the result will cease to exist after the operation 
+in text code segment, in runtime it gets transferred to register and if there is an operation the result r-value is saved in a register and the result will cease to exist after the operation is done
 
 - **R-value Refrence**
 
@@ -730,7 +829,7 @@ the lifetime starts at the initialization and ends at the end of scope of the va
 
 ```cpp
 int &&x=200;  //valid, as we extend it's life time untill the scope of x ends and created a refrence out of it so i can access it
-cout<<x<<endl;
+cout<<x<<endl; //200
 {
 int &&Ref = 3;
 Ref = 43;    
@@ -822,11 +921,15 @@ int Person::counts =0;            //Initilization
 
 int main()
 {
+    Player p1;
+    Player p2;
     std::cout<<"the value of the static variable that is shared among the whole class and all of it's objects is: "<<Person::counts<<endl;
     p1.counts = 5;
     std::cout<<"the value of the static variable that is shared among the whole class and all of it's objects is: "<<Person::counts<<endl;
     p2.counts++;
     std::cout<<"the value of the static variable that is shared among the whole class and all of it's objects is: "<<Person::counts<<endl;
+
+	Person::counts; // this is the recomended way 
                                     //Printing out the value of 
 }
 ```
@@ -837,14 +940,18 @@ int main()
 
 **What?**
 
-It's a functions that is shared among the whole class and all of it's objects and can access the static private data 
+-It's a functions that is shared among the whole class and all of it's objects and can access the static private data 
 Static functions can be called using the class name, without needing to create an object of the class.
+
+-does not have **this** pointer
 
 **Why?**
 
 They are typically used for utility functions or operations that do not require access to the non-static members of the class.
 
-normally you won't be able to access private data however to be able to access private data
+normally you won't be able to access private data WHY? because it does not have this pointer
+
+however to be able to access private data 
 -> you can make it static variable.
 -> you can access it through Static function.
 
@@ -916,7 +1023,11 @@ Person(std::string name, std::string ID)
 
 ```
 
-**in case of operator overloading** 
+**in case of operator overloading**
+
+```
+
+```
 
 
 
@@ -967,6 +1078,40 @@ int main()
 }
 ```
 
+> Note: there is something called friend class 
+
+```cpp
+#include <iostream>
+
+class B; // Forward declaration
+
+class A {
+private:
+    int secret;
+
+public:
+    A() : secret(42) {} // Constructor initializes secret
+
+    friend class B; // Declaring B as a friend class
+};
+
+class B {
+public:
+    void revealSecret(const A& a) {
+        std::cout << "Secret from class A: " << a.secret << std::endl;
+    }
+};
+
+int main() {
+    A a;
+    B b;
+    b.revealSecret(a); // Accessing private member of A
+    return 0;
+}
+```
+
+
+
 ## 13. operator overloading
 
 **What**
@@ -1005,7 +1150,7 @@ The following Operators can not be overloaded
 
 ```cpp
 ::						//Scope resolution
-:?						//Conditional Operator
+?:						//Conditional Operator (ternary)
 .*						//Pointer to Member Operator
 . 						//Dot Operator
 sizeof					//Size of Operator
@@ -1139,7 +1284,7 @@ int main()
 **What would happen if I just implemented like this?**
 
 ```cpp
-Mystring &operator= (const Mystring &src)
+void operator= (const Mystring &src)
 {
     //to avoid self copy    
     if (this != &src)    
@@ -1159,16 +1304,14 @@ Here's what would happen:
    - Your implementation assumes that memory has already been allocated for `str` in the current object. However, if `str` has not been allocated or if it's a dangling pointer (pointing to invalid memory), using `strcpy` will result in undefined behavior, potentially leading to crashes or data corruption.
    
 2. **No Memory Allocation for `str`**:
-
    - If the `str` member of the current object (`*this`) has not been allocated memory yet, using `strcpy` will attempt to copy data to an uninitialized or invalid memory location, resulting in undefined behavior.
-
+   
 3. **Memory Overwrite Risk**:
 
    - If `str` has been previously allocated and contains some data, your implementation will indeed copy the contents of `src.str` to `str`. However, this will lead to the previous data being overwritten by the data from `src.str`. This may be acceptable if you are sure that the memory allocated for `str` is large enough to accommodate the data from `src.str`. Otherwise, it will lead to buffer overflow, causing undefined behavior.
 
 4. **No Memory Allocation for `str` in `src`**:
-
-   - Your implementation assumes that memory has been allocated for the `str` member in the `src` object. If `src.str` is an uninitialized or null pointer, using `strcpy` will result in undefined behavior.
+- Your implementation assumes that memory has been allocated for the `str` member in the `src` object. If `src.str` is an uninitialized or null pointer, using `strcpy` will result in undefined behavior.
 
  **implementation in main** 
 
@@ -1180,7 +1323,7 @@ int main
 ```
 
 while the above piece of code is technically correct but it is not used and it violates the conventions 
-a better way to implement Operator overloading is 
+a better way to implement Operator overloading is:
 
 ```cpp
 Mystring& operator=(const MyString& src) 
@@ -1198,6 +1341,7 @@ Mystring& operator=(const MyString& src)
         {
             str = nullptr;
         }
+        return this;
     }
 }
 ```
@@ -1217,12 +1361,12 @@ ask yourself in this situation when you are S2 = S1 for example, do you want the
 #### 13.1.2 move assignment operation
 
 - it's a (special function = special method).
-- you can create it, if you did not, compiler will use copy Constructor
+- you can create it, if you did not, compiler will use copy assignment
 - you do not call it, it calls itself automatically when giving a temp (instance = object).
 - used in moving ownership of the data from one object to another 
 - benefits of using Moving assignment over Copy assignment is better memory use 
 
-​            **in case of move assignment **  when obj2 is created by copying obj1. During this process, a temporary object is created to hold the copied data, and then obj2 is initialized using this temporary object. Finally, the temporary object is destroyed once the copy construction is complete.
+​            **in case of copy assignment **  when obj2 is created by copying obj1. During this process, a temporary object is created to hold the copied data, and then obj2 is initialized using this temporary object. Finally, the temporary object is destroyed once the copy construction is complete.
 
 ​            **in case of move assignment ** the authority of data is transferred from one obj1 to obj2, that takes less processing time, consume less memory, overall saves resources.
 
@@ -1242,19 +1386,6 @@ Mystring & operator= (Mystring &&src)
 }
 
 ```
-
-##### Q)   Assignment 2 lab 1
-
-- regrading checking on **this pointer** or **ptr** in the Get_Value(); 
-  
-  ```
-  
-  ```
-  
-  
-
-so in my opinion we should implement the 
-
 
 **How to use move assignment operator in main** 
 
@@ -1278,7 +1409,7 @@ So, to safely release memory and ensure that `pointer` no longer points to deall
 ##### 13.1.3.1 Unary Operator (++ , --)
 
 **Constraints:** 
-you can not overload it into binary 
+you can not overload it into binary operator
 
 ##### 13.1.3.2 Binary
 
@@ -1307,8 +1438,7 @@ Mystring operator+ (const Mystring &rhs)
     char *buffer = new char [std::strlen(str)+std::strlen(rhs.str)+1];  // hwa amta ast5m al this pointer?
     std::strcpy(buffer,str);
     std::strcat(buffer,rhs.str);
-    Mystring temp = Mystring(buffer);
-    delete[] buffer;
+    Mystring temp (buffer);
     return temp;
 }
 ```
@@ -1341,7 +1471,8 @@ abstraction in C++ can be header files.
 
 ##### 3-Abstraction using Access Specifiers-Access
 
-specifiers are the main pillar of implementing abstraction in  C++.-We can use access specifiers to enforce restrictions on class  members.
+specifiers are the main pillar of implementing abstraction in  C++.
+-We can use access specifiers to enforce restrictions on class  members.
 
 **Code Example**
 
@@ -1506,7 +1637,7 @@ public:
 
 ### 14.4 association
 
-Association is a relationship among classes which is used to show that instances of classes could be either linked to each other or combined logically or physically into some aggregation
+Association is a relationship among classes which is used to show that instances of classes could be either linked to each other or combined logically or physically into some **aggregation**
 
 **association relations** 
 
@@ -1750,9 +1881,9 @@ int main()
 
 **Weak Association (Aggregation):** 
 
-- It is a specialized form of association between two or more objects in which the objects have their own life-cycle but there exists an ownership as well. As an example, an employee may belong to multiple departments in the organization. However, if the department(the container) is deleted, the employee(the contained) object wouldn't
+- It is a specialized form of association between two or more objects in which the objects have their own life-cycle but there exists an ownership as well. As an example, an employee may belong to multiple departments in the organization. However, if the department(the container) is deleted, the employee(the contained) object won't.
 - all of the previous examples were aggregation type
-
+- It represents **has-a** relationship
 
 **Strong Association (Composition):** 
 
@@ -1769,14 +1900,25 @@ int main()
     	int x ;
     	int y ;
     public:
-    	Point() {}
+    	Point() : x(0),y(0) {}
         Point(int m) 
     	{
-    	x = y = 0 ;
+    	x = y = m ;
         cout<<“Point default constructor is calling”<<endl;
     	}
+        point (int m, int n)
+        {
+            x= m;
+            y= n;
+        }
+        setXY (int m, int n)
+        {
+            x = m;
+            y = n;
+    	}
+    }
     ```
-
+    
     ```cpp
     class Line
     {  
@@ -1786,15 +1928,16 @@ int main()
     public:
         Line() 
         {
-            start.setXY(0,0); end.setXY(0,0);
+            start.setXY(0,0);
+            end.setXY(0,0);
             cout<<“Line default constructor is calling”<<endl;
         }
     
     ```
-
+    
     **Constructor and destructor chaining in case of embedded objects (Interview Question).**
     for the same example above
-
+    
     ```cpp
     int main()
     {
@@ -1802,17 +1945,17 @@ int main()
     	return 0;
     }
     ```
-
+    
     the **constructor channing** when executing `Line myline;`
-
+    
     ```ABAP
     point constructor called
     point constructor called
     line constructor called
     ```
-
+    
     the **destructor channing** when the main code is done executing 
-
+    
     ```ABAP
     line destructor called
     point destructor called
@@ -1877,10 +2020,10 @@ C++ is based on real life, so it's a logical real life approach to programming
 ```cpp
 class A
 {
-private:
-int x; 
-public:
-void display();
+    private:
+        int x; 
+    public:
+        void display();
 };
 
 class B : public A
@@ -1893,26 +2036,306 @@ public:
 ```
 
 **how is that mapped in the memory?**
-data ( not functions ) of Class parents exist in memory whenever you create an instance of the class + whenever you create an instance of a child class from that parent 
+**data** of Class parents exist in memory whenever you create an instance of the class + whenever you create an instance of a child class from that parent 
 
-when creating multiple instances of a class functions are not created multiple times however, they are created once and then the functions have a pointer pointing to it 
+**function** when creating multiple instances of a class functions are not created multiple times however, they are created once and then the functions have a pointer pointing to it 
 
 **Access modifiers:**
 the default access modifier is **private**
 
 ![Access modifiers](Cache/Access_modifiers.png)
 
-
+![Access_modifiers_2](Cache/Access_modifiers_2.png)
 
 ![InhertanceAcessModifier](Cache/InhertanceAcessModifier.png)
 
-**note** function signature is the combination of function type, function name, and function parameters similar to function prototype, or API
+> **note** function signature is the combination of (**function return type** "debatable" , **function name**, **parameters type**,  **parameters order**)  similar to function prototype, or API
+
+#### 14.5.2 Multiple Inheritance
+
+![Multiple_Inheritance](Cache\Multiple_Inheritance.png)
+
+While it is not a concept that is used in C++ frequently but it can be used 
+
+Example:
+
+```cpp
+class Derived : public Base1, public Base2
+{
+    private:
+    	int c;
+    public:
+    	Deriver(int x=0, int y=0, int z=0) : Base1(x), Base2(y) , c(z)
+        {}
+    
+    	int product()
+        { return a*b*c; }
+    
+}
+```
+
+It's recommended to have the same Inheritance Mode for both classes
+
+*the constructor* seqence  
+
+```yaml
+Base class 1
+Base class 2
+Derived class
+```
+
+*the destructor sequence*
+
+```
+Derived class
+Base class 2
+Base class 1
+```
+
+
+
+##### Problems with multiple inheritance
+
+###### 1- Common name resolution
+
+```cpp
+class Base1
+{
+	protected:
+		int a;
+}
+```
+
+```cpp
+class Base2
+{
+	protected:
+		int a;
+}
+```
+
+```cpp
+class Derived : public Base1 , public Base2
+{
+	public:
+    	int c;
+    
+    int product()
+    {
+        return a*a*c
+    }
+    
+}
+```
+
+*output*
+
+```
+"Derived::a" is ambiguous
+```
+
+Ambiguity error the complier will not be able to deduce which **a** you choose it to be
+
+*solution* 
+
+```cpp
+class Derived
+{
+	public:
+		int c
+		
+	int product()
+	{
+		return Base1::a * Base2::a * c;
+	}
+}
+```
+
+###### 2-Diamond problem
+
+![Diamond_Inhertance](Cache\Diamond_Inhertance.png)looking at the picture above you will notice that the derived class inheritance from Base1 and Base2 and these classes originally inherit from class Base which means that in the Dervied class now 4 class (Base1, Base2, Base, Base) this is a problems as Base is in this class twice because it is common in Base1 and Base2
+
+```cpp
+class Base
+{
+	public:
+		Base()
+		{
+			cout<<"Base Constructor" << endl;
+		}
+}
+```
+
+```cpp
+class Base1 : public Base
+{
+	protected:
+		int a;
+    
+	public:
+		Base1()
+		{
+			cout<<"Base1 Constructor" << endl;
+		}
+}
+```
+
+```cpp
+class Base2 : public Base
+{
+	protected:
+		int b;
+    
+	public:
+		Base2()
+		{
+			cout<<"Base2 Constructor" << endl;
+		}
+}
+```
+
+```cpp
+class Derived : public Base1 , public Base2
+{
+	public:
+    	int c;
+    
+    int product()
+    {
+        return a*b*c;
+    }
+    
+
+	Derived()
+	{
+		cout<<"Derived Constructor" << endl;
+	}
+    
+}
+```
+
+```cpp
+Base Constructor
+Base1 Constructor
+Base Constructor
+Base2 Constructor
+Derived Constructor
+```
+
+
+*solution* 
+
+![Dimamond_Inhertiance_solution](Cache\Dimamond_Inhertiance_solution.png)
+
+***Virtual*** keyword
+
+```cpp
+class Base
+{
+	protected: 
+		int a;
+}
+```
+
+```cpp
+class Base1  : virtual public Base
+{
+	protected:
+		int b;
+}
+```
+
+```cpp
+class Base2 : virtual public Base
+{
+	protected:
+		int c;
+}
+```
+
+```cpp
+class Derived : public Base1 , public Base2
+{
+	public:
+    	int c;
+    
+    int product()
+    {
+        return a*a*c
+    }
+    
+}
+```
+
+```yaml
+Base Constructor
+Base1 Constructor
+Base2 Constructor
+```
+
+Virtual keyword ensures that the class when constructed must search if the base of it exists in that domain or not
+
+Question:
+why not make the two class inherit virtually, i can juts choose Base2 to be virtual, meaning only Base2 will check is the Base class check in that domain before constructing it.
+
+while this way could work fine, but you put yourself at a RISK of changing the constructor order so for example in this code 
+
+```cpp
+class Derived : public Base1 , public Base2
+{
+        public:
+            int c;
+    int product()
+    {
+        return a*a*c
+    }
+}
+```
+
+it will create Base1 and then in Base2 it will check if Base exists in or not and finally it will create derived object
+which will lead to a working efficient code.
+
+but if the code was
+
+```
+class Derived : public Base2 , public Base1
+{
+        public:
+            int c;
+    int product()
+    {
+        return a*a*c
+    }
+}
+```
+
+it will create Base2 and will check if there is any Base object exists in that domain so it will create a Base object, and then it will create Base1 object which will not check Base class object, so it will make another one, making the code not efficient 
+
+***Conc.***
+
+Make both classes that inherited from the same class virtual.
 
 ### 14.6 Polymorphism 
 
 What ?
 
-same function with different behavior ( **function overloading**, **Operator overloading** )
+same function with different behavior ( **Function overloading**, **Operator overloading** )
+
+assume that you want to have an absolute function, for multiple types
+
+```c
+iAbs(int)
+FAbs(float)
+CAbs(char)
+```
+
+you might want to make one for each with different signature but when using polymorphism you might have the same function signature that performs differently.
+
+```cpp
+Abs(int)
+Abs(float)
+Abs(char)
+```
 
 ##### 14.6.1Polymorphism types 
 
@@ -1967,7 +2390,7 @@ int main ()
     b.Deposite();
 
     Account *ptr = new Saving;
-    ptr->Deposite();              // here the pointer will call the deposite of Deposite function of Account not the saving, as the ptr types is Account not Saving
+    ptr->Deposite();              // here the pointer will call the deposite of Deposite function of Account not the saving, as the ptr type is Account not Saving
     return 0;
 }
 ```
@@ -1986,7 +2409,7 @@ Account::Deposite()
 
 Apply binding during runtime.
 
-example
+*Example*
 
 ```cpp
 #include <iostream>
@@ -2007,13 +2430,11 @@ public:
         std::cout <<"Account::Deposite()" <<std::endl;
     }
 
-    // if you have virtual function you must have virtual destructor other wise you would have undefined behvior 
+    // if you have virtual function you must have virtual destructor otherwise you would have undefined behvior 
     virtual ~Account()
     {
         std::cout << "Account::destructor" <<std::endl;
     }
-
-
 };
 
 class Saving : public Account 
@@ -2064,7 +2485,7 @@ class Trusted : public Account
 void change_balance(Account *acc)
 {
     acc -> Withdraw();
-    acc -> Withdraw();
+    acc -> Deposite();
 }
 
 int main ()
@@ -2077,7 +2498,7 @@ int main ()
 }
 ```
 
-Output
+*Output*
 
 ```makefile
 Saving::Deposite
@@ -2161,7 +2582,7 @@ public:
 
 any function inside this class can not be overridden 
 
-## 14. base class refrence 
+#### 14.6.5 base class refrence 
 
 A "base class reference" refers to a reference variable that is declared to refer to objects of the base class or any of its derived classes. In object-oriented programming, particularly in languages like C++ where inheritance is supported, references and pointers to base classes are commonly used for polymorphic behavior and abstraction.
 
@@ -2176,7 +2597,7 @@ Consider a simple inheritance hierarchy:
 class Base
 {
 public:
-    void display() 
+    virtual void display() 
 	{
         std::cout << "Base class display()" << std::endl;
     }
@@ -2227,7 +2648,7 @@ Benefits of Base Class References
 
 Important Considerations
 
-- Ensure that the base class declares virtual functions when you intend to override them in derived classes to achieve polymorphic behavior.
+- Ensure that the base class declares **virtual functions** when you intend to override them in derived classes to achieve polymorphic behavior.
 - Use references (`Base&`) or pointers (`Base*`) to base classes when you need to work with objects polymorphically, i.e., when you want to treat objects of derived classes uniformly through a common base class interface.
 
 In summary, a "base class reference" is a powerful feature in object-oriented programming that enables polymorphic behavior and abstraction, allowing code to interact with objects of derived classes through a unified base class interface.
@@ -2241,16 +2662,12 @@ virtual void pureVirtualFunction() = 0; // Pure virtual function
 **Key Characteristics of Pure Virtual Functions:**
 
 1. **No Implementation**: They are declared with `= 0` in the base class and do not provide an implementation.
+
 2. **Abstract Base Class**: A class that contains at least one pure virtual function is called an abstract base class. It cannot be instantiated on its own, as it is incomplete due to the lack of implementation for its pure virtual functions.
+
 3. **Force Implementation in Derived Classes**: Any derived class that does not provide an implementation for all inherited pure virtual functions remains abstract itself and cannot be instantiated
 
-
-
-#### abstract class 
-
-- it's a class that has at least **Pure Virtual function** it is good for abstraction of the code.
-
-- can not create object from this class.
+   
 
 #### Interface class
 
@@ -2258,212 +2675,21 @@ virtual void pureVirtualFunction() = 0; // Pure virtual function
 
 - Can not create object from this class.
 
-#### Concrete class
+#### abstract class 
 
-- can create object from this class. 
+- it's a class that has at least **Pure Virtual function** it is good for abstraction of the code.
+
+- can not create object from this class.
+
+#### Concrete class
 
 - have no pure virtual function.
 
-## 16. Vectors
+- can create object from this class. 
 
-**What is Vector?**
+  
 
-- vector is a **dynamic array** (can grow and shrink in size at exaction time) **unlike array**
-
-- Elements are all the **same type** **like array** defined between angle brackets < >.
-
-- Stored **contagiously** in memory **like array.**
-
-- individual elements can by accessed by their position or index **like array**.
-
-- First element  is at index 0 **like array** 
-
-- Last element is at index (size-1) **like array**
-- if you use subscript operator [  ] to access a specific element there will no checking if you are out of bound **like array.**
-  - however, it provides many useful function that do bounds check **unlike array** 
-
-- it's an OOP **container** in **STL** 
-  so in order to use it you must write
-
-```
-#include <vetcor>
-using namespace std;
-```
-
-- elements initialized to zero **unlike arrays** 
-
-- very efficient 
-
-- iteration (looping) is often used to process.
-
-### Declaring vector
-
-```cpp
-#include <vector>
-using namespace std;
-
-vector <char> vowels;
-vector <int> test_scores (10);
-```
-
-### Initialize Vector
-
-#### array like initialization 
-
-```cpp
-vector <char> vowels {'a', 'e', 'i', 'o', 'u'};
-vector <int> test_scores {100, 98, 89, 85, 93};
-```
-
-#### initializing a number of vectors with one value 
-
-```cpp
-vetor <double> hi_temp (365,80.0);
-```
-
-now you have **one vector** with **365 elements** each one of them is a **double** initialized to the value of **80.0**
-
-you can declare a vector to be a copy of an array 
-
-```cpp
-
-```
-
-you can declare a vector to be a copy of another vector
-
-```
-
-```
-
-### Accessing vector elements 
-
-#### Accessing vector elements  - array syntax
-
-```cpp
-vector_name [element_index]
-```
-
-Example Code:
-
-```cpp
-vector <int> test_scores {100, 95, 99, 87, 88};
-
-cout << "1st score at index 0: " << test_scores[0] << endl;
-cout << "2nd score at index 1: " << test_scores[1] << endl;
-cout << "3rd score at index 2: " << test_scores[2] << endl; 
-cout << "4th score at index 3: " << test_scores[3] << endl;
-cout << "5th score at index 4: " << test_scores[4] << endl;
-```
-
-#### Accessing vector elements - vector syntax 
-
-using at method of the class vector 
-
-```cpp
-vector_name.at(element_index)
-```
-
-Example Code:
-
-```cpp
-vector <int> test_scores {100, 95, 99, 87, 88};
-
-cout << "1st score at index 0: " << test_scores.at(0) << endl;
-cout << "2nd score at index 1: " << test_scores.at(1) << endl;
-cout << "3rd score at index 2: " << test_scores.at(2) << endl;
-cout << "4th score at index 3: " << test_scores.at(4) << endl;
-cout << "5th score at index 4: " << test_scores.at(5) << endl;
-```
-
-### Vector dynamic allocation 
-
-#### push_back method
-
-push_back method is a method that append elements to the vector at the end side of the vector
-
-Example code
-
-```cpp
-vector <char> vowels {'a', 'l', 'y'};
-vowels.push_back('z');
-vowels.push_back('i');
-```
-
-Q) How can vectors be **sequentially** ordered and have the option of dynamically adding elements to it 
-
-### Dynamic Growth and Reallocation
-
-When you add elements to the vector using `push_back` or other modifying methods, the vector may need to allocate more memory if its current capacity is exceeded. This is where the concept of reallocation comes into play:
-
-1. **Capacity vs. Size**:
-   - **Size**: The number of elements currently stored in the vector.
-   - **Capacity**: The amount of memory allocated for the vector, which may be greater than the current size to accommodate future growth without frequent reallocations.
-2. **Reallocation**:
-   - If the vector's size exceeds its current capacity, the vector allocates a new block of memory, usually larger than the previous one (often by a growth factor, typically 2x).
-   - It then copies the existing elements to the new memory block and deallocates the old block.
-
-### Vector boundary checking
-
-- boundary checking does not occur in subscript operator [ ].
-- boundary checking occurs in the methods provided by the vector class. 
-
-```cpp
-vector <int> test_scores {100,95};
-cin >> test_scores.at(5);
-```
-
-```cpp
-Output
-treminate called after throwing an instance of 'std::out_of_range' 
-what (): vector::_M_range_check: __n (which is 5) >= this->size() (which is 2) this application has requested the Runtime to terminate it in an unusual way.
-please contact the application's support team for more information.
-```
-
-### Vector size identification
-
-to know the size of an vector you can use the `.size ()` method
-
-Code Example 
-
-```cpp
-vector <int> test_scores {100,95};
-cout << test_scores.size() << endl;
-```
-
-### 2D Vectors
-
-#### declaration 
-
-```cpp
-vector <vector<int>> movie_ratings [4][3]
-```
-
-#### initialization
-
-```cpp
-vector <vector<int>> movie_ratings
-{
-    {1,2,3,4},
-    {1,2,4,4},
-    {1,3,4,5}
-}
-```
-
-#### Accessing 
-
-##### Accessing vector elements  - array syntax
-
-```cpp
-movie_ratings [0][1]
-```
-
-#####  Accessing vector elements  - vector syntax
-
-```cpp
-movie_rating.at(0).at(1)
-```
-
-
+  
 
 ## 16. Smart pointers
 
@@ -2581,7 +2807,7 @@ movie_rating.at(0).at(1)
     	// creating a unique pointer
     	std::unique_ptr<int> ptr {new int {100}}; 
     	// trying to add the unique pointer created into the back of vector
-    	vec.push_back(std::move(ptr);
+    	vec.push_back(std::move(ptr));
     }
     ```
 
@@ -2651,8 +2877,6 @@ movie_rating.at(0).at(1)
 
       
 
-
-
 ### Shared pointer (shared_ptr)
 
 - **Shared pointer characteristics** 
@@ -2714,6 +2938,12 @@ std::cout << ptr.use_count() << std::endl;
 
 **Example 4:** 
 
+```
+
+```
+
+
+
 - **Useful methods**
 
   - make_shared(c++11):
@@ -2725,7 +2955,7 @@ std::cout << ptr.use_count() << std::endl;
 
       1. we construct the default pointer
          - compiler generates data structure that hold info about:
-           - refrence count
+           - reference count
 
            - raw pointer
     
@@ -2757,7 +2987,7 @@ std::cout << ptr.use_count() << std::endl;
       {
       	std::shared_ptr<int> p1 = std::make_shared<int> (100);
       	std::shared_ptr<int> p2 {p1};
-      	stdLLshared_ptr<int> p3;
+      	std::shared_ptr<int> p3;
       	
       	p3=p1;
           std::cout<< p3.use_count() << std::endl;
@@ -2776,7 +3006,7 @@ std::cout << ptr.use_count() << std::endl;
       
       **Which shared pointer is responsible for cleaning up the heap storage?**
       
-      the last pointer that refrence it, in this case p1 
+      the last pointer that reference it, in this case p1 
     
     
     
@@ -2811,14 +3041,14 @@ std::cout << ptr.use_count() << std::endl;
 ### Weak pointer(weak_ptr)
 
 - **Weak pointer characteristics**
-  - provides a non-owning refrence
-    - does not increment or decrement refrence use count
+  - provides a non-owning reference
+    - does not increment or decrement reference use count
   - points to an object of type <T> on the heap
   - created from a shared_ptr
 
 - **Use case**
 
-  - used to prevent strong refrence cycle which could prevent from being deleted
+  - used to prevent strong reference cycle which could prevent from being deleted
 
     - Visualization 
 
@@ -2828,13 +3058,80 @@ std::cout << ptr.use_count() << std::endl;
 
       but their shared resources on the heap will not be destroyed and will leak memory.
 
-      **A** keeps B alive, and **B** keeps **A** alive
+      **A** keeps **B** alive, and **B** keeps **A** alive
 
       - solution
 
-        ![Weak_ptr-circular_refrence_sol](Cache\Weak_ptr-circular_refrence_sol.png)
+        ![Weak_ptr-circular_refrence_sol](.\Cache\Weak_ptr-circular_refrence_sol.png)
 
-  - used as temp refrence for example an "iterator"
+  - used as temp reference for example an "iterator"
+
+**Example**
+
+```cpp
+#include <iostream>
+#include <memory>
+
+class B; // Forward declaration of class B
+
+class A {
+public:
+    std::shared_ptr<B> b_ptr;
+
+    A() {
+        std::cout << "A Constructor" << std::endl;
+    }
+
+    ~A() {
+        std::cout << "A Destructor" << std::endl;
+    }
+
+    void setB(std::shared_ptr<B> b) {
+        b_ptr = b;
+    }
+};
+
+class B {
+public:
+    std::weak_ptr<A> a_ptr;  // Using weak_ptr to avoid circular reference
+
+    B() {
+        std::cout << "B Constructor" << std::endl;
+    }
+
+    ~B() {
+        std::cout << "B Destructor" << std::endl;
+    }
+
+    void setA(std::shared_ptr<A> a) {
+        a_ptr = a;
+    }
+};
+
+int main() {
+    // Create shared_ptr for both A and B
+    std::shared_ptr<A> a = std::make_shared<A>();
+    std::shared_ptr<B> b = std::make_shared<B>();
+
+    // Set mutual references
+    a->setB(b);
+    b->setA(a);
+
+    // Demonstrating that there is no circular reference leak
+    std::cout << "Exiting main" << std::endl;
+
+    return 0;
+}
+
+```
+
+here we are creating two shared pointers in main and initializing them with make_shared<T>()  function which invoke the constructor of the class and then using the set method to set these shared pointer created in main into the shared pointer in class A and the weak pointer in class B
+
+this way we getting the benefits of shared pointer & weak pointer 
+shared pointer use :
+incrementing the use counter of the object to one enabling to create the object
+Wear Pointer use:
+eliminating the possibility of circular/cyclic reference 
 
 ### Auto pointer (auto_ptr)
 
@@ -2844,11 +3141,13 @@ makes the compiler deduce the type of pointer based on what return data type.
 std::auto_ptr p1 = make_unique<player>("Hero", 100, 100);
 ```
 
+The `auto_ptr` was a smart pointer introduced in C++98 and C++03, but it was deprecated in C++11 and **removed in C++17**. It was used for **automatic memory management** by **taking ownership of dynamically allocated objects** and automatically deleting the object when it went out of scope. While it provided automatic cleanup, it had several design flaws, which led to its deprecation and removal in favor of better alternatives such as `std::unique_ptr`.
+
 ### Custom deleters
 
 - **What are custom deleters?**
 
-  - when a smart pointer goes out of scope it should delete the objects it points to & nulls it self out. or at least that is the default, but what if you need to make your own deleters for the pointer to make more than just the default deleters does
+  - when a smart pointer goes out of scope it should delete the objects it points to & nulls it self out. or at least that is the default, but what if you need to make your own deleters for the pointer to make more than just the default deleters does.
 
 - **Why use of custom deleters?**
 
@@ -2864,32 +3163,58 @@ std::auto_ptr p1 = make_unique<player>("Hero", 100, 100);
   - **function**
 
     - ```cpp
-      void my_deletrs (some_CLass *raw_pointer)
+      #include <iostream>
+      #include <memory>
+      
+      // Example class
+      class Some_class 
       {
-          std::cout<< "In my custom deleter"<<std::endl;
-      	delter raw_pointer;
+      public:
+          explicit Some_class(int value) : value_(value) 
+          {
+              std::cout << "Some_class constructor called with value: " << value_ << std::endl;
+          }
+      
+          ~Some_class() {
+              std::cout << "Some_class destructor called" << std::endl;
+          }
+      
+      private:
+          int value_;
+      };
+      
+      // Custom deleter
+      void my_deleter(Some_class* raw_pointer) {
+          std::cout << "In my custom deleter" << std::endl;
+          delete raw_pointer;  // Properly delete the raw pointer
       }
+      
+      int main() {
+          // Create a shared_ptr with a custom deleter
+          std::shared_ptr<Some_class> ptr{new Some_class{100}, my_deleter};
+      
+          return 0;
+      }
+      
       ```
-
-    - **How to create a pointer when using a custom deleters**
-
-      ```cpp
-      shared_ptr<some_Class> ptr {new Some_class {100}, my_delter}
-      ```
-
+  
+  
+  
+  
   - **Lambda**
-
+  
   - in a nut shell, lambda is an anonymous function that has no name and can be defined inline.
-
+  
     - ```cpp
-      shared_ptr<some_Class> ptr {
+      shared_ptr<some_Class> ptr
+      {
       new Some_class {100}
       , 
       std::cout<<"In my custom deletrs"}std::endl;
       delete ptr;
       }
       ```
-
+  
   
 
 **Why?**
@@ -2904,7 +3229,7 @@ Removes the headache of searching of what type of pointer that we created is.
 
 - Data structure that can store object of almost any type
 - Each container has member functions
-  - some are specific to all the container
+  - some are specific to some of the container
   - Other are available to all containers
 - Each container has an associated header file.
   - `#include <container_type>`
@@ -2919,24 +3244,440 @@ Containers most common functions
 
 #### 17.1.1 sequence containers
 
-- description:
-  - containers that save the variables in memory sequentially
+description:
 
-##### array 
+- Sequence containers store elements in a linear order, meaning the order of elements is preserved as they are inserted.
+
+##### Vectors
+
+**What is Vector?**
+
+- vector is a **dynamic array** (can grow and shrink in size at exaction time) **unlike array**
+
+- Elements are all the **same type** **like array** defined between angle brackets < >.
+
+- Stored **contagiously** in memory **like array.**
+
+- individual elements can by accessed by their position or index **like array**.
+
+- First element  is at index 0 **like array** 
+
+- Last element is at index (size-1) **like array**
+- if you use subscript operator `[]` to access a specific element there will no checking if you are out of bound **like array.**
+  - however, it provides many useful function that do bounds check **unlike array** 
+
+- it's an OOP **container** in **STL** 
+  so in order to use it you must write
+
+```
+#include <vector>
+using namespace std;
+```
+
+- elements initialized to zero **unlike arrays** 
+
+- very efficient 
+
+- iteration (looping) is often used to process.
+
+###### Declaring vector
+
+```cpp
+#include <vector>
+using namespace std;
+
+vector <char> vowels;
+vector <int> test_scores (10);
+```
+
+###### Initialize Vector
+
+**array like initialization** 
+
+```cpp
+vector <char> vowels {'a', 'e', 'i', 'o', 'u'};
+vector <int> test_scores {100, 98, 89, 85, 93};
+```
+
+**initializing a vector with multiple elements with one value** 
+
+```cpp
+vetor <double> hi_temp (365,80.0);
+```
+
+now you have **one vector** with **365 elements** each one of them is a **double** initialized to the value of **80.0**
+
+you can declare a vector to be a copy of an array 
+
+```cpp
+
+```
+
+you can declare a vector to be a copy of another vector
+
+```
+
+```
+
+###### Accessing vector elements 
+
+**Accessing vector elements  - array syntax**
+
+```cpp
+vector_name [element_index]
+```
+
+Example Code:
+
+```cpp
+vector <int> test_scores {100, 95, 99, 87, 88};
+
+cout << "1st score at index 0: " << test_scores[0] << endl;
+cout << "2nd score at index 1: " << test_scores[1] << endl;
+cout << "3rd score at index 2: " << test_scores[2] << endl; 
+cout << "4th score at index 3: " << test_scores[3] << endl;
+cout << "5th score at index 4: " << test_scores[4] << endl;
+```
+
+###### Vector-Methods
+
+​	Please refer to CPP reference.
+
+**Accessing vector elements - vector syntax** 
+
+using at method of the class vector 
+
+```cpp
+vector_name.at(element_index)
+```
+
+Example Code:
+
+```cpp
+vector <int> test_scores {100, 95, 99, 87, 88};
+
+cout << "1st score at index 0: " << test_scores.at(0) << endl;
+cout << "2nd score at index 1: " << test_scores.at(1) << endl;
+cout << "3rd score at index 2: " << test_scores.at(2) << endl;
+cout << "4th score at index 3: " << test_scores.at(4) << endl;
+cout << "5th score at index 4: " << test_scores.at(5) << endl;
+```
+
+###### Vector dynamic allocation 
+
+**push_back method**
+
+push_back method is a method that append elements to the vector at the end side of the vector
+
+*Example code*
+
+```cpp
+Person p1 {"Larry", 18};
+std::vector<person> vec;
+vec.push_back(p1);
+vec.push_back(Person{"Larry",18});
+```
+
+in *push_back* method an extra temporary copy is made out of the element and then it's put in the last element, taking an extra space in memory
+
+**emplace_back**
+
+This method does not need to make an extra temporary copy to push the element in the back of the vector.
+
+```cpp
+vec.emplace_back("Larry",18);
+```
+
+Q) How can vectors be **sequentially** ordered and have the option of dynamically adding elements to it 
+
+###### Dynamic Growth and Reallocation
+
+When you add elements to the vector using `push_back` or other modifying methods, the vector may need to allocate more memory if its current capacity is exceeded. This is where the concept of reallocation comes into play:
+
+1. **Capacity vs. Size**:
+   - **Size**: The number of elements currently stored in the vector.
+   - **Capacity**: The amount of memory allocated for the vector, which may be greater than the current size to accommodate future growth without frequent reallocations.
+2. **Reallocation**:
+   - If the vector's size exceeds its current capacity, the vector allocates a new block of memory, usually larger than the previous one (often by a growth factor, typically 2x).
+   - It then copies the existing elements to the new memory block and deallocates the old block.
+
+
+
+###### Vector boundary checking
+
+- boundary checking does not occur in subscript operator [ ].
+- boundary checking occurs in the methods provided by the vector class. 
+
+```cpp
+vector <int> test_scores {100,95};
+cin >> test_scores.at(5);
+```
+
+*Output*
+
+```cpp
+treminate called after throwing an instance of 'std::out_of_range' 
+what (): vector::_M_range_check: __n (which is 5) >= this->size() (which is 2) this application has requested the Runtime to terminate it in an unusual way.
+please contact the application's support team for more information.
+```
+
+###### Vector size identification
+
+to know the size of an vector you can use the `.size ()` method
+
+*Code Example* 
+
+```cpp
+vector <int> test_scores {100,95};
+cout << test_scores.size() << endl;
+```
+
+###### 2D Vectors
+
+**declaration** 
+
+```cpp
+vector <vector<int>> movie_ratings [4][3]
+```
+
+**initialization**
+
+```cpp
+vector <vector<int>> movie_ratings
+{
+    {1,2,3,4},
+    {1,2,4,4},
+    {1,3,4,5}
+}
+```
+
+**Accessing** 
+
+**Accessing vector elements  - array syntax**
+
+```cpp
+movie_ratings [0][1]
+```
+
+**Accessing vector elements  - vector syntax**
+
+```cpp
+movie_rating.at(0).at(1)
+```
+
+##### std::array 
+
+While you might think this is an normal array but it is not
+
+| Feature                 | Built-in Array (`int arr[5];`)                | `std::array` (`std::array<int, 5> arr;`)               |
+| ----------------------- | --------------------------------------------- | ------------------------------------------------------ |
+| **Memory Allocation**   | Fixed-size, allocated on the stack            | Fixed-size, allocated on the stack                     |
+| **Size**                | Must be known at compile-time                 | Size is also fixed at compile-time                     |
+| **element access time** | fixed time regardless of the element position | fixed time regardless of the element position          |
+| **Size Retrieval**      | No direct way (use `sizeof` trick)            | `.size()` function provides size                       |
+| **Bounds Checking**     | No bounds checking                            | Bounds checking with `.at()` method (throws exception) |
+| **Assignment**          | Cannot assign one array to another            | Supports copy and assignment                           |
+| **STL Compatibility**   | Limited (no iterators or algorithms)          | Fully compatible with STL algorithms and iterators     |
+| **Initialization**      | Must use `{}` or manual element setting       | Can use `{}`, list initialization, or assignment       |
+| **Memory Safety**       | Minimal; susceptible to buffer overflow       | Safer with `.at()` for bounds checking                 |
+| **Performance**         | Very fast; minimal overhead                   | Slightly more overhead (due to class structure)        |
+
+- Declaration of **raw array**
 
 ```cpp
 int arr[5];
 ```
 
-##### vector
+- Declaration of **std::array**
 
-```
-std::vector<int> vec;
-```
+  - Example 1
+
+  ```cpp
+  std::array<int,5> aar1{{1,2,3,4,5}}
+  arr1 = {2,4,6,8,10};
+  ```
+
+  - Example 2
+
+  ```cpp
+  std::array<std::string,3> stooges
+  {
+      std::string ("Larry"),
+      "Moe",
+      std::string("Curly")
+  };
+  ```
+
+  in the above code `"Moe"` will be converted to std::string
+  
+- **std::array methods**
+
+  - **size()**
+
+    **functionality**
+
+    ​	returns size of array
+
+    ```cpp
+    arr1.size(); 
+    ```
+
+  - **at()**
+
+  **functionality**
+
+  returns the element in the index with bound checking
+
+  **Example 1**
+
+  ```cpp
+  std::cout << arr1.at(4);
+  ```
+
+  *output*
+
+  ```
+  5
+  ```
+
+  **Example 2**
+
+  ```
+  std::cout << arr1.at(10);
+  ```
+
+  *output*
+
+  ```
+  exception error : out of boundry
+  ```
+
+  **Example 3**
+
+  ```
+  std::cout << arr[4]; 
+  ```
+
+  *output*
+
+  ```
+  5
+  ```
+
+  **Example 4**
+
+  ```
+  std::cout << arr[10]
+  ```
+
+  *output*
+
+  ```
+  -2345678 // random number - no bound checking
+  ```
+
+  - **front**
+
+  ​	**functionality**
+
+  ​	returns the element in the begging of the array
+
+  ```cpp
+  arr1.front(); 
+  ```
+
+  *output*
+
+  ```
+  1
+  ```
+
+  - **back**
+
+    **functionality**
+
+    returns a reference to the element in the index
+
+  ```
+  arr1.back();
+  ```
+
+  *output*
+
+  ```
+  5
+  ```
+
+  **empty()**
+
+  **functionality** 
+
+  checks if the array is empty or not
+
+  ```cpp
+  arr1.empty();
+  ```
+
+  *output*
+
+  ```
+  0 (false)
+  ```
+
+  **max_size()**
+
+  **functionality** 
+
+  ​	returns the size
+
+  ```cpp
+  arr1.max_size();
+  ```
+
+  *output*
+
+  ```
+  5
+  ```
+
+  - **swap()**
+
+    **functionality**
+
+    ​	swap the two arrays 
+
+    **Constrains**
+    	Same size, Same type
+
+  ```cpp
+  arr.swap(arr1);
+  ```
+
+  - **data()**
+
+    **functionality**
+
+    ​	get the raw array address
+
+    ```cpp
+    int *data = arr.data();
+    ```
+
+  - **fill()**
+
+    **functionality** 
+
+    ​	fills the array with one number 
+
+    ```
+    arr.fill(0);
+    ```
+
+    
 
 ##### list
 
-it's a simple linked list 
+it's a simple doubly linked list 
 
 declaration
 
@@ -2946,25 +3687,157 @@ std::list<std::string>
 
 ##### forward_list
 
+it's a simple single linked list
+
 ```
 
 ```
 
 ##### deque
 
+- Dynamic Size 
+  - Handled automatically
+  - can expand and contract as needed
+  - Elements are NOT stored in contiguous memory
+- Direct element access (constant time)
+- Rapid insertion and deletion at front and back (constant time)
+- Insertion or removal of elements (Linear time)
+- All iterators available and may invalidate
+
+- **Initialization**
+
+```
+std::deque<int> d {1,2,3,4,5};
+d={2,4,6,8,10};
 ```
 
 ```
+std::deque<int> d1(10,100);
+```
+
+```
+std::deque<std::string> stooges
+{
+	std::string {"Larry"},
+	"Moe",
+	std::string{"Curly"}
+};
+```
+
+**deque methods**
+
+![deque](.\Cache\deque.png)
+
+- back();
+
+  - return the element in the back of the deque
+
+  ```
+  d.back();
+  ```
+
+- push_back();
+
+```
+d.push_back(4);
+```
+
+![deque_push_back](.\Cache\deque_push_back.png)
+
+- emplace_back 
+
+  this adds data in the back in a more effcient way as it does not make any temp data reservation but it make an initialization in place.
+
+  ```
+  d.emplace_back();
+  ```
+
+- pop_back()
+
+  ```
+  d.pop_back();
+  ```
+
+- front();
+  - returns element in the front
+
+```
+d.front();
+```
+
+- push_front();
+
+![deque Push_front](.\Cache\deque_push_front.png)
+
+```
+d.push_front(10);
+```
+
+- emplace_front();
+
+  ​	this is efficient as there is no temp copy occur but no initialization in place
+
+  ```
+  d.emplave_front();
+  ```
+
+- pop_front();
+
+  - remove from front
+
+```
+d.pop_front();
+```
+
+- size();
+
+```
+d.size();
+```
+
+- max_size();
+
+```
+d.max_size();
+```
+
+**accessing of queue**
+
+- Subscript operator 
+  - no boundary checking will occur
+
+```
+d[1];
+```
+
+- at();
+  - boundary checking will occur and exception will be thrown
+
+```
+d.at();
+```
+
+
+
+**allocation of deque** 
+
+It's like a linked list of vector, if there is space it the element will be allocated, if there is not a memory allocation will occur and the the previous memory allocation will point to to next
+
+![image-20241202154154395](.\Cache\dequeallocation.png)
+
+
+
+
 
 #### 17.1.2 associative containers
 
 - description:
+-  Associative containers store elements in a way that allows for fast lookups based on keys. The elements are usually organized according to a specific sorting criterion or hashing function.
+- insert elements in a
 
-  - insert elements in a
+  - predefined order or no order at all.
 
-    - predefined order or no order at all.
-
-    - no duplicates or allow duplicates 
+  - no duplicates or allow duplicates 
 
 ##### set
 
@@ -3053,15 +3926,17 @@ Many algorithms require extra information in order to do their work
 #include <algorithm>
 ```
 
-- not all algorithms are compatable with all containers
+- not all algorithms are compatible with all containers
   - as containers only support different types of iterators
     - and iterators are a must parameter to be passed to the algorithm
 
+- Iterator invalidation 
+  - Suppose we are iterating over a vector of 10 elements 
+  - and we used `clear()` method while iterating ---result--->  undefined behavior
 
+#### 17.2.1 Non-modifying
 
-#### 17.2 Non-modifying
-
-##### 17.2.1 find
+##### 17.2.1.1 find
 
 tries to locate the 1st occurrence of an element in a container
 
@@ -3082,7 +3957,7 @@ std::find(container_instance.being(),conatiner_instance.end(), key_to_find);
 **Example Primitive types**
 
 ```
-std::vecotr<int> vec {1,2,3}l
+std::vecotr<int> vec {1,2,3};
 std::vector<int>::iterator loc = std::find(vec.begin(), vec.end(), 3)
 if (loc != vec.end())
 {
@@ -3108,19 +3983,19 @@ if (loc!=team.end())
 
 
 
-##### 17.2.2 max
+##### 17.2.1.2 max
 
 ```
 
 ```
 
-##### 17.2.3 count
+##### 17.2.1.3 count
 
 ```
 
 ```
 
-##### 17.2.4 accumulate
+##### 17.2.1.4 accumulate
 
 **description:**
 accumulates the data provided
@@ -3145,7 +4020,7 @@ std::cout << sum << std::endl;
 9
 ```
 
-##### 17.2.5 for_each
+##### 17.2.1.5 for_each
 
 algorithm applies a whatever **function** you provide to each element in the **iterator sequence**
 
@@ -3194,11 +4069,9 @@ std::vector<int> vec {1,2,3,4};
 std::for_each(vec.begin(),vec.end(),[](int x) {std::cout << x*x << " ";})
 ```
 
+#### 17.3.1 modifying
 
-
-#### 17.3 modifying
-
-##### 17.3.1 sort
+##### 17.3.1.1 sort
 
 **description:** 
 
@@ -3232,7 +4105,7 @@ for(auto elem: v)
 5
 ```
 
-##### 17.3.2 reverse
+##### 17.3.1.2 reverse
 
 ```cpp
 #include <vector>
@@ -3252,6 +4125,141 @@ for(auto elem: v)
 5
 3
 1
+```
+
+##### 17.3.1.3 front_inserter
+
+`push_front` like method
+
+```cpp
+std::vector<int> v{1, 2, 3, 4, 5};
+std::deque<int> d;
+std::copy(v.begin(), v.end(), std::front_inserter(d));
+for (int n : d)
+    std::cout << n << ' ';
+std::cout << '\n';
+```
+
+*output*
+
+```
+5 4 3 2 1
+```
+
+
+
+##### 17.3.1.4  insert
+
+```cpp
+#include <vector>
+#include <algorithm>
+
+std::vector<int> v {1,5,3};
+
+auto it = v.find( v.begin() , v.end() , 3 );
+vec.insert( it , 10 );
+for(auto elem: v)
+    std::cout << elem << std::endl;
+```
+
+*output*
+
+```
+1
+5
+10
+```
+
+
+
+##### 17.3.1.5 insert_back
+
+like *push_back*
+
+```cpp
+std::vector<int> v{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+std::fill_n(std::back_inserter(v), 3, -1);
+for (int n : v)
+    std::cout << n << ' ';
+std::cout << '\n';
+```
+
+
+
+##### 17.3.1.6 copy
+
+```cpp
+std::vector<int> vec1 {1,2,3,4,5};
+std::vector<int> vec2 {10,20};
+
+display(vec1);
+display(vec2);
+std::cout<<std::endl;
+
+std::copy(vec1.begin(),vec1.end,std::back_inserter(vec2));
+
+display(vec1);
+display(vec2);
+std::cout<<std::endl;
+```
+
+*Output*
+
+```
+[1 2 3 4 5]
+[10 20]
+
+[1 2 3 4 5]
+[10 20 1 2 3 4 5]
+```
+
+##### 17.3.1.7 copy_if
+
+just like copy but with a condition parameter
+
+```cpp
+std::vector<int> vec1 {1,2,3,4,5,6,7,8,9,10};
+std::vector<int> vec2 {10,20};
+
+display(vec1);
+display(vec2);
+std::cout<<std::endl;
+
+std::copy(vec1.begin(),vec1.end,std::back_inserter(vec2),[](int x){return x%2 == 0;});
+// Condition is used by lamda expression - Condition means even only
+
+display(vec1);
+display(vec2);
+std::cout<<std::endl;
+```
+
+*Output*
+
+```
+[1 2 3 4 5 6 7 8 9 10]
+[10 20]
+
+[1 2 3 4 5 6 7 8 9 10]
+[10 20 2 4 6 8 10]
+```
+
+##### 17.3.1.8 transform
+
+```cpp
+std::vector<int> vec1 {1,2,3,4,5};
+std::vector<int> vec2 {10,20,30,40,50};
+std::vector<int> vec3;
+
+std::transform(vec1.begin(),vec1.end(),vec2.begin(),std::back_inserter(vec3),[](int x, int y){return x*y;});
+
+display(vec3)
+std::cout<<std::endl;
+```
+
+*output*
+
+```cpp
+10 40 90 160 250
 ```
 
 
@@ -3349,9 +4357,34 @@ suits.end();
 
 ##### 17.3.2 output iterator
 
+**back_inserter**
+
+```cpp
+std::vector<int> vec1 {1,2,3,4,5};
+std::vector<int> vec2 {10,20};
+
+display(vec1);
+display(vec2);
+std::cout<<std::endl;
+
+std::copy(vec1.begin(),vec1.end,std::back_inserter(vec2));
+
+display(vec1);
+display(vec2);
+std::cout<<std::endl;
 ```
 
+*Output*
+
 ```
+[1 2 3 4 5]
+[10 20]
+
+[1 2 3 4 5]
+[10 20 1 2 3 4 5]
+```
+
+
 
 ##### 17.3.3 forward iterator
 
@@ -3833,6 +4866,10 @@ k
 
 #### 18.1.4 counter based for loop!
 
+```
+
+```
+
 
 
 ### 18.2 auto
@@ -3864,7 +4901,7 @@ std::cout << number << std::endl;
 
 ### 18.4 how to add tab space in code
 
-tab representation in code is \t
+tab representation in code is '\t'.
 
 ### 18.5 pair
 
