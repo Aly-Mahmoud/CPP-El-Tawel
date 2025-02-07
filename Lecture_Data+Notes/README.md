@@ -838,7 +838,7 @@ Ref = 43;
 
 **Sum up Example**
 
-![[L-R]Values](Cache\[L-R]Values.png)
+![[L-R]Values](Cache/[L-R]Values.png)
 
 ## 7. Constant Object 
 
@@ -2053,7 +2053,7 @@ the default access modifier is **private**
 
 #### 14.5.2 Multiple Inheritance
 
-![Multiple_Inheritance](Cache\Multiple_Inheritance.png)
+![Multiple_Inheritance](Cache/Multiple_Inheritance.png)
 
 While it is not a concept that is used in C++ frequently but it can be used 
 
@@ -2153,7 +2153,7 @@ class Derived
 
 ###### 2-Diamond problem
 
-![Diamond_Inhertance](Cache\Diamond_Inhertance.png)looking at the picture above you will notice that the derived class inheritance from Base1 and Base2 and these classes originally inherit from class Base which means that in the Dervied class now 4 class (Base1, Base2, Base, Base) this is a problems as Base is in this class twice because it is common in Base1 and Base2
+![Diamond_Inhertance](Cache/Diamond_Inhertance.png)looking at the picture above you will notice that the derived class inheritance from Base1 and Base2 and these classes originally inherit from class Base which means that in the Dervied class now 4 class (Base1, Base2, Base, Base) this is a problems as Base is in this class twice because it is common in Base1 and Base2
 
 ```cpp
 class Base
@@ -2225,7 +2225,7 @@ Derived Constructor
 
 *solution* 
 
-![Dimamond_Inhertiance_solution](Cache\Dimamond_Inhertiance_solution.png)
+![Dimamond_Inhertiance_solution](Cache/Dimamond_Inhertiance_solution.png)
 
 ***Virtual*** keyword
 
@@ -3062,7 +3062,7 @@ std::cout << ptr.use_count() << std::endl;
 
       - solution
 
-        ![Weak_ptr-circular_refrence_sol](Cache\Weak_ptr-circular_refrence_sol.png)
+        ![Weak_ptr-circular_refrence_sol](Cache/Weak_ptr-circular_refrence_sol.png)
 
   - used as temp reference for example an "iterator"
 
@@ -3726,7 +3726,7 @@ std::deque<std::string> stooges
 
 **deque methods**
 
-![deque](Cache\deque.png)
+![deque](Cache/deque.png)
 
 - back();
 
@@ -3742,7 +3742,7 @@ std::deque<std::string> stooges
 d.push_back(4);
 ```
 
-![deque_push_back](Cache\deque_push_back.png)
+![deque_push_back](Cache/deque_push_back.png)
 
 - emplace_back 
 
@@ -3767,7 +3767,7 @@ d.front();
 
 - push_front();
 
-![deque Push_front](Cache\deque_push_front.png)
+![deque Push_front](Cache/deque_push_front.png)
 
 ```
 d.push_front(10);
@@ -3823,7 +3823,7 @@ d.at();
 
 It's like a linked list of vector, if there is space it the element will be allocated, if there is not a memory allocation will occur and the the previous memory allocation will point to to next
 
-![dequeallocation](Cache\dequeallocation.png)
+![dequeallocation](Cache/dequeallocation.png)
 
 
 
