@@ -304,7 +304,7 @@ int main()
 }
 ```
 
-####      3.1.5 Move Constructor /move semantics(C++)
+####      3.1.5 Move Constructor / Move semantics(C++)
 
 - it's a (special function = special method).
 
@@ -385,8 +385,7 @@ class MyClass
 	private:
 		int x;
 		int y;
-		MyClass(int n, int m) : x(n), y(m)
-		{}
+		MyClass(int n, int m) : x(n), y(m) {}
 }
 ```
 
@@ -912,9 +911,7 @@ Global data across all the class
 class Person
 {
     public:
-
         static int counts;         //declaration
-
 };
 
 int Person::counts =0;            //Initilization 
@@ -940,10 +937,10 @@ int main()
 
 **What?**
 
--It's a functions that is shared among the whole class and all of it's objects and can access the static private data 
+-It's a functions that is shared among the whole class and all of it's objects and can access the static private data
 Static functions can be called using the class name, without needing to create an object of the class.
 
--does not have **this** pointer
+-does not have **this** pointer.
 
 **Why?**
 
@@ -1379,7 +1376,7 @@ Mystring & operator= (Mystring &&src)
         delete []str;   //deallocation of memory potentially previously allocated when creating the calling object
 		if (src.ptr != nullptr)
         {
-            str = src.str;        // assign data from source to the object calling this method
+            str = src.str; // assign data from source to the object calling this method
             src.str = nullptr; // deleting the pointer of the src object as it won't be needed again and other pointer will have the authority over this data
         }
     }
@@ -1389,12 +1386,27 @@ Mystring & operator= (Mystring &&src)
 
 **How to use move assignment operator in main** 
 
+1. **Pass R-value**
+
+```cpp
+int main ()
+{
+    I1 = string{"ahmed"};       
+    I2 = {"omar"};
+//behind the scene the compiler will construct a temp object that will moved in I1/I2 and then it will be destructed and we are still passing r-values that is why we get move assignmnet
+}
+```
+
+2. **Pass L-value and cast it to R-Value**
+
 ```cpp
 int main ()
 {
 	I2 = std::move(I1);
 }
 ```
+
+`std::move` is used to cast an object to an **r-value reference**, enabling move semantics instead of copy semantics. This is useful for **performance optimization** by avoiding deep copies when moving resources.
 
 **what is the difference between `delete pointer` and `pointer = nullptr`;?**
 
@@ -1406,21 +1418,61 @@ So, to safely release memory and ensure that `pointer` no longer points to deall
 
 #### 13.1.3 Arithmetic operator
 
-##### 13.1.3.1 Unary Operator (++ , --)
+##### 13.1.3.1 Unary Operator (++ , --, -, !)
 
 **Constraints:** 
 you can not overload it into binary operator
 
-##### 13.1.3.2 Binary
+**1. Operation overloading for(+)**
 
-**Operation overloading for (-)**
+```cpp
+Mystring operator+ ()
+{
+    char *buffer = new char [std::strlen(str)+1];
+    std::strcpy(buffer,str);
+    int len = strlen(str);
+    for (size_t i=0 ; i<len ; i++ )
+    {
+        buffer[i] = std::toupper(str[i]);
+    }
+    Mystring temp = Mystring(buffer);
+    delete[] buffer;
+    return temp;
+}
+```
+
+note: *size_t* is just an *unsigned int* which guarantees to be bigger than *unsigned int* making it more suitable and we are not gonna act in **-ve** anyway.
+
+```cpp
+int main ()
+{
+	Mystring Larry1 {"larry"};
+    Mystring Larry2;
+    
+	Larry2 = +Larry1;  //Larry1.operator+();
+    
+    Larry1.display();
+    Larry2.display();
+
+	return 0;
+}
+```
+
+*output*
+
+```yaml
+larry
+LARRY
+```
+
+**2. Operation overloading for (-)**
 
 ```cpp
 Mystring operator- ()
 {
     char *buffer = new char [std::strlen(str)+1];
     std::strcpy(buffer,str);
-    for (size_t i=0 ; i<strlen(str) ; ++i )
+    for (size_t i=0 ; i<strlen(str) ; i++ )
     {
         buffer[i] = std::tolower(str[i]);
     }
@@ -1430,15 +1482,155 @@ Mystring operator- ()
 }
 ```
 
+```cpp
+int main ()
+{
+	Mystring Larry1 {"LARRY"};
+    Mystring Larry2;
+    
+	Larry2 = -Larry1;
+    
+    Larry1.display();
+    Larry2.display();
+
+	return 0;
+}
+```
+
+*output*
+
+```yaml
+LARRY
+larry
+```
+
+**3. Operation overloading for (++)**
+
+**3.1 Pre increment ** : will repeat the first half of the string 
+
+```cpp
+Mystring operator++ ()
+{
+	int len = strlen(str);
+	int new_len = len + len/2;
+	char* buffer = new char [new_len + 1];
+
+	for (size_t i =0; i< len/2 ; i++)
+    {
+        buffer[i] = str[i];
+    }
+	for (size_t i=0 ; i<len ; i++)
+    {
+        buffer[i+len/2] = str[i];
+    }
+
+	buffer[new_len] = '\0';
+	Mystring temp {buffer}; // must be deep copy
+
+    delete[] buffer;
+	return temp;
+}
+```
+
+**3.2 Post increment** : will repeat the 2nd half of the string
+
+```cpp
+MyString operator++ (int)
+{
+    int len = strlen(str);
+    int new_len = len + len/2;
+    char* buffer = new char [new_len + 1];
+
+    for (size_t i=0 ; i<len ; i++)
+    {
+        buffer[i] = str[i];
+    }
+    for (size_t i =len/2; i< len ; i++)
+    {
+        buffer[i+len/2] = str[i];
+    }
+
+    buffer[new_len] = '\0';
+    MyString temp {buffer}; // must be deep copy
+
+    delete[] buffer;
+    return temp;
+}
+```
+
+**4 Operator overloading for (--)**
+
+**4.1 Pre decrement** : will remove the 1st half of the string 
+
+```cpp
+MyString MyString::operator-- ()
+{
+    int len = strlen(str);
+    int new_len = len/2;
+    char* buffer = new char [new_len];
+
+    for (size_t i=0; i<new_len; i++)
+    { 
+        buffer[i] = str[i];
+    }
+
+    buffer[new_len] = '\0';
+
+    MyString temp = buffer;
+    delete[] buffer;
+
+    return temp;
+}
+```
+
+**4.2 Post decrement:** will remove the 2nd half of the string
+
+```cpp
+MyString MyString::operator-- (int)
+{
+    int len = strlen(str);
+    int new_len = len/2;
+    char* buffer = new char [len];
+
+    for (size_t i=new_len; i<len; i++)
+    {
+        buffer[i-new_len] = str[i];
+    }
+    buffer[new_len] = '\0';
+
+    MyString temp = buffer;
+    delete[] buffer;
+
+    return temp;
+}
+```
+
+
+
+##### 13.1.3.2 Binary
+
 **Operation overloading for (+)**
 
 ```cpp
-Mystring operator+ (const Mystring &rhs)
+MyString MyString::operator+(const MyString& rhs)
 {
-    char *buffer = new char [std::strlen(str)+std::strlen(rhs.str)+1];  // hwa amta ast5m al this pointer?
-    std::strcpy(buffer,str);
-    std::strcat(buffer,rhs.str);
-    Mystring temp (buffer);
+    int FH_len = strlen(str);
+    int new_len = strlen(str) + strlen(rhs.str);
+    char* buffer = new char [new_len + 1];
+    
+    for (size_t i = 0; i<FH_len; i++)   // First half copying
+    {
+        buffer[i] = str[i];
+    }
+    for (size_t i = 0; i<new_len; i++)
+    {
+        buffer[i+FH_len] = rhs.str[i];
+    }
+    buffer[new_len] = '\0';
+
+    MyString temp {buffer};
+    delete [] buffer;
+
     return temp;
 }
 ```
@@ -1962,8 +2154,6 @@ int main()
     point destructor called
     ```
 
-
-
 **which point constructor will be called when executing `Line myline;`? (interview question)**
 
 the default constructor 
@@ -2273,10 +2463,10 @@ Base1 Constructor
 Base2 Constructor
 ```
 
-Virtual keyword ensures that the class when constructed must search if the base of it exists in that domain or not
+Virtual keyword ensures that the class when constructed must search if the base of it exists in that domain or not.
 
-Question:
-why not make the two class inherit virtually, i can juts choose Base2 to be virtual, meaning only Base2 will check is the Base class check in that domain before constructing it.
+**Question**:
+why not make the two class inherit virtually, I can just choose Base2 to be virtual, meaning only Base2 will check is the Base class check in that domain before constructing it.
 
 while this way could work fine, but you put yourself at a RISK of changing the constructor order so for example in this code 
 
@@ -2420,7 +2610,7 @@ private:
     double balance;
 
 public:
-    // a function used to be able to implemnt dynmaic binding, it can be overriden by other function in an inherted class during runtime
+    // a function used to be able to implement dynmaic binding, it can be overriden by other function in an inherted class during runtime
     virtual void Withdraw()
     {
         std::cout <<"Account::Withdraw()" << std::endl;
@@ -2687,9 +2877,6 @@ virtual void pureVirtualFunction() = 0; // Pure virtual function
 
 - can create object from this class. 
 
-  
-
-  
 
 ## 16. Smart pointers
 
@@ -2719,7 +2906,7 @@ virtual void pureVirtualFunction() = 0; // Pure virtual function
   - Automatically call delete when no longer needed
 
 - **Why the need for smart pointers ?**
-  - Pointer purpose is to give you more control and fixability over memory. however most application **faults** written in languages that supports raw pointer are a pointer related problems. that encouraged the need for smart pointers concept 
+  - Pointer purpose is to give you more control and flexibility over memory. however most application **faults** written in languages that supports raw pointer are a pointer related problems. that encouraged the need for smart pointers concept.
 
 - **smart pointer constrains**
   - you can not use arithmetic operation on smart pointer (++, --, etc.)
@@ -2730,7 +2917,7 @@ virtual void pureVirtualFunction() = 0; // Pure virtual function
 
 - **Unique pointer characteristics**
 
-  - Points to an object of type T on the heap
+  - Points to an object of type T **on the heap**
 
   - it is unique - there can only be one unique_ptr<T> pointing to the object on the heap, but raw pointer can be assigned to the same object (not good practice).
 
@@ -2749,6 +2936,10 @@ virtual void pureVirtualFunction() = 0; // Pure virtual function
   - **Example 1**: creating, initializing and using
 
     ```cpp
+    #include <memory>
+    #include <iostream>
+    
+    int main ()
     {
         std::unique_ptr<int> p1 {new int {100}};
     	std::cout << *p1 << std::endl; //100
@@ -2756,29 +2947,29 @@ virtual void pureVirtualFunction() = 0; // Pure virtual function
     	std::cout << *p1 << std::endl; //200
     } // when goes out of scope it deletes whatever it was pointing to
     ```
-
+  
+    *Output*
+  
     ```
-    ________
-    |Output|
-    ----------------------
     100
     200
     ```
-
+  
   - **Example 2:**
-
+  
     ```cpp
     {
     	std::unique_ptr<Account> p1 {new Account {"Larry"}};
-    	std::cout <<*p1<<std::endl;
+    	std::cout <<*p1<<std::endl; // <<  friend overload must be implemented for class
     	p1->deposite(1000);
     	pq->withdraw(500);
     }
     ```
-
+  
   - **Example 3:** unique pointer with vectors
-
+  
     ```cpp
+    #include <vector>
     {
     	//creating a vector of unique pointers
     	std::vector<std::unique_ptr<int>> vec;
@@ -2788,18 +2979,18 @@ virtual void pureVirtualFunction() = 0; // Pure virtual function
     	vec.push_back(ptr);
     }
     ```
-
+  
     ```makefile
     ________
     |Output|
     ----------------------
     Error - Copy not allowed for unique vectors
     ```
-
+  
     we get an **error** in the output as vector push_back method initiate coping of the object to be pushed but unique pointer can not be copied
-
+  
   - **Example 4**: Solution to **Example 3**
-
+  
     ```cpp
     {
     	//creating a vector of unique pointers
@@ -2810,55 +3001,55 @@ virtual void pureVirtualFunction() = 0; // Pure virtual function
     	vec.push_back(std::move(ptr));
     }
     ```
-
+  
     
-
+  
   - **Useful methods** 
-
+  
     - **make_unique<>()**
       a better way to initialize a pointer 
       **why?** 
-
+  
       - in the traditional way 
-
+  
         1. we construct the default pointer
-
+  
         2. assign value to it 
-
+  
         ```cpp
         std::unique_ptr<int> p1 {new int {100}};
         ```
-
+  
       - using make_unique
-
+  
         1. we pass initialization values into the constructor  (compiler generates much more efficient code)
-
+  
         ```cpp
         {
             std::unique_ptr<int> p1 = make_unique<int>(100);
         }
         ```
-
+  
       
-
+  
     - **get()**: gets the address of what this pointer points to
-
+  
       ```cpp
       {
       	std::unique_ptr<int> p1 {new int {100}};
       	std::cout << p1.get() << std::endl;
       } // when goes out of scope it deletes whatever it was pointing to
       ```
-
+  
       ```cpp
       ________
       |Output|
       ----------------------
       0x564388
       ```
-
+  
     - **reset()**: release the memory from this pointer (ie.) makes the pointer points to null
-
+  
       ```cpp
       {
               std::unique_ptr<int> p1 {new int {100}};
@@ -2867,14 +3058,14 @@ virtual void pureVirtualFunction() = 0; // Pure virtual function
       		std::cout<< "this pointer is null" << std::endl;
       }
       ```
-
+  
       ```cpp
       ________
       |Output|
       ----------------------
       this pointer is null
       ```
-
+  
       
 
 ### Shared pointer (shared_ptr)
@@ -2912,7 +3103,7 @@ virtual void pureVirtualFunction() = 0; // Pure virtual function
 ```cpp
 {
 	std::shared_ptr<Account> p1 {new Account {"Larry"}};
-	std::cout << *p1 << std::endl;
+	std::cout << *p1 << std::endl; // << friend function must be implemented for class Account
 	
 	p1->deposit(1000);
 	p1->withdraw(500)
@@ -2935,14 +3126,6 @@ std::cout << ptr.use_count() << std::endl;
 ```makefile
 2
 ```
-
-**Example 4:** 
-
-```
-
-```
-
-
 
 - **Useful methods**
 
@@ -3130,7 +3313,7 @@ here we are creating two shared pointers in main and initializing them with make
 this way we getting the benefits of shared pointer & weak pointer 
 shared pointer use :
 incrementing the use counter of the object to one enabling to create the object
-Wear Pointer use:
+Weak Pointer use:
 eliminating the possibility of circular/cyclic reference 
 
 ### Auto pointer (auto_ptr)
@@ -3169,6 +3352,9 @@ The `auto_ptr` was a smart pointer introduced in C++98 and C++03, but it was dep
       // Example class
       class Some_class 
       {
+      private:
+          int value_;
+          
       public:
           explicit Some_class(int value) : value_(value) 
           {
@@ -3179,8 +3365,7 @@ The `auto_ptr` was a smart pointer introduced in C++98 and C++03, but it was dep
               std::cout << "Some_class destructor called" << std::endl;
           }
       
-      private:
-          int value_;
+      
       };
       
       // Custom deleter
@@ -3191,7 +3376,7 @@ The `auto_ptr` was a smart pointer introduced in C++98 and C++03, but it was dep
       
       int main() {
           // Create a shared_ptr with a custom deleter
-          std::shared_ptr<Some_class> ptr{new Some_class{100}, my_deleter};
+          std::shared_ptr<Some_class> ptr {new Some_class{100}, my_deleter};
       
           return 0;
       }
@@ -3252,7 +3437,7 @@ description:
 
 **What is Vector?**
 
-- vector is a **dynamic array** (can grow and shrink in size at exaction time) **unlike array**
+- vector is a **dynamic array** (can grow and shrink in size at execution time) **unlike array**
 
 - Elements are all the **same type** **like array** defined between angle brackets < >.
 
@@ -3359,8 +3544,9 @@ vector <int> test_scores {100, 95, 99, 87, 88};
 cout << "1st score at index 0: " << test_scores.at(0) << endl;
 cout << "2nd score at index 1: " << test_scores.at(1) << endl;
 cout << "3rd score at index 2: " << test_scores.at(2) << endl;
-cout << "4th score at index 3: " << test_scores.at(4) << endl;
-cout << "5th score at index 4: " << test_scores.at(5) << endl;
+cout << "4th score at index 3: " << test_scores.at(3) << endl;
+cout << "5th score at index 4: " << test_scores.at(4) << endl;
+cout << "6th score at index 5: " << test_scores.at(5) << endl; //Error out of boundry
 ```
 
 ###### Vector dynamic allocation 
@@ -3385,7 +3571,7 @@ in *push_back* method an extra temporary copy is made out of the element and the
 This method does not need to make an extra temporary copy to push the element in the back of the vector.
 
 ```cpp
-vec.emplace_back("Larry",18);
+vec.emplace_back(Person{"Larry",18});
 ```
 
 Q) How can vectors be **sequentially** ordered and have the option of dynamically adding elements to it 
@@ -3400,8 +3586,6 @@ When you add elements to the vector using `push_back` or other modifying methods
 2. **Reallocation**:
    - If the vector's size exceeds its current capacity, the vector allocates a new block of memory, usually larger than the previous one (often by a growth factor, typically 2x).
    - It then copies the existing elements to the new memory block and deallocates the old block.
-
-
 
 ###### Vector boundary checking
 
@@ -3432,18 +3616,24 @@ vector <int> test_scores {100,95};
 cout << test_scores.size() << endl;
 ```
 
+*output*
+
+```
+2
+```
+
 ###### 2D Vectors
 
 **declaration** 
 
 ```cpp
-vector <vector<int>> movie_ratings [4][3]
+vector <vector<int>> movie_ratings;
 ```
 
 **initialization**
 
 ```cpp
-vector <vector<int>> movie_ratings
+vector <vector<int>> movie_ratings =
 {
     {1,2,3,4},
     {1,2,4,4},
@@ -3580,7 +3770,7 @@ int arr[5];
 
   ​	**functionality**
 
-  ​	returns the element in the begging of the array
+  ​	returns a reference to the element in the begging of the array
 
   ```cpp
   arr1.front(); 
@@ -3596,7 +3786,7 @@ int arr[5];
 
     **functionality**
 
-    returns a reference to the element in the index
+    returns a reference to the element in the end of the array
 
   ```
   arr1.back();
@@ -3620,7 +3810,7 @@ int arr[5];
 
   *output*
 
-  ```
+  ```yaml
   0 (false)
   ```
 
@@ -3778,7 +3968,7 @@ d.push_front(10);
   ​	this is efficient as there is no temp copy occur but no initialization in place
 
   ```
-  d.emplave_front();
+  d.emplace_front();
   ```
 
 - pop_front();
@@ -3821,23 +4011,19 @@ d.at();
 
 **allocation of deque** 
 
-It's like a linked list of vector, if there is space it the element will be allocated, if there is not a memory allocation will occur and the the previous memory allocation will point to to next
+It's like a linked list of vector, if there is space it the element will be allocated, if there is not a memory allocation will occur and the the previous memory allocation will point to to next.
 
 ![dequeallocation](Cache/dequeallocation.png)
-
-
-
-
 
 #### 17.1.2 associative containers
 
 - description:
--  Associative containers store elements in a way that allows for fast lookups based on keys. The elements are usually organized according to a specific sorting criterion or hashing function.
-- insert elements in a
+  - Associative containers store elements in a way that allows for fast lookups based on keys. The elements are usually organized according to a specific sorting criterion or hashing function.
+  - insert elements in a
+    - predefined order or no order at all.
 
-  - predefined order or no order at all.
+    - no duplicates or allow duplicates 
 
-  - no duplicates or allow duplicates 
 
 ##### set
 
@@ -4482,9 +4668,7 @@ while (it != vec.end() )
 
 ##### 	variables like macros
 
-​	just like you know them in good old C 
-
-language
+​	just like you know them in good old C language
 
 ```cpp
 #define PI 3.141592
@@ -4642,7 +4826,7 @@ in `function overloading` code each and every function you did make have it's ow
 
 in `Template` code only the function that you did overload in the application code have space in memory.
 
-Can you have multiple types in `template` ? Yes, and there is no limit on the number of limit parameters 
+Can you have multiple types in `template` ? Yes, and there is no limit on the number of parameters 
 
 ```cpp
 template <typename T1, typename T2>
@@ -4736,11 +4920,11 @@ public:
 int main() {
     // Instantiating MyClass with int as T and 10 as x
     MyClass<int, 10> obj1;
-    obj1.printValues(); // Outputs: Type T: i, Value of x: 10
+    obj1.printValues(); // Outputs: Type T: int, Value of x: 10
 
     // Instantiating MyClass with double as T and 20 as x
     MyClass<double, 20> obj2;
-    obj2.printValues(); // Outputs: Type T: d, Value of x: 20
+    obj2.printValues(); // Outputs: Type T: double, Value of x: 20
 
     return 0;
 }
@@ -4792,21 +4976,214 @@ int main ()
 }
 ```
 
+*output*
+
+```
+1
+1
+1
+2
+2
+2
+```
+
+
+
 ###### Template Specialization 
 
+**Why Use Template Specialization?**
+
+- To provide a **custom implementation** of a function or class template for a specific type.
+
+- When a **general template** works for most types, but some types require **special handling**.
+
+  
+
+**1. Function Template Specialization**
+
+A function template can have a specialized version for a particular type.
+
+**Example: Specializing for `char\*`**
+
+```cpp
+#include <iostream>
+using namespace std;
+
+template <typename T>
+void printValue(T value) {  
+    cout << "General Template: " << value << endl;  
+}
+
+// Specialization for char*
+template <>
+void printValue<char*>(char* value) {
+    cout << "Specialized Template for char*: " << value << endl;
+}
+
+int main() {
+    printValue(10);        // Uses general template
+    printValue(3.14);      // Uses general template
+    printValue("Hello");   // Uses specialized template for char*
+
+    return 0;
+}
+```
+
+*Output*
+
+```pgsql
+General Template: 10
+General Template: 3.14
+Specialized Template for char*: Hello
+```
+
+- The general template handles `int` and `double`.
+- The specialized template handles `char*` **differently**.
+
+**3. Class Template Specialization**
+
+Class templates can also be specialized for a particular type.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+template <typename T>
+class Data {
+public:
+    Data(T value) { cout << "General Template: " << value << endl; }
+};
+
+// Specialization for bool
+template <>
+class Data<bool> {
+public:
+    Data(bool value) {
+        cout << "Specialized Template for bool: " 
+             << (value ? "True" : "False") << endl;
+    }
+};
+
+int main() {
+    Data<int> d1(42);   // Uses general template
+    Data<double> d2(3.14); // Uses general template
+    Data<bool> d3(true); // Uses specialized template
+
+    return 0;
+}
+
+```
+
+*Output*
+
+```sql
+General Template: 42
+General Template: 3.14
+Specialized Template for bool: True
+
+```
+
+###### **Partial Specialization**
+
+Partial specialization allows customizing **some** parameters while keeping the rest general.
+
+**Example: Partial Specialization for `pair<T, int>`**
+
+```cpp
+template <typename T, typename U>
+class Pair {
+public:
+    Pair(T a, U b) { cout << "General Pair\n"; }
+};
+
+// Partial specialization when second type is int
+template <typename T>
+class Pair<T, int> {
+public:
+    Pair(T a, int b) { cout << "Partial Specialization when second type is int\n"; }
+};
+
+int main() {
+    Pair<double, char> p1(3.14, 'A'); // General template
+    Pair<string, int> p2("Hello", 42); // Partially specialized template
+
+    return 0;
+}
+
+```
+
+*Output*
+
+```
+General Pair
+Partial Specialization when second type is int
+
+```
+
+### **Summary**
+
+1. **Template specialization** provides a custom implementation for a specific type.
+
+2. **Function template specialization** allows custom behavior for specific data types.
+
+3. **Class template specialization** enables a completely different implementation for a specific type.
+
+4. **Partial specialization** allows modifying some template parameters while keeping others general.
+
+   
+
+   **Lab**
+
+   ### **💡 Lab Task Description**
+
+   #### **1️⃣ General `Vehicle` Template**
+
+   - Create a **class template** `Vehicle<T>`, where `T` represents the **fuel capacity** type.
+   - Store the following attributes:
+     - `brand` (string)
+     - `fuelCapacity` (T) → for gas-powered cars (in liters).
+     - `topSpeed` (int) → in km/h.
+   - Implement a `displayInfo()` function to print vehicle details.
+
+   #### **2️⃣ Specialization for Electric Vehicles**
+
+   - Specialize `Vehicle<T>` **for electric vehicles (`Vehicle<void>`)**.
+   - Instead of `fuelCapacity`, store `batteryCapacity` (in kWh).
+   - Modify `displayInfo()` to correctly reflect EV details.
+
+   #### **3️⃣ Function Template for Displaying Vehicles**
+
+   - Write a **function template** `showVehicleInfo()` to print any vehicle's info using `displayInfo()`.
+   - Call `showVehicleInfo()` with both **gasoline** and **electric vehicles**.
+     
+
+## 18.Lambda Expression
+
 ```
 
 ```
 
+## 19.Concurrency&Multithreading
+
+**Concurrency**
+
+**Multithreading**
 
 
+**Join**
+![concurrancy_join](Cache\concurrancy_join.png)
 
+**Detach**
+![detach_concurancy](Cache\detach_concurancy.jpeg)
 
-## 18. Exotic notes
+**very important note:**
+when the main thread terminate, it terminates the whole program, so if Test tread did not finish before the main thread the program will terminate, making Test thread function execution not complete.
 
-### 	18.1  range-based for Loop(C++)
+## xx. Exotic notes
 
-#### 	18.1.1normal range-based for loop
+### 	xx.1  range-based for Loop(C++)
+
+#### 	xx.1.1normal range-based for loop
 
  	a for loop without having to worry about the elements number or incrementing/decrementing a counter variable.
 
@@ -4830,7 +5207,7 @@ for (int score : scores)
   
 - less error prone.
 
-#### 18.1.2 initializer list range-based for loop (on the go)
+#### xx.1.2 initializer list range-based for loop (on the go)
 
 ```cpp
 double average_temp {};
@@ -4847,7 +5224,7 @@ average_temp = running_sum/size;
 
 
 
-#### 18.1.3 string range-based for loop
+#### xx.1.3 string range-based for loop
 
 ```cpp
 for (auto c:"Frank")
@@ -4864,7 +5241,7 @@ n
 k
 ```
 
-#### 18.1.4 counter based for loop!
+#### 1x.1.4 counter based for loop!
 
 ```
 
@@ -4872,7 +5249,7 @@ k
 
 
 
-### 18.2 auto
+### xx.2 auto
 
 let's make it even easier by using **auto** keyword
 
@@ -4886,7 +5263,7 @@ for (auto score : scores)
 - auto keyword let the compiler deduce the type of the variable so instead of writing **int** you can just write **auto** and compiler will use **int** data type.
 - you might think will there is no much headache using **int** instead of **auto**, well you are correct but working in real big project declaring a variable will be much challenging thing, you might declare a variable in 2 lines of code.
 
-### 18.3 setprecision()
+### xx.3 setprecision()
 
 it adjusts how many numbers you want after the decimal point (rounding)
 
@@ -4899,11 +5276,11 @@ std::cout << fixed << std::setprecision(1);
 std::cout << number << std::endl;
 ```
 
-### 18.4 how to add tab space in code
+### xx.4 how to add tab space in code
 
 tab representation in code is '\t'.
 
-### 18.5 pair
+### xx.5 pair
 
 there is a class called pair
 
@@ -4933,3 +5310,100 @@ auto it = favourites.begin();
 	}
 ```
 
+### xx.6 nullptr and NULL
+
+**What is `NULL` in C?**
+
+In C, `NULL` is a macro that represents a **null pointer constant**. It is typically defined as:
+
+```c
+#define NULL ((void*)0)  // Common definition in C
+```
+
+This means `NULL` is simply a **void pointer** that evaluates to `0`, indicating that a pointer does not point to a valid memory address.
+
+------
+
+**Key Properties of `NULL` in C**
+
+1. **Indicates an Uninitialized or Invalid Pointer**
+
+   ```cpp
+   int* ptr = NULL;  // ptr does not point to valid memory
+   ```
+
+2. **`NULL` is Just `0` in Context of Pointers**
+
+   - ```c
+     NULL
+     ```
+
+      is often defined as 
+
+     ```c
+     0
+     ```
+
+     , meaning:
+
+     ```c
+     int* p = 0;   // Equivalent to int* p = NULL;
+     ```
+
+3. **Not Type-Safe**
+
+   - `NULL` is simply `0` or `(void*)0`, which can lead to **implicit conversions and mistakes**.
+
+   ```cpp
+   int x = NULL;   // Compiles! But logically incorrect
+   ```
+
+4. **Used in `malloc()` Failure Checks**
+
+   ```cpp
+   int* arr = (int*)malloc(10 * sizeof(int));
+   if (arr == NULL) {  // Memory allocation failed
+       printf("Memory allocation failed\n");
+   }
+   ```
+
+------
+
+Differences Between `NULL` in C and C++
+
+| Feature     | `NULL` in C                  | `NULL` in C++                   |
+| ----------- | ---------------------------- | ------------------------------- |
+| Definition  | `((void*)0)` (sometimes `0`) | Typically `0`                   |
+| Type Safety | Not type-safe                | Not fully type-safe             |
+| Alternative | None                         | Use `nullptr` (C++11 and later) |
+
+**Why is `nullptr` Better in C++?**
+
+In C++, `NULL` is just `0`, which can cause ambiguity.
+Instead, C++11 introduced **`nullptr`**, which is a **proper null pointer type (`std::nullptr_t`)**, making it **type-safe**.
+
+```cpp
+void func(int) { std::cout << "func(int) called\n"; }
+void func(char*) { std::cout << "func(char*) called\n"; }
+
+int main() {
+    func(NULL);   // Ambiguous in C++
+    func(nullptr); // Calls func(char*), intended behavior
+}
+```
+
+------
+
+**When to Use `NULL` in C?**
+
+✅ Use `NULL` for **null pointers** in C:
+
+```cpp
+int* ptr = NULL; // Good practice in C
+```
+
+🚨 Avoid using `NULL` in non-pointer contexts:
+
+```cpp
+int x = NULL;  // ❌ Wrong, NULL is for pointers
+```

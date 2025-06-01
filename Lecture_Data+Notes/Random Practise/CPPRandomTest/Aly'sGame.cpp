@@ -184,7 +184,7 @@ void Character::add_Tool(int pos, string tool_name)
 
 }
 
-void Character::display_character ()
+void Character::display_character () const
 {
     cout <<"Name   : " << Name << endl;
     cout <<"Health : " << Health << endl;
