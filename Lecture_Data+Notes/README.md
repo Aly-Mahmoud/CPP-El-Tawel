@@ -5,7 +5,7 @@
 
 1. **Definition**: A class is a blueprint for creating objects. It defines the properties (data members) and behaviors (member functions) of that objects of that class will have.
 
-2. **Memory Location**: The class definition itself is typically stored in the program's code segment (also known as the **text segmen**t). This segment contains the executable code of the program.
+2. **Memory Location**: The class definition itself is typically stored in the program's code segment (also known as the **text segment**). This segment contains the executable code of the program.
 
 3. **When It's Saved**: The class definition is compiled into the program during the compilation process. It exists in the program's code even before any objects of that class are created.
 
@@ -365,6 +365,7 @@ public:
 
 **`noexcept`keyword** 
 Using `noexcept` with move constructors (and move assignment operators) is a best practice in modern C++ to ensure exception safety and to enable potential optimizations. It guarantees that these operations will not throw exceptions, allowing for more efficient resource management and better performance, especially when used with standard library containers.
+also when using `noexcept` the move does not fail back to copy resulting in incorrect behavior 
 
 ```cpp
 int main() 
@@ -442,7 +443,7 @@ int x = {5.3} //-> error -> no casting will occur
 
 #### 4.2.1 Default Member Initializers
 
-Since C++11, you can initialize members directly in the class definition.
+Since **C++11**, you can initialize members directly in the class definition.
 
 ```cpp
 class Person 
@@ -968,6 +969,11 @@ class MyClass
 		{
             count++; // Accessing and modifying the static data member
         }
+    
+    	static void set_increment(const int& new_count)
+        {
+            count = new_count;
+        }
 
         // Static function to get the current count
         static int getCount() 
@@ -995,6 +1001,17 @@ int main()
 }
 ```
 
+**why use lvalue refrence when setting the count?**
+
+
+
+| Parameter Type          | Accepts Lvalue | Accepts Rvalue | Copies Made | Notes                              |
+| ----------------------- | -------------- | -------------- | ----------- | ---------------------------------- |
+| `string`                | ✅              | ✅              | ✅           | Always makes a copy                |
+| `const string&`         | ✅              | ✅              | ❌           | Best for read-only input           |
+| `string&&` (rvalue ref) | ❌              | ✅              | ❌ (move)    | Use only if you need to steal data |
+| `string&`               | ✅              | ❌              | ❌           | Only for mutable lvalues           |
+
 
 
 ## 11. this  pointer
@@ -1020,19 +1037,13 @@ Person(std::string name, std::string ID)
 
 ```
 
-**in case of operator overloading**
-
-```
-
-```
-
 
 
 ## 12. friend function/Class
 
 **What**
 
-A friend function in C++ is a function that is not a member of a class.
+A friend function in C++ is a function is not a member of a class.
 Friend functions are declared inside a class and preceded by the `friend` keyword, and must be implemented outside of the class, They can access **private** and **protected** members of the class as if they were regular member functions.
 
 **Why**
@@ -1082,7 +1093,8 @@ int main()
 
 class B; // Forward declaration
 
-class A {
+class A 
+{
 private:
     int secret;
 
@@ -1193,7 +1205,7 @@ int main
 
 **Why?**
 
-- the compiler by default creates a Copy assignment operator the problem with this default copy assignment operator is that it makes a shallow copy operation 
+- the compiler by default creates a Copy assignment operator the problem with this default copy assignment operator is that it makes a shallow copy (member wise copy) operation 
 
 
 - if you want to make a deep copy version of it you have to implement one yourself 
@@ -1655,7 +1667,7 @@ This type only shows the required information about the  implementation and hide
 
 ##### 1-Abstraction using Classes
 
-We can implement Abstraction in C++ using classes.-A Class can decide which data member will be visible to the outside  world and which is not. 
+We can implement Abstraction in C++ using classes. a Class can decide which data member will be visible to the outside world and which is not. 
 
 ##### 2-Abstraction in Header files
 
@@ -2247,7 +2259,7 @@ the default access modifier is **private**
 
 While it is not a concept that is used in C++ frequently but it can be used 
 
-Example:
+**Example:**
 
 ```cpp
 class Derived : public Base1, public Base2
@@ -2255,7 +2267,7 @@ class Derived : public Base1, public Base2
     private:
     	int c;
     public:
-    	Deriver(int x=0, int y=0, int z=0) : Base1(x), Base2(y) , c(z)
+    	Derived (int x=0, int y=0, int z=0) : Base1(x), Base2(y) , c(z)
         {}
     
     	int product()
@@ -2343,7 +2355,7 @@ class Derived
 
 ###### 2-Diamond problem
 
-![Diamond_Inhertance](Cache/Diamond_Inhertance.png)looking at the picture above you will notice that the derived class inheritance from Base1 and Base2 and these classes originally inherit from class Base which means that in the Dervied class now 4 class (Base1, Base2, Base, Base) this is a problems as Base is in this class twice because it is common in Base1 and Base2
+![Diamond_Inhertance](Cache/Diamond_Inhertance.png)looking at the picture above you will notice that the derived class inheritance from Base1 and Base2 and these classes originally inherit from class Base which means that in the Derived class now 4 class (Base1, Base2, Base, Base) this is a problems as Base is in this class twice because it is common in Base1 and Base2
 
 ```cpp
 class Base
@@ -2772,7 +2784,7 @@ public:
 
 any function inside this class can not be overridden 
 
-#### 14.6.5 base class refrence 
+#### 14.6.5 base class reference 
 
 A "base class reference" refers to a reference variable that is declared to refer to objects of the base class or any of its derived classes. In object-oriented programming, particularly in languages like C++ where inheritance is supported, references and pointers to base classes are commonly used for polymorphic behavior and abstraction.
 
@@ -2830,13 +2842,13 @@ Explanation
 3. **Polymorphic Behavior**:
    - Even though `baseRef` is declared as a reference to `Base`, because `display` is a virtual function in `Base` and overridden in `Derived`, the call `baseRef.display()` resolves to the `display` function in `Derived` due to dynamic polymorphism (runtime binding).
 
-Benefits of Base Class References
+**Benefits of Base Class References**
 
 - **Polymorphism**: Allows code to work with objects of different derived classes through a single interface (the base class interface), promoting flexibility and extensibility.
 - **Abstraction**: Encapsulates common behavior and attributes in the base class, allowing derived classes to specialize or extend functionality as needed.
 - **Dynamic Binding**: Enables dynamic dispatch of function calls based on the actual type of the object at runtime, facilitating runtime polymorphism.
 
-Important Considerations
+**Important Considerations**
 
 - Ensure that the base class declares **virtual functions** when you intend to override them in derived classes to achieve polymorphic behavior.
 - Use references (`Base&`) or pointers (`Base*`) to base classes when you need to work with objects polymorphically, i.e., when you want to treat objects of derived classes uniformly through a common base class interface.
@@ -3334,7 +3346,7 @@ The `auto_ptr` was a smart pointer introduced in C++98 and C++03, but it was dep
 
 - **Why use of custom deleters?**
 
-  - when you have a special case where you  need more than the default deleters offers to you.
+  - when you have a special case where you need more than the default deleters offers to you.
 
 - **Constrains of creating custom deleters**
 
@@ -3400,7 +3412,7 @@ The `auto_ptr` was a smart pointer introduced in C++98 and C++03, but it was dep
       }
       ```
   
-  
+  - we will get to lambda next
 
 **Why?**
 it makes the code more readable and more writeable.
@@ -3445,7 +3457,7 @@ description:
 
 - individual elements can by accessed by their position or index **like array**.
 
-- First element  is at index 0 **like array** 
+- First element is at index 0 **like array** 
 
 - Last element is at index (size-1) **like array**
 - if you use subscript operator `[]` to access a specific element there will no checking if you are out of bound **like array.**
@@ -3487,7 +3499,7 @@ vector <int> test_scores {100, 98, 89, 85, 93};
 **initializing a vector with multiple elements with one value** 
 
 ```cpp
-vetor <double> hi_temp (365,80.0);
+vector <double> hi_temp (365,80.0);
 ```
 
 now you have **one vector** with **365 elements** each one of them is a **double** initialized to the value of **80.0**
@@ -3495,13 +3507,15 @@ now you have **one vector** with **365 elements** each one of them is a **double
 you can declare a vector to be a copy of an array 
 
 ```cpp
+int arr[] = {1,2,3,4,5};
 
+vector <int> v1 (arr, arr+5);
 ```
 
 you can declare a vector to be a copy of another vector
 
-```
-
+```cpp
+vector <int> v2 = v1;
 ```
 
 ###### Accessing vector elements 
@@ -3555,7 +3569,7 @@ cout << "6th score at index 5: " << test_scores.at(5) << endl; //Error out of bo
 
 push_back method is a method that append elements to the vector at the end side of the vector
 
-*Example code*
+***Example code***
 
 ```cpp
 Person p1 {"Larry", 18};
@@ -3680,14 +3694,14 @@ int arr[5];
 
 - Declaration of **std::array**
 
-  - Example 1
+  - **Example 1**
 
   ```cpp
   std::array<int,5> aar1{{1,2,3,4,5}}
   arr1 = {2,4,6,8,10};
   ```
 
-  - Example 2
+  - **Example 2**
 
   ```cpp
   std::array<std::string,3> stooges
@@ -3698,7 +3712,7 @@ int arr[5];
   };
   ```
 
-  in the above code `"Moe"` will be converted to std::string
+  in the above code `"Moe"` will be converted to `std::string`
   
 - **std::array methods**
 
@@ -3773,7 +3787,7 @@ int arr[5];
   ​	returns a reference to the element in the begging of the array
 
   ```cpp
-  arr1.front(); 
+  arr1.front();
   ```
 
   *output*
@@ -3875,20 +3889,42 @@ declaration
 std::list<std::string>
 ```
 
+no at method or subscript operator []
+
+![List](Cache\List.png)
+
 ##### forward_list
 
 it's a simple single linked list
 
 ```
-
+std::forward_list<std::string>
 ```
 
+- no at method or subscript operator []
+
+- you can only traverse it in one way
+
+- does not have size(), or back() method.
+
+- push_front()
+- emplace_front()
+- pop_front()
+- insert_after(it, element)
+- emplace_after(it, element)
+- erase_after()
+- resize
+
+![forward list](Cache\image-20250625215056628.png)
+
 ##### deque
+
+double ended queue.
 
 - Dynamic Size 
   - Handled automatically
   - can expand and contract as needed
-  - Elements are NOT stored in contiguous memory
+  - Elements are NOT stored in **contiguous** memory
 - Direct element access (constant time)
 - Rapid insertion and deletion at front and back (constant time)
 - Insertion or removal of elements (Linear time)
@@ -3918,7 +3954,7 @@ std::deque<std::string> stooges
 
 ![deque](Cache/deque.png)
 
-- back();
+- **back();** 
 
   - return the element in the back of the deque
 
@@ -3926,7 +3962,7 @@ std::deque<std::string> stooges
   d.back();
   ```
 
-- push_back();
+- **push_back();**
 
 ```
 d.push_back(4);
@@ -3934,7 +3970,7 @@ d.push_back(4);
 
 ![deque_push_back](Cache/deque_push_back.png)
 
-- emplace_back 
+- **emplace_back()**
 
   this adds data in the back in a more effcient way as it does not make any temp data reservation but it make an initialization in place.
 
@@ -3942,20 +3978,21 @@ d.push_back(4);
   d.emplace_back();
   ```
 
-- pop_back()
+- **pop_back()**
 
   ```
   d.pop_back();
   ```
 
-- front();
+- **front();**
+  
   - returns element in the front
 
 ```
 d.front();
 ```
 
-- push_front();
+- **push_front();**
 
 ![deque Push_front](Cache/deque_push_front.png)
 
@@ -4023,19 +4060,101 @@ It's like a linked list of vector, if there is space it the element will be allo
     - predefined order or no order at all.
 
     - no duplicates or allow duplicates 
-
+  - usually implemented as a balanced binary tree or hashsets
 
 ##### set
 
-```
+- similar to mathimatical set
+- ordered by key
+- no duplicates elements
+- all iterators available and invalidate when corresponding element is deleted
+
+```cpp
+#include <set>
+int main ()
+{
+    set<int> s {1,2,3,4,5};
+
+    s = {2,3,4,5,6};
+
+    set<string> stooges 
+    {
+        string {"Larry"},
+        "Moe",
+        string {"Curly"}
+    };
+}
 
 ```
 
-##### multi set
+
+
+```cpp
+set<int> s {4,1,1,3,3,2,5}; // 1 2 3 4 5
+```
+
+###### set methodes
+
+**size()**
+
+```cpp
+s.size();
+```
+
+**max_size()**
+
+```cpp
+s.max_size();
+```
+
+**insert() ** 
+
+-  no front and back concept in associative containers -- if element already exist, it will not do anything
+- it return a pair data, that has 2 data, pair <iterator, bool> , iterator pointing to the data or the last element, and bool indicating the operation state
+
+```cpp
+s.insert(3);
+```
+
+**erase()**
+
+```cpp
+s.erase(3);
+```
+
+**find()** 
+
+- returns an iterator to the the `item`, or if not found to the `s.end()`
+
+```cpp
+s.find(5)
+```
+
+and then you can the find method from the STL algorithms, but using the find from the the set is much more efficient as it's implemented with the implementation of the set in mind.
+
+and you can also remove the element by passing the iterator, that is returned from the pair of the find function 
+
+
+
+###### unordered_set
 
 ```
 
 ```
+
+###### multiset
+
+```
+
+```
+
+###### unordered_multiset
+
+```
+
+```
+
+
 
 ##### map
 
@@ -4067,7 +4186,7 @@ Frank : C++
 
 notice here the output is not in the same order of initialization.
 
-##### multi map
+###### multi map
 
 ```
 
@@ -4143,7 +4262,7 @@ std::find(container_instance.being(),conatiner_instance.end(), key_to_find);
 **Example Primitive types**
 
 ```
-std::vecotr<int> vec {1,2,3};
+std::vector<int> vec {1,2,3};
 std::vector<int>::iterator loc = std::find(vec.begin(), vec.end(), 3)
 if (loc != vec.end())
 {
